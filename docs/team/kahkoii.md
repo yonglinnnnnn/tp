@@ -1,5 +1,5 @@
 ---
-  layout: "default.md",
+  layout: default.md
   title: "Kah Ho's Project Portfolio Page"
 ---
 

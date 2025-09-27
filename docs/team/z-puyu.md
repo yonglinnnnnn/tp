@@ -1,5 +1,5 @@
 ---
-  layout: "default.md",
+  layout: default.md
   title: "Puyu's Project Portfolio Page"
 ---
 
