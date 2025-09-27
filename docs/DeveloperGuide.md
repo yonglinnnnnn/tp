@@ -310,9 +310,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+2.  System shows a list of persons
+3.  User finds the person's ID
+4.  User requests to delete a specific person in the list by ID
+5.  System deletes the person
 
     Use case ends.
 
@@ -322,13 +323,129 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
   Use case ends.
 
-* 3a. The given index is invalid.
+* 3a. The given ID is invalid.
 
-    * 3a1. AddressBook shows an error message.
+    * 3a1. System shows an error message.
 
       Use case resumes at step 2.
 
-*{More to be added}*
+**Use case: Query details of a person**
+
+1.  User requests to list persons
+2.  System shows a list of persons
+3.  User finds the person's ID
+4.  User requests to display details of a specific person in the list by ID
+5.  System shows the details of the person
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The given ID is invalid.
+
+    * 3a1. System shows an error message.
+
+      Use case resumes at step 2.
+
+**Use case: Finds all employees' details under a project team**
+
+1.  User requests to list persons allocated under a project team by team name
+2.  System shows a list of persons with their details
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The team name does not exist.
+
+  Use case ends.
+
+**Use case: Update details of a person**
+
+1.  User requests to list persons
+2.  System shows a list of persons
+3.  User finds the person's ID
+4.  User requests to update details of a specific person in the list by ID
+5.  System shows the updated details of the person
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The given ID is invalid.
+
+    * 3a1. System shows an error message.
+
+      Use case resumes at step 2.
+
+**Use case: Add tags to a person**
+
+1.  User requests to list persons
+2.  System shows a list of persons
+3.  User finds the person's ID
+4.  User requests to add a tag to the person by ID
+5.  System adds the tag to the person
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The given ID is invalid.
+
+    * 3a1. System shows an error message.
+
+      Use case resumes at step 2.
+
+* 4a. The tag already exists.
+
+    * 4a1. System shows an error message.
+
+      Use case resumes at step 2.
+
+**Use case: Display company overview**
+
+1.  User requests to display company overview
+2.  System shows departments, project teams and employees in a tree view
+
+    Use case ends.
+
+**Use case: Sort persons**
+
+1.  User requests to sort persons
+2.  User chooses the sorting criteria (e.g. by name, by department, by project team, etc.)
+3.  System sorts persons by the chosen criteria
+4.  System lists down persons in sorted order
+
+    Use case ends.
+
+**Use case: Search an employee by GitHub username**
+
+1.  User requests to search an employee by GitHub username
+2.  System shows the employee's details
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The GitHub username does not exist.
+
+  * 1a1. System shows an error message.
+
+      Use case ends.
+
+    
 
 ### Non-Functional Requirements
 
