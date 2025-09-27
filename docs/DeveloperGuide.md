@@ -274,7 +274,7 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of employee contacts in tech company
+* has a need to manage a significant number of employee contacts in a tech company
 * has a need to track team structures and developer allocations
 * prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
@@ -286,20 +286,18 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​          | I want to …​                                                                      | So that I can…​                                                                                                                                              |
-|----------|------------------|-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `* * *`  | HR administrator | see a company-level overview of all the employees and the departments they are in | have a better idea of the manpower allocation.                                                                                                               |
-| `* * *`  | HR administrator | add people’s contact to my address book                                           | add them when they join company                                                                                                                              |
-| `* * *`  | HR administrator | delete people’s contact to my address book                                        | remove them when they leave the company                                                                                                                      |
-| `* * *`  | HR administrator | directly export my saved contacts                                                 | save them as a backup                                                                                                                                        |
-| `* * *`  | HR administrator | create custom tags for employee roles or teams                                    | quickly filter contacts based on their job function                                                                                                          |
-| `* * *`  | HR administrator | see employee details including salary                                             | find out more details about them                                                                                                                             |
-| `* * *`  | HR administrator | the application to provide feedback when actions are completed                    | can confirm my actions were properly                                                                                                                         |
-| `* * *`  | HR administrator | search developer details by a project team's name                                 | quickly find out which developers are allocated to a specific team                                                                                           |
-| `* * *`  | HR administrator | use contact management apps based on the command line                             | appear tech-savvy in my work style                                                                                                                           |
-| `* * *`  | HR administrator | update contact information easily                                                 | keep employees' data up to date                                                                                                                              |
-| `* * *`  | HR administrator | customise the UI colour scheme of the address book                                | ease the strain on my eyes.                                                                                                                                  |
-| `* * *`  | HR administrator | change the font size of the contents in the address book                          | fit more information on the screen.                                                                                                                          |
+| Priority | As a …​          | I want to …​                                                                      | So that I can…​                                                    |
+|----------|------------------|-----------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| `* * *`  | HR administrator | see a company-level overview of all the employees and the departments they are in | have a better idea of the manpower allocation.                     |
+| `* * *`  | HR administrator | add people’s contact to my address book                                           | add them when they join the company                                |
+| `* * *`  | HR administrator | delete people’s contact to my address book                                        | remove them when they leave the company                            |
+| `* * *`  | HR administrator | directly export my saved contacts                                                 | save them as a backup                                              |
+| `* * *`  | HR administrator | create custom tags for employee roles or teams                                    | quickly filter contacts based on their job function                |
+| `* * *`  | HR administrator | see employee details including salary                                             | find out more details about them                                   |
+| `* * *`  | HR administrator | the application to provide feedback when actions are completed                    | can confirm my actions were properly executed                      |
+| `* * *`  | HR administrator | search developer details by a project team's name                                 | quickly find out which developers are allocated to a specific team |
+| `* * *`  | HR administrator | use contact management apps based on the command line                             | appear tech-savvy in my work style                                 |
+| `* * *`  | HR administrator | update contact information easily                                                 | keep employees' data up to date                                    |
 
 *{More to be added}*
 
