@@ -451,9 +451,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-
-*{More to be added}*
+3.  A user with above-average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4.  The different elements of the user interface should be arranged according to level of impact/priority (i.e immediate feedback somewhere close to the input box/as a pop-up.
+5.  The command manual should be easily understandable by a first-time user of the application.
+6.  Updated contacts should not be lost despite the unexpected closing of the application.
+7.  Error messages should be displayed to the user within 200 milliseconds.
+8.  All error messages should be easily understandable by a non-technical user and suggest a possible solution.
+9.  The save process should ensure 100% data integrity, preventing corruption even if the system crashes during the save.
+10. The exported contact list file should be compatible with any mainstream OS.
 
 ### Glossary
 
