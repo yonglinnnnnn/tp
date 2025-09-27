@@ -40,15 +40,15 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Developer
 * Responsibilities: Data
 
-### Jean Doe
+### Xu Yong Lin
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/yonglinnnnnn.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](http://github.com/yonglinnnnnn)]
+[[portfolio](team/yonglinnnnnn.md)]
 
-* Role: Developer
-* Responsibilities: Dev Ops + Threading
+* Role: Deliverables and deadlines
+* Responsibilities: Ensure project deliverables are done on time and in the right format. 
 
 ### Zhang Puyu
 
