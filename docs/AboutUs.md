@@ -21,7 +21,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Project Advisor
 
-### Danny
+### Danny Chan
 
 <img src="images/dannyoncode.png" width="200px">
 
