@@ -31,14 +31,14 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Integration
 * Responsibilities: In charge of versioning of the code, maintaining the code repository, integrating various parts of the software to create a whole.
 
-### Johnny Doe
+### Swee Kah Ho
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/kahkoii.png" width="200px" alt="kah ho picture">
 
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
+[[github](http://github.com/kahkoii)] [[portfolio](team/kahkoii.md)]
 
-* Role: Developer
-* Responsibilities: Data
+* Role: Testing
+* Responsibilities: Ensures the testing of the project is done properly and on time
 
 ### Xu Yong Lin
 
