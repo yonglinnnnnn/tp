@@ -1,8 +1,10 @@
 package seedu.address.testutil;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+import seedu.address.logic.parser.AddCommandParser;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
@@ -15,7 +17,6 @@ import seedu.address.model.util.SampleDataUtil;
  * A utility class to help with building Person objects.
  */
 public class PersonBuilder {
-    public static final String DEFAULT_ID = "E9999";
     public static final String DEFAULT_NAME = "Amy Bee";
     public static final String DEFAULT_PHONE = "85355255";
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
@@ -32,7 +33,20 @@ public class PersonBuilder {
      * Creates a {@code PersonBuilder} with the default details.
      */
     public PersonBuilder() {
-        id = DEFAULT_ID;
+        Field field;
+        try {
+            field = AddCommandParser.class.getDeclaredField("nextId");
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+
+        field.setAccessible(true);
+        try {
+            id = String.format("E%04d", field.getLong(null));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
         name = new Name(DEFAULT_NAME);
         phone = new Phone(DEFAULT_PHONE);
         email = new Email(DEFAULT_EMAIL);
@@ -50,6 +64,16 @@ public class PersonBuilder {
         email = personToCopy.email();
         address = personToCopy.address();
         tags = new HashSet<>(personToCopy.tags());
+    }
+
+    /**
+     * Sets the {@code Id} of the {@code Person} that we are building.
+     * @param id The id to set.
+     * @return The PersonBuilder object.
+     */
+    public PersonBuilder withId(long id) {
+        this.id = String.format("E%04d", id);
+        return this;
     }
 
     /**
