@@ -34,21 +34,4 @@ public record GitHubUsername(String value) {
     public static boolean isValidGitHubUserName(String test) {
         return test.matches(VALIDATION_REGEX);
     }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (!(other instanceof GitHubUsername o)) {
-            return false;
-        }
-        return value.equals(o.value);
-    }
-
 }
