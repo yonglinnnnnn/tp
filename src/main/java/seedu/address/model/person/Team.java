@@ -49,10 +49,9 @@ public class Team {
         if (other == this) {
             return true;
         }
-        if (!(other instanceof Team)) {
+        if (!(other instanceof Team otherTeam)) {
             return false;
         }
-        Team otherTeam = (Team) other;
         return fullName.equals(otherTeam.fullName) && id.equals(otherTeam.id);
     }
 
