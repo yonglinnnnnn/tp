@@ -11,7 +11,8 @@ public record GitHubUsername(String value) {
 
     public static final String MESSAGE_CONSTRAINTS =
             "GitHub username should only contain alphanumeric characters and hyphens, start with an alphanumeric,\n"
-                    + "cannot have multiple consecutive hyphens, cannot begin or end with a hyphen, and must be 1-39 chars.";
+                    + "cannot have multiple consecutive hyphens, "
+                    + "cannot begin or end with a hyphen, and must be 1-39 chars.";
 
     /*
      * Using the same validation approach as Name for simplicity in this task.
