@@ -21,6 +21,10 @@ public class Person {
     private final Phone phone;
     private final Email email;
 
+    // Additional identity/data fields
+    private final GitHubUsername gitHubUserName; // may be null if not provided
+    private final Team team; // may be null if not provided
+
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
@@ -34,6 +38,25 @@ public class Person {
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.gitHubUserName = null;
+        this.team = null;
+        this.tags.addAll(tags);
+    }
+
+    /**
+     * Full constructor including new fields.
+     */
+    public Person(
+            Name name, Phone phone, Email email, Address address, Set<Tag> tags,
+            GitHubUsername gitHubUserName, Team team
+    ) {
+        requireAllNonNull(name, phone, email, address, tags);
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.gitHubUserName = gitHubUserName;
+        this.team = team;
         this.tags.addAll(tags);
     }
 
@@ -51,6 +74,14 @@ public class Person {
 
     public Address getAddress() {
         return address;
+    }
+
+    public GitHubUsername getGitHubUserName() {
+        return gitHubUserName;
+    }
+
+    public Team getTeam() {
+        return team;
     }
 
     /**
@@ -112,6 +143,78 @@ public class Person {
                 .add("address", address)
                 .add("tags", tags)
                 .toString();
+    }
+
+    /**
+     * Returns a builder pre-populated with this person's data, for convenient cloning with modifications.
+     */
+    public Builder duplicate() {
+        return new Builder()
+                .withName(name)
+                .withPhone(phone)
+                .withEmail(email)
+                .withAddress(address)
+                .withTags(tags)
+                .withGitHubUserName(gitHubUserName)
+                .withTeam(team);
+    }
+
+    /**
+     * Builder for Person, allowing incremental construction.
+     */
+    public static class Builder {
+        private Name name;
+        private Phone phone;
+        private Email email;
+        private Address address;
+        private Set<Tag> tags = new HashSet<>();
+        private GitHubUsername gitHubUserName;
+        private Team team;
+
+        public Builder withName(Name name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withPhone(Phone phone) {
+            this.phone = phone;
+            return this;
+        }
+
+        public Builder withEmail(Email email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder withAddress(Address address) {
+            this.address = address;
+            return this;
+        }
+
+        public Builder withTags(Tag... tags) {
+            this.tags.addAll(Set.of(tags));
+            return this;
+        }
+
+        public Builder withTags(Set<Tag> tags) {
+            this.tags = new HashSet<>(tags);
+            return this;
+        }
+
+        public Builder withGitHubUserName(GitHubUsername gitHubUserName) {
+            this.gitHubUserName = gitHubUserName;
+            return this;
+        }
+
+        public Builder withTeam(Team team) {
+            this.team = team;
+            return this;
+        }
+
+        public Person build() {
+            // use full constructor; existing fields are required by Person invariant
+            return new Person(name, phone, email, address, tags, gitHubUserName, team);
+        }
     }
 
 }
