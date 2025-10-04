@@ -15,8 +15,10 @@ import seedu.address.model.tag.Tag;
  * Guarantees: details are present and not null, field values are validated, immutable.
  */
 public class Person {
+    private static long nextId = 0;
 
     // Identity fields
+    private final String id = String.format("%04d", nextId++);
     private final Name name;
     private final Phone phone;
     private final Email email;
@@ -58,6 +60,10 @@ public class Person {
         this.gitHubUserName = gitHubUserName;
         this.team = team;
         this.tags.addAll(tags);
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Name getName() {
