@@ -15,6 +15,7 @@ import java.lang.reflect.Field;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -44,6 +45,23 @@ public class LogicManagerTest {
 
     private final Model model = new ModelManager();
     private Logic logic;
+
+    @BeforeAll
+    public static void setupOnce() {
+        Field field;
+        try {
+            field = AddCommandParser.class.getDeclaredField("nextId");
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+
+        field.setAccessible(true);
+        try {
+            field.setLong(null, 0);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @BeforeEach
     public void setUp() {

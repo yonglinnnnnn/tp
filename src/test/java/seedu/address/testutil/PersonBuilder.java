@@ -58,7 +58,49 @@ public class PersonBuilder {
      * Initializes the PersonBuilder with the data of {@code personToCopy}.
      */
     public PersonBuilder(Person personToCopy) {
-        id = personToCopy.id();
+        Field field;
+        try {
+            field = AddCommandParser.class.getDeclaredField("nextId");
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+
+        field.setAccessible(true);
+        try {
+            id = String.format("E%04d", field.getLong(null));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+        name = personToCopy.name();
+        phone = personToCopy.phone();
+        email = personToCopy.email();
+        address = personToCopy.address();
+        tags = new HashSet<>(personToCopy.tags());
+    }
+
+    /**
+     * Initializes the PersonBuilder with the data of {@code personToCopy}.
+     */
+    public PersonBuilder(Person personToCopy, boolean retainsId) {
+        Field field;
+        try {
+            field = AddCommandParser.class.getDeclaredField("nextId");
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+
+        field.setAccessible(true);
+        try {
+            id = String.format("E%04d", field.getLong(null));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (retainsId) {
+            id = personToCopy.id();
+        }
+
         name = personToCopy.name();
         phone = personToCopy.phone();
         email = personToCopy.email();
