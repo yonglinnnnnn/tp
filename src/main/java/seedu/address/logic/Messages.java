@@ -36,15 +36,15 @@ public class Messages {
      */
     public static String format(Person person) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(person.getName())
+        builder.append(person.name())
                 .append("; Phone: ")
-                .append(person.getPhone())
+                .append(person.phone())
                 .append("; Email: ")
-                .append(person.getEmail())
+                .append(person.email())
                 .append("; Address: ")
-                .append(person.getAddress())
+                .append(person.address())
                 .append("; Tags: ");
-        person.getTags().forEach(builder::append);
+        person.tags().forEach(builder::append);
         return builder.toString();
     }
 
