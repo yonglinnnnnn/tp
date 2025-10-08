@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
@@ -21,7 +22,7 @@ public class PersonTest {
     @Test
     public void asObservableList_modifyList_throwsUnsupportedOperationException() {
         Person person = new PersonBuilder().build();
-        assertThrows(UnsupportedOperationException.class, () -> person.getTags().remove(0));
+        assertThrows(UnsupportedOperationException.class, () -> person.tags().remove(0));
     }
 
     @Test
@@ -54,7 +55,7 @@ public class PersonTest {
     @Test
     public void equals() {
         // same values -> returns true
-        Person aliceCopy = new PersonBuilder(ALICE).build();
+        Person aliceCopy = new PersonBuilder(ALICE, true).build();
         assertTrue(ALICE.equals(aliceCopy));
 
         // same object -> returns true
@@ -70,11 +71,11 @@ public class PersonTest {
         assertFalse(ALICE.equals(BOB));
 
         // different name -> returns false
-        Person editedAlice = new PersonBuilder(ALICE).withName(VALID_NAME_BOB).build();
+        Person editedAlice = new PersonBuilder(ALICE, true).withName(VALID_NAME_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different phone -> returns false
-        editedAlice = new PersonBuilder(ALICE).withPhone(VALID_PHONE_BOB).build();
+        editedAlice = new PersonBuilder(ALICE, true).withPhone(VALID_PHONE_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different email -> returns false
@@ -92,8 +93,19 @@ public class PersonTest {
 
     @Test
     public void toStringMethod() {
-        String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
-                + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", tags=" + ALICE.getTags() + "}";
+        String expected = String.format(
+                "Person[id=%s, name=%s, phone=%s, email=%s, address=%s, gitHubUsername=%s, team=%s, tags=%s]",
+                ALICE.id(), ALICE.name(), ALICE.phone(), ALICE.email(), ALICE.address(),
+                ALICE.gitHubUsername(), ALICE.team(), ALICE.tags()
+        );
         assertEquals(expected, ALICE.toString());
+    }
+
+    @Test
+    public void duplicate() {
+        Person duplicateAlice = ALICE.duplicate("E9999").build();
+        assertTrue(ALICE.isSamePerson(duplicateAlice));
+        assertEquals("E9999", duplicateAlice.id());
+        assertNotEquals(ALICE, duplicateAlice);
     }
 }

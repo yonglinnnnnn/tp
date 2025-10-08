@@ -135,11 +135,14 @@ public class ModelManager implements Model {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof ModelManager)) {
+        if (!(other instanceof ModelManager otherModelManager)) {
             return false;
         }
 
-        ModelManager otherModelManager = (ModelManager) other;
+        boolean isSameAddressBook = addressBook.equals(otherModelManager.addressBook);
+        boolean isSameUserPrefs = userPrefs.equals(otherModelManager.userPrefs);
+        boolean isSameFilteredPersons = filteredPersons.equals(otherModelManager.filteredPersons);
+
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
                 && filteredPersons.equals(otherModelManager.filteredPersons);
