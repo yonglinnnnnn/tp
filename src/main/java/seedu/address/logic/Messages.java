@@ -43,6 +43,8 @@ public class Messages {
                 .append(person.email())
                 .append("; Address: ")
                 .append(person.address())
+                .append("; GitHubUsername: ")
+                .append(person.gitHubUsername())
                 .append("; Tags: ");
         person.tags().forEach(builder::append);
         return builder.toString();

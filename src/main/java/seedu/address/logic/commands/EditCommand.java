@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -23,6 +24,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.GitHubUsername;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -43,6 +45,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
+            + "[" + PREFIX_GITHUB + "GITHUB_USERNAME] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
@@ -99,9 +102,12 @@ public class EditCommand extends Command {
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.phone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.email());
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.address());
+        GitHubUsername updatedGitHubUsername =
+                editPersonDescriptor.getGitHubUsername().orElse(personToEdit.gitHubUsername());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.tags());
 
-        return new Person(personToEdit.id(), updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
+        return new Person(personToEdit.id(), updatedName, updatedPhone, updatedEmail,
+                updatedAddress, updatedGitHubUsername, updatedTags);
     }
 
     @Override
@@ -137,6 +143,7 @@ public class EditCommand extends Command {
         private Phone phone;
         private Email email;
         private Address address;
+        private GitHubUsername gitHubUsername;
         private Set<Tag> tags;
 
         public EditPersonDescriptor() {}
@@ -150,6 +157,7 @@ public class EditCommand extends Command {
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
             setAddress(toCopy.address);
+            setGitHubUsername(toCopy.gitHubUsername);
             setTags(toCopy.tags);
         }
 
@@ -157,7 +165,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, gitHubUsername, tags);
         }
 
         public void setName(Name name) {
@@ -192,6 +200,15 @@ public class EditCommand extends Command {
             return Optional.ofNullable(address);
         }
 
+        public void setGitHubUsername(GitHubUsername gitHubUsername) {
+            this.gitHubUsername = gitHubUsername;
+        }
+
+        public Optional<GitHubUsername> getGitHubUsername() {
+            return Optional.ofNullable(gitHubUsername);
+        }
+
+
         /**
          * Sets {@code tags} to this object's {@code tags}.
          * A defensive copy of {@code tags} is used internally.
@@ -225,6 +242,7 @@ public class EditCommand extends Command {
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
+                    && Objects.equals(gitHubUsername, otherEditPersonDescriptor.gitHubUsername)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags);
         }
 
@@ -235,6 +253,7 @@ public class EditCommand extends Command {
                     .add("phone", phone)
                     .add("email", email)
                     .add("address", address)
+                    .add("gitHubUsername", gitHubUsername)
                     .add("tags", tags)
                     .toString();
         }
