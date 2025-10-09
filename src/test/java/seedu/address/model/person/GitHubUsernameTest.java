@@ -15,8 +15,8 @@ class GitHubUsernameTest {
 
     @Test
     public void isValidGitHubUserName() {
-        assertTrue(GitHubUsername.isValidGitHubUserName(VALID_GITHUB_USERNAME));
-        assertFalse(GitHubUsername.isValidGitHubUserName(INVALID_GITHUB_USERNAME));
+        assertTrue(GitHubUsername.isValidGitHubUsername(VALID_GITHUB_USERNAME));
+        assertFalse(GitHubUsername.isValidGitHubUsername(INVALID_GITHUB_USERNAME));
     }
 
     @Test

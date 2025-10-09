@@ -19,13 +19,15 @@ public record Person(
     /**
      * Every field must be present and not null.
      */
-    public Person(String id, Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        this(id, name, phone, email, address, null, null, new HashSet<>());
+    public Person(String id, Name name, Phone phone, Email email, Address address,
+                  GitHubUsername gitHubUsername,
+                  Set<Tag> tags) {
+        this(id, name, phone, email, address, gitHubUsername, null, new HashSet<>());
         this.tags.addAll(tags);
     }
 
     public Person {
-        requireAllNonNull(id, name, phone, email, address, tags);
+        requireAllNonNull(id, name, phone, email, address, gitHubUsername, tags);
     }
 
     /**
