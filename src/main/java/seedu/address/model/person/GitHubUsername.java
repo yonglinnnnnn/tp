@@ -5,7 +5,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Person's GitHub username.
- * Guarantees: immutable; is valid as declared in {@link #isValidGitHubUserName(String)}
+ * Guarantees: immutable; is valid as declared in {@link #isValidGitHubUsername(String)}
  */
 public record GitHubUsername(String value) {
 
@@ -17,7 +17,7 @@ public record GitHubUsername(String value) {
     /*
      * Using the same validation approach as Name for simplicity in this task.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
+    public static final String VALIDATION_REGEX = "\\p{Alnum}*";
 
     /**
      * Constructs a {@code GitHubUserName}.
@@ -26,13 +26,13 @@ public record GitHubUsername(String value) {
      */
     public GitHubUsername {
         requireNonNull(value);
-        checkArgument(isValidGitHubUserName(value), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidGitHubUsername(value), MESSAGE_CONSTRAINTS);
     }
 
     /**
      * Returns true if a given string is a valid GitHub username.
      */
-    public static boolean isValidGitHubUserName(String test) {
+    public static boolean isValidGitHubUsername(String test) {
         return test.matches(VALIDATION_REGEX);
     }
 }
