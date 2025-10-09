@@ -28,8 +28,8 @@ public class SampleDataUtil {
                         "bernyuuu"),
                 getTagSet("colleagues", "friends")),
             new Person("E1002", new Name("Charlotte Oliveiro"), new Phone("93210283"),
-                new Email("charlotte@example.com"), new Address("Blk 11 Ang Mo Kio Street 74, " +
-                    "#11-04"), new GitHubUsername("char-olive-3"),
+                new Email("charlotte@example.com"), new Address("Blk 11 Ang Mo Kio Street 74, #11-04"),
+                    new GitHubUsername("char-olive-3"),
                 getTagSet("neighbours")),
             new Person("E1002", new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
                 new Address("Blk 436 Serangoon Gardens Street 26, #16-43"), new GitHubUsername(

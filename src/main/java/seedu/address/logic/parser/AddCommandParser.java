@@ -54,7 +54,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
         Person person = new Person(String.format("E%04d", nextId++), name, phone, email, address,
-         gitHubUsername, tagList);
+                gitHubUsername, tagList);
         return new AddCommand(person);
     }
 
