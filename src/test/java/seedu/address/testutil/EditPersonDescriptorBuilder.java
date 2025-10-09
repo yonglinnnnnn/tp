@@ -37,6 +37,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setPhone(person.phone());
         descriptor.setEmail(person.email());
         descriptor.setAddress(person.address());
+        descriptor.setGitHubUsername(person.gitHubUsername());
         descriptor.setTags(person.tags());
     }
 
