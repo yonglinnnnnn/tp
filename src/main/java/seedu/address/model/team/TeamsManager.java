@@ -9,7 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Manager for Team objects.
+ * Manager that holds and manages a collection of {@link Team} objects.
+ *
+ * <p>Provides basic mutating operations (add, remove, replace), lookup by id and
+ * an unmodifiable view of the stored teams. Designed for use in tests and
+ * higher-level components that coordinate team operations.
  */
 public class TeamsManager {
     private final List<Team> teams = new ArrayList<>();
@@ -17,7 +21,9 @@ public class TeamsManager {
     public TeamsManager() {}
 
     /**
-     * Adds a team if it does not already exist (by Team.equals).
+     * Adds the given team if it is not already present.
+     *
+     * @param team the team to add (must not be null)
      */
     public void addTeam(Team team) {
         requireNonNull(team);
@@ -28,6 +34,8 @@ public class TeamsManager {
 
     /**
      * Removes the given team if present.
+     *
+     * @param team the team to remove (must not be null)
      */
     public void removeTeam(Team team) {
         requireNonNull(team);
@@ -35,7 +43,9 @@ public class TeamsManager {
     }
 
     /**
-     * Replaces target team with editedTeam. Throws IllegalArgumentException if target not found.
+     * Replaces {@code target} with {@code editedTeam}.
+     *
+     * @throws IllegalArgumentException if {@code target} is not present.
      */
     public void setTeam(Team target, Team editedTeam) {
         requireNonNull(target);
@@ -48,7 +58,7 @@ public class TeamsManager {
     }
 
     /**
-     * Returns true if the manager contains an equivalent team.
+     * Returns true if an equivalent team exists in the manager.
      */
     public boolean hasTeam(Team team) {
         requireNonNull(team);
@@ -57,6 +67,9 @@ public class TeamsManager {
 
     /**
      * Finds a team by id.
+     *
+     * @param id the team id to search for (must not be null)
+     * @return an Optional containing the team if found, otherwise empty
      */
     public Optional<Team> getTeamById(String id) {
         requireNonNull(id);
@@ -64,14 +77,14 @@ public class TeamsManager {
     }
 
     /**
-     * Returns an unmodifiable view of the team list.
+     * Returns an unmodifiable view of the teams held by this manager.
      */
     public List<Team> getTeamList() {
         return Collections.unmodifiableList(teams);
     }
 
     /**
-     * Deletes all teams.
+     * Removes all teams from this manager.
      */
     public void resetTeams() {
         teams.clear();
@@ -85,8 +98,8 @@ public class TeamsManager {
         if (!(other instanceof TeamsManager)) {
             return false;
         }
-        TeamsManager otherManager = (TeamsManager) other;
-        return teams.equals(otherManager.teams);
+        TeamsManager teamManager = (TeamsManager) other;
+        return teams.equals(teamManager.teams);
     }
 
     @Override

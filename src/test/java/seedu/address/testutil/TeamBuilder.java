@@ -10,7 +10,10 @@ import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamName;
 
 /**
- * A utility class to help build Team objects for tests.
+ * Test utility to build {@link seedu.address.model.team.Team} instances.
+ *
+ * <p>Provides fluent setters for id, name, parent, leader, members and subteams
+ * to simplify test setup.
  */
 public class TeamBuilder {
     public static final String DEFAULT_ID = "T0000";
@@ -23,6 +26,9 @@ public class TeamBuilder {
     private final List<Person> members = new ArrayList<>();
     private final List<Team> subteams = new ArrayList<>();
 
+    /**
+     * Creates a {@code TeamBuilder} with default values.
+     */
     public TeamBuilder() {
         this.id = DEFAULT_ID;
         this.name = new TeamName(DEFAULT_NAME);
@@ -43,26 +49,41 @@ public class TeamBuilder {
         this.subteams.addAll(teamToCopy.getSubteams());
     }
 
+    /**
+     * Sets the id to use for the built {@link Team}.
+     */
     public TeamBuilder withId(String id) {
         this.id = id;
         return this;
     }
 
+    /**
+     * Sets the {@link TeamName} to use for the built {@link Team}.
+     */
     public TeamBuilder withTeamName(TeamName teamName) {
         this.name = Objects.requireNonNull(teamName);
         return this;
     }
 
+    /**
+     * Sets the parent team for the built {@link Team}.
+     */
     public TeamBuilder withParentTeam(Team parent) {
         this.parentTeam = parent;
         return this;
     }
 
+    /**
+     * Sets the team leader for the built {@link Team}.
+     */
     public TeamBuilder withTeamLeader(Person leader) {
         this.teamLeader = leader;
         return this;
     }
 
+    /**
+     * Sets the member list for the built {@link Team}.
+     */
     public TeamBuilder withMembers(Person... members) {
         this.members.clear();
         if (members != null) {
@@ -71,6 +92,9 @@ public class TeamBuilder {
         return this;
     }
 
+    /**
+     * Sets the subteam list for the built {@link Team}.
+     */
     public TeamBuilder withSubteams(Team... subteams) {
         this.subteams.clear();
         if (subteams != null) {
@@ -79,6 +103,9 @@ public class TeamBuilder {
         return this;
     }
 
+    /**
+     * Builds and returns a {@link Team} configured with the builder's values.
+     */
     public Team build() {
         Team team = new Team(id, name);
         if (parentTeam != null) {

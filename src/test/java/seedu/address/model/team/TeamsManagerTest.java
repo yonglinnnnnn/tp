@@ -3,7 +3,6 @@ package seedu.address.model.team;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -15,6 +14,11 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.testutil.TypicalTeams;
 
+/**
+ * Unit tests for {@link seedu.address.model.team.TeamsManager}.
+ *
+ * <p>Exercises all public operations: add, remove, replace, lookup and view semantics.
+ */
 public class TeamsManagerTest {
 
     private TeamsManager manager;
@@ -30,7 +34,7 @@ public class TeamsManagerTest {
     }
 
     @Test
-    public void addTeam_adds_whenNotPresent_and_ignoresDuplicate() {
+    public void addTeam_addsAndIgnoresDuplicate() {
         Team t = new Team("T1000", "Example");
         manager.addTeam(t);
         List<Team> listAfterAdd = manager.getTeamList();
@@ -64,7 +68,6 @@ public class TeamsManagerTest {
         Team edited = new Team("T2000", "Edited");
         manager.setTeam(original, edited);
 
-        // original reference no longer present; edited present
         assertFalse(manager.getTeamList().contains(original));
         assertTrue(manager.getTeamList().contains(edited));
     }

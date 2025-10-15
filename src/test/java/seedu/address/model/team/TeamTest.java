@@ -1,4 +1,3 @@
-// java
 package seedu.address.model.team;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.testutil.TypicalTeams.CORE;
 import static seedu.address.testutil.TypicalTeams.BACKEND;
+import static seedu.address.testutil.TypicalTeams.CORE;
 import static seedu.address.testutil.TypicalTeams.FRONTEND;
 import static seedu.address.testutil.TypicalTeams.QA;
 
@@ -21,12 +20,18 @@ import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.TypicalPersons;
 
+/**
+ * Unit tests for {@link seedu.address.model.team.Team}.
+ *
+ * <p>Verifies core behaviors: leader/member management, parent/subteam relationships,
+ * immutability of returned collections and basic identity semantics.
+ */
 public class TeamTest {
 
     @Test
     public void changeLeader_addsLeaderAndMemberIfAbsent() {
         Team team = new Team("T1000", "Example");
-        assertEquals(null, team.getLeaderPersonId());
+        assertNull(team.getLeaderPersonId());
 
         Person p = new PersonBuilder().withId(9999).build();
         team.changeLeader(p);
