@@ -2,6 +2,9 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -136,5 +139,21 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+    /**
+     * Parses a {@code String fileName} inclusive of '.json' into an {@code Path}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code fileName} is invalid.
+     */
+    public static Path parseFileName(String fileName) throws ParseException {
+        requireNonNull(fileName);
+        String trimmedPath = fileName.trim();
+        Path filePath = Paths.get("data", trimmedPath);
+        if (!Files.exists(filePath)) {
+            throw new ParseException("File does not exist");
+        }
+        return filePath;
     }
 }

@@ -6,6 +6,9 @@ import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -194,5 +197,33 @@ public class ParserUtilTest {
         Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
 
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    @Test
+    public void parseFileName_validFile_returnsPath() throws Exception {
+        Path testDataFile = Paths.get("data", "testImportData.json");
+        Files.createFile(testDataFile);
+        try {
+            Path result = ParserUtil.parseFileName("testImportData.json");
+            assertEquals(testDataFile.toAbsolutePath().normalize(), result.toAbsolutePath().normalize());
+        } finally {
+            if (Files.exists(testDataFile)) {
+                Files.delete(testDataFile);
+            }
+        }
+    }
+
+    @Test
+    public void parseFileName_withWhitespace_returnsTrimmedPath() throws Exception {
+        Path testDataFile = Paths.get("data", "testImportData.json");
+        Files.createFile(testDataFile);
+        try {
+            Path result = ParserUtil.parseFileName(WHITESPACE + "testImportData.json");
+            assertEquals(testDataFile.toAbsolutePath().normalize(), result.toAbsolutePath().normalize());
+        } finally {
+            if (Files.exists(testDataFile)) {
+                Files.delete(testDataFile);
+            }
+        }
     }
 }
