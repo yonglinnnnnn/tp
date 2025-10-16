@@ -73,15 +73,9 @@ public class UntagCommand extends Command {
         Set<Tag> updatedTags = new HashSet<>(personToUntag.tags());
         updatedTags.removeAll(tagsToRemove);
 
-        return new Person(
-            personToUntag.id(),
-            personToUntag.name(),
-            personToUntag.phone(),
-            personToUntag.email(),
-            personToUntag.address(),
-            personToUntag.gitHubUsername(),
-            updatedTags
-        );
+        return personToUntag.duplicate(personToUntag.id())
+                .withTags(updatedTags)
+                .build();
     }
 
     @Override
@@ -108,4 +102,3 @@ public class UntagCommand extends Command {
                 .toString();
     }
 }
-

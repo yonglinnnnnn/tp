@@ -72,15 +72,9 @@ public class TagCommand extends Command {
         Set<Tag> updatedTags = new HashSet<>(personToTag.tags());
         updatedTags.addAll(tagsToAdd);
 
-        return new Person(
-            personToTag.id(),
-            personToTag.name(),
-            personToTag.phone(),
-            personToTag.email(),
-            personToTag.address(),
-            personToTag.gitHubUsername(),
-            updatedTags
-        );
+        return personToTag.duplicate(personToTag.id())
+                .withTags(updatedTags)
+                .build();
     }
 
     @Override
@@ -107,4 +101,3 @@ public class TagCommand extends Command {
                 .toString();
     }
 }
-
