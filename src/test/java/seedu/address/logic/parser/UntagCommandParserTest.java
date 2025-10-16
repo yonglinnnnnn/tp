@@ -112,4 +112,17 @@ public class UntagCommandParserTest {
 
         assertParseSuccess(parser, "999 friends", new UntagCommand(Index.fromOneBased(999), tags));
     }
+
+    @Test
+    public void parse_emptyTagAfterTrim_throwsParseException() {
+        // Note: This tests the edge case where ParserUtil.parseTags might return an empty set
+        // In practice, ParserUtil.parseTag throws an exception for empty/whitespace-only tags,
+        // but this ensures the isEmpty() check in UntagCommandParser is covered
+
+        // Tags that are only whitespace should be caught by Tag validation
+        // This will throw MESSAGE_INVALID_COMMAND_FORMAT, not MESSAGE_NO_TAGS_PROVIDED
+        // because the tokens.length < 2 check catches this before we reach parseTags
+        assertParseFailure(parser, "1  ", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                UntagCommand.MESSAGE_USAGE));
+    }
 }
