@@ -1,15 +1,8 @@
 ﻿package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -26,29 +19,24 @@ public final class SetSalaryCommand extends Command {
     public static final String MESSAGE_NON_EXISTENT_PERSON = "The person does not exist!";
 
 
-    private final Person toSet;
+    private final String toSet;
     private final int salary;
 
     /**
-     * Creates an SetSalaryCommand to add the specified {@code Person}
+     * Creates an SetSalaryCommand for the specified {@code Person}
      */
-    public SetSalaryCommand(Person person, int salary) {
-        requireNonNull(person);
-        toSet = person;
+    public SetSalaryCommand(String personId, int salary) {
+        requireNonNull(personId);
+        toSet = personId;
         this.salary = salary;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-
-        if (!model.hasPerson(toSet)) {
-            throw new CommandException(MESSAGE_NON_EXISTENT_PERSON);
-        }
-
-        model.deletePerson(toSet);
-        Person person = toSet.duplicate(toSet.id()).withSalary(salary).build();
-        model.addPerson(person);
+        Person person = model.find(p -> p.id().equals(toSet));
+        model.deletePerson(person);
+        model.addPerson(person.duplicate(toSet).withSalary(salary).build());
         return new CommandResult(String.format(MESSAGE_SUCCESS, salary, person.id()));
     }
 

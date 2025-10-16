@@ -76,6 +76,8 @@ public interface Model {
      */
     void setPerson(Person target, Person editedPerson);
 
+    Person find(Predicate<Person> predicate);
+
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();
 
