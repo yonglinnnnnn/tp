@@ -111,6 +111,12 @@ public class ModelManager implements Model {
         addressBook.setPerson(target, editedPerson);
     }
 
+    @Override
+    public Person find(Predicate<Person> predicate) {
+        requireNonNull(predicate);
+        return addressBook.getPersonList().stream().filter(predicate).findFirst().orElse(null);
+    }
+
     //=========== Filtered Person List Accessors =============================================================
 
     /**

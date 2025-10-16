@@ -14,7 +14,7 @@ import seedu.address.model.tag.Tag;
  */
 public record Person(
         String id, Name name, Phone phone, Email email,
-        Address address, GitHubUsername gitHubUsername, Team team, Set<Tag> tags
+        Address address, GitHubUsername gitHubUsername, Team team, Set<Tag> tags, int salary
 ) {
     /**
      * Every field must be present and not null.
@@ -22,7 +22,7 @@ public record Person(
     public Person(String id, Name name, Phone phone, Email email, Address address,
                   GitHubUsername gitHubUsername,
                   Set<Tag> tags) {
-        this(id, name, phone, email, address, gitHubUsername, null, new HashSet<>());
+        this(id, name, phone, email, address, gitHubUsername, null, new HashSet<>(), 0);
         this.tags.addAll(tags);
     }
 
@@ -63,7 +63,23 @@ public record Person(
                 .withAddress(address)
                 .withTags(tags)
                 .withGitHubUserName(gitHubUsername)
-                .withTeam(team);
+                .withTeam(team)
+                .withSalary(salary);
+    }
+
+    /**
+     * Returns a builder pre-populated with this person's data, for convenient cloning with modifications.
+     */
+    public Builder duplicate() {
+        return new Builder(id)
+                .withName(name)
+                .withPhone(phone)
+                .withEmail(email)
+                .withAddress(address)
+                .withTags(tags)
+                .withGitHubUserName(gitHubUsername)
+                .withTeam(team)
+                .withSalary(salary);
     }
 
     /**
@@ -78,8 +94,7 @@ public record Person(
         private Set<Tag> tags = new HashSet<>();
         private GitHubUsername gitHubUsername;
         private Team team;
-
-        private Builder() { }
+        private int salary;
 
         public Builder(String id) {
             this.id = id;
@@ -166,12 +181,21 @@ public record Person(
         }
 
         /**
+         * Sets the salary of the {@code Person} that we are building.
+         * @param salary The salary to set.
+         * @return The Builder object.
+         */
+        public Builder withSalary(int salary) {
+            this.salary = salary;
+            return this;
+        }
+
+        /**
          * Builds the Person object.
          * @return The Person object.
          */
         public Person build() {
-            return new Person(id, name, phone, email, address, gitHubUsername, team, tags);
+            return new Person(id, name, phone, email, address, gitHubUsername, team, tags, salary);
         }
     }
-
 }
