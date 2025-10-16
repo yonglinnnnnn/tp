@@ -201,28 +201,40 @@ public class ParserUtilTest {
 
     @Test
     public void parseFileName_validFile_returnsPath() throws Exception {
-        Path testDataFile = Paths.get("data", "testImportData.json");
-        Files.createFile(testDataFile);
+        Path dirPath = Paths.get("data");
+        Path testFilePath = Paths.get("data", "testImportData.json");
+        if (!Files.exists(dirPath)) {
+            Files.createDirectories(dirPath);
+        }
+        if (!Files.exists(testFilePath)) {
+            Files.createFile(testFilePath);
+        }
         try {
             Path result = ParserUtil.parseFileName("testImportData.json");
-            assertEquals(testDataFile.toAbsolutePath().normalize(), result.toAbsolutePath().normalize());
+            assertEquals(testFilePath.toAbsolutePath().normalize(), result.toAbsolutePath().normalize());
         } finally {
-            if (Files.exists(testDataFile)) {
-                Files.delete(testDataFile);
+            if (Files.exists(testFilePath)) {
+                Files.delete(testFilePath);
             }
         }
     }
 
     @Test
     public void parseFileName_withWhitespace_returnsTrimmedPath() throws Exception {
-        Path testDataFile = Paths.get("data", "testImportData.json");
-        Files.createFile(testDataFile);
+        Path dirPath = Paths.get("data");
+        Path testFilePath = Paths.get("data", "testImportData.json");
+        if (!Files.exists(dirPath)) {
+            Files.createDirectories(dirPath);
+        }
+        if (!Files.exists(testFilePath)) {
+            Files.createFile(testFilePath);
+        }
         try {
             Path result = ParserUtil.parseFileName(WHITESPACE + "testImportData.json");
-            assertEquals(testDataFile.toAbsolutePath().normalize(), result.toAbsolutePath().normalize());
+            assertEquals(testFilePath.toAbsolutePath().normalize(), result.toAbsolutePath().normalize());
         } finally {
-            if (Files.exists(testDataFile)) {
-                Files.delete(testDataFile);
+            if (Files.exists(testFilePath)) {
+                Files.delete(testFilePath);
             }
         }
     }
