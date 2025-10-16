@@ -4,6 +4,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import java.util.stream.Stream;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.SetSalaryCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -21,6 +22,16 @@ public class SetSalaryCommandParser implements Parser<SetSalaryCommand> {
         if (tokens.length < 2) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, SetSalaryCommand.MESSAGE_USAGE));
+        }
+
+        String id = tokens[0];
+        int salary = Integer.parseInt(tokens[1]);
+        if (!id.startsWith("E")) {
+            throw new ParseException(Messages.MESSAGE_INVALID_PERSON_ID);
+        }
+
+        if (salary <= 0) {
+            throw new ParseException(Messages.MESSAGE_INVALID_SALARY);
         }
 
         return new SetSalaryCommand(tokens[0], Integer.parseInt(tokens[1]));
