@@ -170,6 +170,20 @@ Clears all entries from the address book.
 
 Format: `clear`
 
+### Importing contacts from data file : `import`
+
+Imports contact data from a specific JSON file from the data folder into the main address book.
+
+Format: `import FILENAME.json`
+
+- The file must be located inside the 'data' folder
+- The command must include the '.json' file extension
+- JSON format from the file must be valid
+- Duplicate contacts with the same employee ID will not be imported
+
+Example:
+- `import oldContacts.json` imports non-duplicate contacts from 'data/oldContacts.json' into the address book.
+
 ### Exiting the program : `exit`
 
 Exits the program.
@@ -220,5 +234,6 @@ Action     | Format, Examples
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [-name NAME] [-hp PHONE_NUMBER] [-em EMAIL] [-addr ADDRESS] [-tag TAG]…​`<br> e.g.,`edit 2 -name James Lee -em jameslee@example.com`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Import** | `import FILENAME.json`<br> e.g., `import oldContacts.json`
 **List**   | `list`
 **Help**   | `help`
