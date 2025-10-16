@@ -7,6 +7,9 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
+/**
+ * Sets the salary for a person.
+ */
 public final class SetSalaryCommand extends Command {
     public static final String COMMAND_WORD = "set-salary";
 
