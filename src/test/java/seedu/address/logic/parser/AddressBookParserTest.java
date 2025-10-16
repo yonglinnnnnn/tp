@@ -23,6 +23,7 @@ import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.SetSalaryCommand;
 import seedu.address.logic.commands.TagCommand;
 import seedu.address.logic.commands.UntagCommand;
 import seedu.address.logic.commands.ViewCommand;
@@ -109,6 +110,14 @@ public class AddressBookParserTest {
         UntagCommand command = (UntagCommand) parser.parseCommand(
                 UntagCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " friends");
         assertEquals(new UntagCommand(INDEX_FIRST_PERSON, tags), command);
+    }
+
+    @Test
+    public void parseCommand_setSalary() throws Exception {
+        Person person = new PersonBuilder().build();
+        SetSalaryCommand command = (SetSalaryCommand) parser.parseCommand(
+                SetSalaryCommand.COMMAND_WORD + " " + person.id() + " 100");
+        assertEquals(new SetSalaryCommand(person.id(), 100), command);
     }
 
     @Test
