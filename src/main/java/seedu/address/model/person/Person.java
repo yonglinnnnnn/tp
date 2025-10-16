@@ -68,6 +68,21 @@ public record Person(
     }
 
     /**
+     * Returns a builder pre-populated with this person's data, for convenient cloning with modifications.
+     */
+    public Builder duplicate() {
+        return new Builder(id)
+                .withName(name)
+                .withPhone(phone)
+                .withEmail(email)
+                .withAddress(address)
+                .withTags(tags)
+                .withGitHubUserName(gitHubUsername)
+                .withTeam(team)
+                .withSalary(salary);
+    }
+
+    /**
      * Builder for Person, allowing incremental construction.
      */
     public static class Builder {
@@ -80,8 +95,6 @@ public record Person(
         private GitHubUsername gitHubUsername;
         private Team team;
         private int salary;
-
-        private Builder() { }
 
         public Builder(String id) {
             this.id = id;
