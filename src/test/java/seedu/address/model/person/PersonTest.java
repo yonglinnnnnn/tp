@@ -94,7 +94,7 @@ public class PersonTest {
     @Test
     public void toStringMethod() {
         String expected = String.format(
-                "Person[id=%s, name=%s, phone=%s, email=%s, address=%s, gitHubUsername=%s, team=%s, tags=%s]",
+                "Person[id=%s, name=%s, phone=%s, email=%s, address=%s, gitHubUsername=%s, team=%s, tags=%s, salary=0]",
                 ALICE.id(), ALICE.name(), ALICE.phone(), ALICE.email(), ALICE.address(),
                 ALICE.gitHubUsername(), ALICE.team(), ALICE.tags()
         );
