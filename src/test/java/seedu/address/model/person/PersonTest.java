@@ -107,5 +107,10 @@ public class PersonTest {
         assertTrue(ALICE.isSamePerson(duplicateAlice));
         assertEquals("E9999", duplicateAlice.id());
         assertNotEquals(ALICE, duplicateAlice);
+
+        duplicateAlice = ALICE.duplicate().build();
+        assertTrue(ALICE.isSamePerson(duplicateAlice));
+        assertEquals(ALICE.id(), duplicateAlice.id());
+        assertEquals(ALICE, duplicateAlice);
     }
 }
