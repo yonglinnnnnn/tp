@@ -45,7 +45,8 @@ public class TypicalPersons {
             .withPhone("95352563")
             .withEmail("heinz@example.com")
             .withGitHubUsername("@carl03")
-            .withAddress("wall street").build();
+            .withAddress("wall street")
+            .withoutTags().build();
     public static final Person DANIEL = new PersonBuilder()
             .withId(3)
             .withName("Daniel Meier")
@@ -60,21 +61,24 @@ public class TypicalPersons {
             .withPhone("9482224")
             .withEmail("werner@example.com")
             .withGitHubUsername("@elle05")
-            .withAddress("michegan ave").build();
+            .withAddress("michegan ave")
+            .withoutTags().build();
     public static final Person FIONA = new PersonBuilder()
             .withId(5)
             .withName("Fiona Kunz")
             .withPhone("9482427")
             .withEmail("lydia@example.com")
             .withGitHubUsername("@fiona06")
-            .withAddress("little tokyo").build();
+            .withAddress("little tokyo")
+            .withoutTags().build();
     public static final Person GEORGE = new PersonBuilder()
             .withId(6)
             .withName("George Best")
             .withPhone("9482442")
             .withEmail("anna@example.com")
             .withGitHubUsername("@george07")
-            .withAddress("4th street").build();
+            .withAddress("4th street")
+            .withoutTags().build();
 
     // Manually added
     public static final Person HOON = new PersonBuilder()
@@ -83,14 +87,16 @@ public class TypicalPersons {
             .withPhone("8482424")
             .withEmail("stefan@example.com")
             .withGitHubUsername("@hoon08")
-            .withAddress("little india").build();
+            .withAddress("little india")
+            .withoutTags().build();
     public static final Person IDA = new PersonBuilder()
             .withId(8)
             .withName("Ida Mueller")
             .withPhone("8482131")
             .withEmail("hans@example.com")
             .withGitHubUsername("@ida09")
-            .withAddress("chicago ave").build();
+            .withAddress("chicago ave")
+            .withoutTags().build();
 
     // Manually added - Person's details found in {@code CommandTestUtil}
     public static final Person AMY = new PersonBuilder()

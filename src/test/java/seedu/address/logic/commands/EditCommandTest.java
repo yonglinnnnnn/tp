@@ -18,7 +18,6 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import java.lang.reflect.Field;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -57,10 +56,9 @@ public class EditCommandTest {
         }
     }
 
-    @Disabled()
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
-        Person editedPerson = new PersonBuilder().build();
+        Person editedPerson = new PersonBuilder().addDefaultTag().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(editedPerson).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
 
