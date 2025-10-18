@@ -1,11 +1,17 @@
 package seedu.address.logic.commands;
 
+import static java.util.Objects.requireNonNull;
+
+import java.util.List;
+
 import seedu.address.model.Model;
+import seedu.address.model.audit.AuditLog;
+import seedu.address.model.audit.AuditLogEntry;
 
 /**
  * Displays the audit log of all past actions.
  */
-public class ViewAuditLogCommand extends Command {
+public class AuditCommand extends Command {
 
     public static final String COMMAND_WORD = "audit";
     public static final String MESSAGE_SUCCESS = "Audit Log:\n%s";
@@ -13,17 +19,20 @@ public class ViewAuditLogCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) {
-        var entries = model.getAuditLog().getEntries();
+        requireNonNull(model);
+
+        AuditLog auditLog = model.getAuditLog();
+        List<AuditLogEntry> entries = auditLog.getEntries();
 
         if (entries.isEmpty()) {
-            return new CommandResult(MESSAGE_EMPTY);
+            return new CommandResult("No audit log entries found.");
         }
 
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < entries.size(); i++) {
-            result.append(String.format("%d. %s\n", i + 1, entries.get(i)));
+        StringBuilder result = new StringBuilder("Audit Log:\n");
+        for (AuditLogEntry entry : entries) {
+            result.append(entry.toString()).append("\n");
         }
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, result.toString().trim()));
+        return new CommandResult(result.toString());
     }
 }
