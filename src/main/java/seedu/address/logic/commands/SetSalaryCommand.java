@@ -40,6 +40,8 @@ public final class SetSalaryCommand extends Command {
         Person person = model.find(p -> p.id().equals(toSet));
         model.deletePerson(person);
         model.addPerson(person.duplicate(toSet).withSalary(salary).build());
+        model.addAuditEntry("SET SALARY", String.format("Set salary for person: %s", person.name()));
+
         return new CommandResult(String.format(MESSAGE_SUCCESS, salary, person.id()));
     }
 
