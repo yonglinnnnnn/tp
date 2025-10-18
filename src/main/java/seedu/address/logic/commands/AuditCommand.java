@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 
+import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.Model;
 import seedu.address.model.audit.AuditLog;
 import seedu.address.model.audit.AuditLogEntry;
@@ -32,5 +33,21 @@ public class AuditCommand extends Command {
         }
 
         return new CommandResult(result.toString());
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        // instanceof handles nulls
+        return other instanceof AuditCommand;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .toString();
     }
 }
