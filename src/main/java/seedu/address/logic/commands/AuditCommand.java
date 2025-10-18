@@ -25,7 +25,8 @@ public class AuditCommand extends Command {
         List<AuditLogEntry> entries = auditLog.getEntries();
 
         if (entries.isEmpty()) {
-            return new CommandResult("No audit log entries found.");        }
+            return new CommandResult("No audit log entries found.");
+        }
 
         StringBuilder result = new StringBuilder("Audit Log:\n");
         for (AuditLogEntry entry : entries) {
