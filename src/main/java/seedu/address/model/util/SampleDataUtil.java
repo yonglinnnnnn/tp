@@ -21,26 +21,26 @@ public class SampleDataUtil {
     public static Person[] getSamplePersons() {
         return new Person[] {
             new Person("E1001", new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
-                new Address("Blk 30 Geylang Street 29, #06-40"), new GitHubUsername("alexxx"),
+                new Address("Blk 30 Geylang Street 29, #06-40"), new GitHubUsername("@alexxx"),
                 getTagSet("friends")),
             new Person("E1002", new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
                 new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18"), new GitHubUsername(
-                        "bernyuuu"),
+                        "@bernyuuu"),
                 getTagSet("colleagues", "friends")),
-            new Person("E1002", new Name("Charlotte Oliveiro"), new Phone("93210283"),
+            new Person("E1003", new Name("Charlotte Oliveiro"), new Phone("93210283"),
                 new Email("charlotte@example.com"), new Address("Blk 11 Ang Mo Kio Street 74, #11-04"),
-                    new GitHubUsername("char-olive-3"),
+                    new GitHubUsername("@char-olive-3"),
                 getTagSet("neighbours")),
-            new Person("E1002", new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
+            new Person("E1004", new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
                 new Address("Blk 436 Serangoon Gardens Street 26, #16-43"), new GitHubUsername(
-                        "li-david-01"),
+                        "@li-david-01"),
                 getTagSet("family")),
-            new Person("E1002", new Name("Irfan Ibrahim"), new Phone("92492021"), new Email("irfan@example.com"),
+            new Person("E1005", new Name("Irfan Ibrahim"), new Phone("92492021"), new Email("irfan@example.com"),
                 new Address("Blk 47 Tampines Street 20, #17-35"), new GitHubUsername(
-                        "irfanibrahim23"),
+                        "@irfanibrahim23"),
                 getTagSet("classmates")),
-            new Person("E1002", new Name("Roy Balakrishnan"), new Phone("92624417"), new Email("royb@example.com"),
-                new Address("Blk 45 Aljunied Street 85, #11-31"), new GitHubUsername("roy-b"),
+            new Person("E1006", new Name("Roy Balakrishnan"), new Phone("92624417"), new Email("royb@example.com"),
+                new Address("Blk 45 Aljunied Street 85, #11-31"), new GitHubUsername("@roy-b"),
                 getTagSet("colleagues"))
         };
     }
