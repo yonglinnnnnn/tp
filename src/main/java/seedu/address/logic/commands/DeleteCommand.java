@@ -42,7 +42,8 @@ public class DeleteCommand extends Command {
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
         model.deletePerson(personToDelete);
-        model.addAuditEntry("DELETE", String.format("Deleted person: %s", personToDelete.name()));
+        model.addAuditEntry("DELETE", String.format("Deleted person: %s (ID: %s)",
+                personToDelete.name(), personToDelete.id()));
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
     }
 
