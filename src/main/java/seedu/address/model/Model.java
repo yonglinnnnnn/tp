@@ -86,4 +86,14 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Adds an entry to the audit log.
+     */
+    void addAuditEntry(String action, String details);
+
+    /**
+     * Returns the audit log.
+     */
+    AuditLog getAuditLog();
 }

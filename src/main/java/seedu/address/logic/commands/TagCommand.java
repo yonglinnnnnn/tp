@@ -59,6 +59,7 @@ public class TagCommand extends Command {
 
         model.setPerson(personToTag, taggedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        model.addAuditEntry("TAG", String.format("Add tag for person: %s", taggedPerson.name()));
         return new CommandResult(String.format(MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson)));
     }
 

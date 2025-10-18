@@ -60,6 +60,7 @@ public class UntagCommand extends Command {
 
         model.setPerson(personToUntag, untaggedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        model.addAuditEntry("UNTAG", String.format("Removed tag for person: %s", untaggedPerson.name()));
         return new CommandResult(String.format(MESSAGE_UNTAG_SUCCESS, Messages.format(untaggedPerson)));
     }
 
