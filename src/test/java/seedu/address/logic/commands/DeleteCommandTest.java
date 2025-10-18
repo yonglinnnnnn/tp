@@ -17,6 +17,7 @@ import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 
 /**
@@ -117,4 +118,27 @@ public class DeleteCommandTest {
 
         assertTrue(model.getFilteredPersonList().isEmpty());
     }
+
+    @Test
+    public void execute_validIndexUnfilteredList_addsAuditEntry() {
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(personToDelete));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(personToDelete);
+        expectedModel.addAuditEntry("DELETE", String.format("Deleted person: %s", personToDelete.name()));
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+
+        // Verify audit entry exists
+        AuditLog auditLog = model.getAuditLog();
+        assertFalse(auditLog.getEntries().isEmpty());
+        assertTrue(auditLog.getEntries().stream()
+                .anyMatch(entry -> entry.getAction().equals("DELETE")
+                        && entry.getDetails().contains(personToDelete.name().toString())));
+    }
+
 }
