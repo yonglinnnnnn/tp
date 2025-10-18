@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
-import java.time.*;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -24,7 +23,6 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
-    private final AuditLog auditLog;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -37,8 +35,6 @@ public class ModelManager implements Model {
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
-        this.auditLog = new AuditLog();
-
     }
 
     public ModelManager() {
@@ -163,12 +159,11 @@ public class ModelManager implements Model {
     @Override
     public void addAuditEntry(String action, String details) {
         addressBook.addAuditEntry(action, details);
-        auditLog.addEntry(action, details, LocalDateTime.now());
     }
 
     @Override
     public AuditLog getAuditLog() {
-        return auditLog;
+        return addressBook.getAuditLog();
     }
 
 }
