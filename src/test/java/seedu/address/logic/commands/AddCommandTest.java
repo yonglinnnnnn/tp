@@ -211,9 +211,9 @@ public class AddCommandTest {
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
-        boolean auditEntryAdded = false;
-        String lastAuditAction = "";
-        String lastAuditDetails = "";
+        private boolean auditEntryAdded = false;
+        private String lastAuditAction = "";
+        private String lastAuditDetails = "";
 
         @Override
         public boolean hasPerson(Person person) {

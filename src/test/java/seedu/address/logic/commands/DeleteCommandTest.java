@@ -140,5 +140,4 @@ public class DeleteCommandTest {
                 .anyMatch(entry -> entry.getAction().equals("DELETE")
                         && entry.getDetails().contains(personToDelete.name().toString())));
     }
-
 }

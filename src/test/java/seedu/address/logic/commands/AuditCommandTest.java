@@ -12,7 +12,6 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -113,6 +112,4 @@ public class AuditCommandTest {
         String expected = new ToStringBuilder(auditCommand).toString();
         assertEquals(expected, auditCommand.toString());
     }
-
-
 }

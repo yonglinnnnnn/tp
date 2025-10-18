@@ -50,6 +50,4 @@ public class ClearCommandTest {
                 .anyMatch(entry -> entry.getAction().equals("CLEAR")
                         && entry.getDetails().contains("Cleared all data")));
     }
-
-
 }
