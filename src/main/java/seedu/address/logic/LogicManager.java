@@ -3,6 +3,7 @@ package seedu.address.logic;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
@@ -12,6 +13,7 @@ import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddressBookParser;
+import seedu.address.logic.parser.AddCommandParser;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
@@ -40,6 +42,19 @@ public class LogicManager implements Logic {
         this.model = model;
         this.storage = storage;
         addressBookParser = new AddressBookParser();
+
+        // In the LogicManager constructor, after model initialization
+        List<Person> persons = model.getAddressBook().getPersonList();
+        if (!persons.isEmpty()) {
+            long maxId = persons.stream()
+                    .map(Person::id)
+                    .filter(id -> id.startsWith("E"))
+                    .mapToLong(id -> Long.parseLong(id.substring(1)))
+                    .max()
+                    .orElse(0);
+            AddCommandParser.setNextId(maxId + 1);
+        }
+
     }
 
     @Override

@@ -66,4 +66,13 @@ public class AddCommandParser implements Parser<AddCommand> {
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 
+    /**
+     * Sets the next ID based on the highest existing ID in the address book.
+     * Should be called when the application starts.
+     */
+    public static void setNextId(long id) {
+        nextId = id;
+    }
+
+
 }
