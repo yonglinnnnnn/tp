@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AuditCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
@@ -119,6 +120,13 @@ public class AddressBookParserTest {
                 SetSalaryCommand.COMMAND_WORD + " " + person.id() + " 100");
         assertEquals(new SetSalaryCommand(person.id(), 100), command);
     }
+
+    @Test
+    public void parseCommand_audit() throws Exception {
+        assertTrue(parser.parseCommand(AuditCommand.COMMAND_WORD) instanceof AuditCommand);
+        assertTrue(parser.parseCommand(AuditCommand.COMMAND_WORD + " 3") instanceof AuditCommand);
+    }
+
 
     @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
