@@ -21,6 +21,9 @@ import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.tag.Tag;
 
+/**
+ * Parses input arguments and creates a new EditCommand object
+ */
 public class EditCommandParser implements Parser<EditCommand> {
 
     private static final Pattern EMPLOYEE_ID_FORMAT = Pattern.compile("^E\\d{4}$");
