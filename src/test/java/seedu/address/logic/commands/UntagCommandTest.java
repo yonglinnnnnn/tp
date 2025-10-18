@@ -146,7 +146,8 @@ public class UntagCommandTest {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("friend"));
         UntagCommand untagCommand = new UntagCommand(employeeId, tags);
-        String expected = UntagCommand.class.getCanonicalName() + "{employeeId=" + employeeId + ", tagsToRemove=" + tags + "}";
+        String expected = UntagCommand.class.getCanonicalName()
+                + "{employeeId=" + employeeId + ", tagsToRemove=" + tags + "}";
         assertEquals(expected, untagCommand.toString());
     }
 }

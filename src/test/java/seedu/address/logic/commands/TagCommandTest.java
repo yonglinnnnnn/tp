@@ -147,7 +147,8 @@ public class TagCommandTest {
         tags.add(new Tag("friend"));
 
         TagCommand tagCommand = new TagCommand(employeeId, tags);
-        String expected = TagCommand.class.getCanonicalName() + "{employeeId=" + employeeId + ", tagsToAdd=" + tags + "}";
+        String expected = TagCommand.class.getCanonicalName()
+                + "{employeeId=" + employeeId + ", tagsToAdd=" + tags + "}";
         assertEquals(expected, tagCommand.toString());
     }
 }
