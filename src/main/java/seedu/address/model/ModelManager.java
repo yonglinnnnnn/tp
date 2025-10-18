@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.time.*;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -161,7 +162,8 @@ public class ModelManager implements Model {
     //=========== Audit Log Entry  =============================================================
     @Override
     public void addAuditEntry(String action, String details) {
-        auditLog.addEntry(action, details);
+        addressBook.addAuditEntry(action, details);
+        auditLog.addEntry(action, details, LocalDateTime.now());
     }
 
     @Override

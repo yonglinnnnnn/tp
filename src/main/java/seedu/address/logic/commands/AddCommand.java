@@ -60,7 +60,9 @@ public class AddCommand extends Command {
         }
 
         model.addPerson(toAdd);
-        model.addAuditEntry("ADD", String.format("Added person: %s", toAdd.name()));
+        // Add this line to log the action
+        model.addAuditEntry("ADD", String.format("Added person: %s (ID: %s)",
+                toAdd.name(), toAdd.id()));
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
     }
 

@@ -2,10 +2,12 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.time.*;
 import java.util.List;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 
@@ -16,6 +18,7 @@ import seedu.address.model.person.UniquePersonList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
+    private final AuditLog auditLog = new AuditLog();
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -55,6 +58,12 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(newData);
 
         setPersons(newData.getPersonList());
+
+        // Restore audit log from persisted data
+        auditLog.clear();
+        for (var entry : newData.getAuditLog().getEntries()) {
+            auditLog.addEntry(entry.getAction(), entry.getDetails(), entry.getTimestamp());
+        }
     }
 
     //// person-level operations
@@ -92,6 +101,15 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removePerson(Person key) {
         persons.remove(key);
+    }
+
+    @Override
+    public AuditLog getAuditLog() {
+        return auditLog;
+    }
+
+    public void addAuditEntry(String action, String details) {
+        auditLog.addEntry(action, details, LocalDateTime.now());
     }
 
     //// util methods

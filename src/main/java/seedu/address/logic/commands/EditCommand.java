@@ -88,7 +88,9 @@ public class EditCommand extends Command {
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        model.addAuditEntry("EDIT", String.format("Added person: %s", editedPerson.name()));
+        // Add this line
+        model.addAuditEntry("EDIT", String.format("Edited person: %s (ID: %s)",
+                editedPerson.name(), editedPerson.id()));
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson)));
     }
 
