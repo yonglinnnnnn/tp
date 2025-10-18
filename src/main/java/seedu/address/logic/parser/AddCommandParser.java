@@ -74,5 +74,12 @@ public class AddCommandParser implements Parser<AddCommand> {
         nextId = id;
     }
 
+    /**
+     * Gets the current next ID value.
+     * Used for testing purposes.
+     */
+    public static long getNextId() {
+        return nextId;
+    }
 
 }
