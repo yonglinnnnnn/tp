@@ -22,6 +22,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -51,6 +52,19 @@ public class AddCommandTest {
         ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
         assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_personAcceptedByModel_addsAuditEntry() throws Exception {
+        Person validPerson = new PersonBuilder().build();
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+
+        CommandResult commandResult = new AddCommand(validPerson).execute(modelStub);
+
+        // Verify audit entry was added
+        assertTrue(modelStub.auditEntryAdded);
+        assertEquals("ADD", modelStub.lastAuditAction);
+        assertTrue(modelStub.lastAuditDetails.contains(validPerson.name().toString()));
     }
 
     @Test
@@ -162,6 +176,16 @@ public class AddCommandTest {
         public void updateFilteredPersonList(Predicate<Person> predicate) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public void addAuditEntry(String action, String details) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public AuditLog getAuditLog() {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
@@ -187,6 +211,9 @@ public class AddCommandTest {
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
+        boolean auditEntryAdded = false;
+        String lastAuditAction = "";
+        String lastAuditDetails = "";
 
         @Override
         public boolean hasPerson(Person person) {
@@ -201,9 +228,15 @@ public class AddCommandTest {
         }
 
         @Override
+        public void addAuditEntry(String action, String details) {
+            auditEntryAdded = true;
+            lastAuditAction = action;
+            lastAuditDetails = details;
+        }
+
+        @Override
         public ReadOnlyAddressBook getAddressBook() {
             return new AddressBook();
         }
     }
-
 }
