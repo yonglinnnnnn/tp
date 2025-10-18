@@ -13,8 +13,8 @@ public class AuditLogEntry {
     private final String action;
     private final String details;
 
-    public AuditLogEntry(String action, String details) {
-        this.timestamp = LocalDateTime.now();
+    public AuditLogEntry(LocalDateTime timestamp, String action, String details) {
+        this.timestamp = timestamp;
         this.action = action;
         this.details = details;
     }

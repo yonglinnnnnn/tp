@@ -1,5 +1,6 @@
 package seedu.address.model.audit;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,8 +15,8 @@ public class AuditLog {
         this.entries = new ArrayList<>();
     }
 
-    public void addEntry(String action, String details) {
-        entries.add(new AuditLogEntry(action, details));
+    public void addEntry(String action, String details, LocalDateTime timestamp) {
+        entries.add(new AuditLogEntry(timestamp, action, details));
     }
 
     public List<AuditLogEntry> getEntries() {

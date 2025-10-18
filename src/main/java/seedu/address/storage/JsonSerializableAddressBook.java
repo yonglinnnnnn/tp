@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.audit.AuditLogEntry;
 import seedu.address.model.person.Person;
 
 /**
@@ -23,12 +24,19 @@ class JsonSerializableAddressBook {
 
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
 
+    @JsonProperty("auditLog")
+    private final List<JsonAdaptedAuditLogEntry> auditLogEntries = new ArrayList<>();
+
     /**
      * Constructs a {@code JsonSerializableAddressBook} with the given persons.
      */
     @JsonCreator
-    public JsonSerializableAddressBook(@JsonProperty("persons") List<JsonAdaptedPerson> persons) {
+    public JsonSerializableAddressBook(@JsonProperty("persons") List<JsonAdaptedPerson> persons,
+                                       @JsonProperty("auditLog") List<JsonAdaptedAuditLogEntry> auditLogEntries) {
         this.persons.addAll(persons);
+        if (auditLogEntries != null) {
+            this.auditLogEntries.addAll(auditLogEntries);
+        }
     }
 
     /**
@@ -37,7 +45,9 @@ class JsonSerializableAddressBook {
      * @param source future changes to this will not affect the created {@code JsonSerializableAddressBook}.
      */
     public JsonSerializableAddressBook(ReadOnlyAddressBook source) {
-        persons.addAll(source.getPersonList().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList()));
+        persons.addAll(source.getPersonList().stream().map(JsonAdaptedPerson::new).toList());
+        auditLogEntries.addAll(source.getAuditLog().getEntries().stream()
+                .map(JsonAdaptedAuditLogEntry::new).toList());
     }
 
     /**
@@ -49,10 +59,11 @@ class JsonSerializableAddressBook {
         AddressBook addressBook = new AddressBook();
         for (JsonAdaptedPerson jsonAdaptedPerson : persons) {
             Person person = jsonAdaptedPerson.toModelType();
-            if (addressBook.hasPerson(person)) {
-                throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
-            }
             addressBook.addPerson(person);
+        }
+        for (JsonAdaptedAuditLogEntry jsonAdaptedEntry : auditLogEntries) {
+            AuditLogEntry entry = jsonAdaptedEntry.toModelType();
+            addressBook.getAuditLog().addEntry(entry.getAction(), entry.getDetails(), entry.getTimestamp());
         }
         return addressBook;
     }
