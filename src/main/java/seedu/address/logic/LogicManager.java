@@ -3,11 +3,13 @@ package seedu.address.logic;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.logic.commands.AuditCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -50,6 +52,11 @@ public class LogicManager implements Logic {
         Command command = addressBookParser.parseCommand(commandText);
         commandResult = command.execute(model);
 
+        // Add to audit log after successful execution
+        String action = extractAction(command);
+        String details = generateDetails(command, commandResult);
+        model.getAuditLog().addEntry(action, details, LocalDateTime.now());
+
         try {
             storage.saveAddressBook(model.getAddressBook());
         } catch (AccessDeniedException e) {
@@ -84,5 +91,30 @@ public class LogicManager implements Logic {
     @Override
     public void setGuiSettings(GuiSettings guiSettings) {
         model.setGuiSettings(guiSettings);
+    }
+
+    /**
+     * Extracts the action type from the given command.
+     *
+     * @param command The command executed.
+     * @return The action type as a string.
+     */
+    private String extractAction(Command command) {
+        // Extract command type from class name
+        String className = command.getClass().getSimpleName();
+        return className.replace("Command", "").toUpperCase();
+    }
+
+    /**
+     * Generates meaningful details for the audit log based on the command and its result.
+     * @param command   The command executed
+     * @param result    The result of the command execution
+     * @return  String of details for the audit log
+     */
+    private String generateDetails(Command command, CommandResult result) {
+        if (command instanceof  AuditCommand) {
+            return "Viewed audit log.";
+        }
+        return result.getFeedbackToUser();
     }
 }
