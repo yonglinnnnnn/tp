@@ -72,11 +72,6 @@ public class UniqueTeamList implements Iterable<Team> {
         }
     }
 
-    public void setTeams(UniqueTeamList replacement) {
-        requireNonNull(replacement);
-        internalList.setAll(replacement.internalList);
-    }
-
     /**
      * Replaces the contents of this list with {@code teams}.
      * {@code teams} must not contain duplicate teams.
