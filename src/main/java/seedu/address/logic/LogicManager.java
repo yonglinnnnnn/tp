@@ -112,7 +112,7 @@ public class LogicManager implements Logic {
      * @return  String of details for the audit log
      */
     private String generateDetails(Command command, CommandResult result) {
-        if (command instanceof  AuditCommand) {
+        if (command instanceof AuditCommand) {
             return "Viewed audit log.";
         }
         return result.getFeedbackToUser();
