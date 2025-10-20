@@ -57,7 +57,6 @@ public class ImportCommand extends Command {
             throw new CommandException(MESSAGE_INVALID_PATH);
         }
 
-        model.addAuditEntry("IMPORT", String.format("Imported file from: %s", filePath.toString()));
         return new CommandResult(MESSAGE_IMPORT_SUCCESS);
     }
 
