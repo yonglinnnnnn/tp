@@ -167,12 +167,7 @@ public class Team {
         if (team == null) {
             return false;
         }
-        return id.equals(team.id)
-                && teamName.equals(team.teamName)
-                && Objects.equals(getParentTeam(), team.getParentTeam())
-                && Objects.equals(getLeaderId(), team.getLeaderId())
-                && getMembers().equals(team.getMembers())
-                && getSubteams().equals(team.getSubteams());
+        return id.equals(team.id);
     }
 
     @Override

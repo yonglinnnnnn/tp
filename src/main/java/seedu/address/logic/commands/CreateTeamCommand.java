@@ -9,6 +9,7 @@ import java.util.Optional;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamName;
@@ -67,6 +68,13 @@ public class CreateTeamCommand extends Command {
         toAdd.withLeader(leaderOpt.get().id());
 
         if (model.hasTeam(toAdd)) {
+            throw new CommandException(MESSAGE_DUPLICATE_TEAM);
+        }
+
+        ReadOnlyAddressBook ab = model.getAddressBook();
+        boolean nameDuplicate = ab.getTeamList().stream()
+                .anyMatch(t -> t.getTeamName().equals(toAdd.getTeamName()));
+        if (nameDuplicate) {
             throw new CommandException(MESSAGE_DUPLICATE_TEAM);
         }
 
