@@ -55,19 +55,6 @@ public class AddCommandTest {
     }
 
     @Test
-    public void execute_personAcceptedByModel_addsAuditEntry() throws Exception {
-        Person validPerson = new PersonBuilder().build();
-        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
-
-        CommandResult commandResult = new AddCommand(validPerson).execute(modelStub);
-
-        // Verify audit entry was added
-        assertTrue(modelStub.auditEntryAdded);
-        assertEquals("ADD", modelStub.lastAuditAction);
-        assertTrue(modelStub.lastAuditDetails.contains(validPerson.name().toString()));
-    }
-
-    @Test
     public void equals() {
         Person alice = new PersonBuilder().withName("Alice").build();
         Person bob = new PersonBuilder().withName("Bob").build();
@@ -99,7 +86,7 @@ public class AddCommandTest {
     }
 
     /**
-     * A default model stub that have all of the methods failing.
+     * A default model stub that have all the methods failing.
      */
     private class ModelStub implements Model {
         @Override
@@ -211,9 +198,6 @@ public class AddCommandTest {
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
-        private boolean auditEntryAdded = false;
-        private String lastAuditAction = "";
-        private String lastAuditDetails = "";
 
         @Override
         public boolean hasPerson(Person person) {
@@ -225,13 +209,6 @@ public class AddCommandTest {
         public void addPerson(Person person) {
             requireNonNull(person);
             personsAdded.add(person);
-        }
-
-        @Override
-        public void addAuditEntry(String action, String details) {
-            auditEntryAdded = true;
-            lastAuditAction = action;
-            lastAuditDetails = details;
         }
 
         @Override

@@ -28,7 +28,6 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
@@ -201,29 +200,6 @@ public class EditCommandTest {
         String expected = EditCommand.class.getCanonicalName() + "{index=" + index + ", editPersonDescriptor="
                 + editPersonDescriptor + "}";
         assertEquals(expected, editCommand.toString());
-    }
-
-    @Test
-    public void execute_allFieldsSpecifiedUnfilteredList_addsAuditEntry() {
-        Person editedPerson = new PersonBuilder().build();
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(editedPerson).build();
-        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
-
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
-                Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(model.getFilteredPersonList().get(0), editedPerson);
-        expectedModel.addAuditEntry("EDIT", String.format("Edited person: %s", editedPerson.name()));
-
-        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
-
-        // Verify audit entry exists
-        AuditLog auditLog = model.getAuditLog();
-        assertFalse(auditLog.getEntries().isEmpty());
-        assertTrue(auditLog.getEntries().stream()
-                .anyMatch(entry -> entry.getAction().equals("EDIT")
-                        && entry.getDetails().contains(editedPerson.name().toString())));
     }
 
 }
