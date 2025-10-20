@@ -230,10 +230,7 @@ public class LogicManagerTest {
         AuditLog auditLog = model.getAuditLog();
         List<AuditLogEntry> entries = auditLog.getEntries();
 
-        assertFalse(entries.isEmpty());
-        AuditLogEntry lastEntry = entries.get(entries.size() - 1);
-        assertEquals("AUDIT", lastEntry.getAction());
-        assertEquals("Viewed audit log.", lastEntry.getDetails());
+        assertTrue(entries.isEmpty());
     }
 
     @Test
@@ -252,6 +249,59 @@ public class LogicManagerTest {
 
         assertTrue(entries.stream()
                 .anyMatch(entry -> entry.getAction().equals("DELETE")));
+    }
+
+    @Test
+    public void execute_listCommand_doesNotAddAuditEntry() throws Exception {
+        // Get initial audit log size
+        int initialSize = model.getAuditLog().getEntries().size();
+
+        // Execute list command
+        logic.execute("list");
+
+        // Verify no new audit entry was added
+        assertEquals(initialSize, model.getAuditLog().getEntries().size());
+    }
+
+    @Test
+    public void execute_helpCommand_doesNotAddAuditEntry() throws Exception {
+        // Get initial audit log size
+        int initialSize = model.getAuditLog().getEntries().size();
+
+        // Execute help command
+        logic.execute("help");
+
+        // Verify no new audit entry was added
+        assertEquals(initialSize, model.getAuditLog().getEntries().size());
+    }
+
+    @Test
+    public void execute_viewCommand_doesNotAddAuditEntry() throws Exception {
+        // Add a person first
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
+                + ADDRESS_DESC_AMY + GITHUBUSERNAME_DESC_AMY;
+        logic.execute(addCommand);
+
+        // Get audit log size after add
+        int sizeAfterAdd = model.getAuditLog().getEntries().size();
+
+        // Execute view command
+        logic.execute("view 1");
+
+        // Verify no new audit entry was added
+        assertEquals(sizeAfterAdd, model.getAuditLog().getEntries().size());
+    }
+
+    @Test
+    public void execute_auditCommand_doesNotAddAuditEntry() throws Exception {
+        // Get initial audit log size
+        int initialSize = model.getAuditLog().getEntries().size();
+
+        // Execute audit command
+        logic.execute("audit");
+
+        // Verify no new audit entry was added (audit command shouldn't log itself)
+        assertEquals(initialSize, model.getAuditLog().getEntries().size());
     }
 
 }

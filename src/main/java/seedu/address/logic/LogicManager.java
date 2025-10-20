@@ -52,10 +52,12 @@ public class LogicManager implements Logic {
         Command command = addressBookParser.parseCommand(commandText);
         commandResult = command.execute(model);
 
-        // Add to audit log after successful execution
-        String action = extractAction(command);
-        String details = generateDetails(command, commandResult);
-        model.getAuditLog().addEntry(action, details, LocalDateTime.now());
+        // Only log commands that modify state
+        if (shouldLogCommand(command)) {
+            String action = extractAction(command);
+            String details = generateDetails(command, commandResult);
+            model.getAuditLog().addEntry(action, details, LocalDateTime.now());
+        }
 
         try {
             storage.saveAddressBook(model.getAddressBook());
@@ -116,5 +118,23 @@ public class LogicManager implements Logic {
             return "Viewed audit log.";
         }
         return result.getFeedbackToUser();
+    }
+
+    /**
+     * Determines if a command should be logged in the audit log.
+     * Only commands that modify state are logged.
+     *
+     * @param command The command to check.
+     * @return true if the command should be logged, false otherwise.
+     */
+    private boolean shouldLogCommand(Command command) {
+        String action = extractAction(command);
+        // Exclude read-only commands
+        return !action.equals("AUDIT")
+                && !action.equals("EXIT")
+                && !action.equals("HELP")
+                && !action.equals("LIST")
+                && !action.equals("VIEW")
+                && !action.equals("FIND"); // Add other read-only commands as needed
     }
 }
