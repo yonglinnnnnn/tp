@@ -1,3 +1,4 @@
+// java
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
@@ -10,6 +11,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
+import seedu.address.model.team.TeamName;
 
 /**
  * Creates a team in the address book.
@@ -35,10 +37,11 @@ public class CreateTeamCommand extends Command {
     private final String leaderPersonId;
 
     /**
-     * Creates a CreateTeamCommand with a team name and leader id.
+     * Creates a CreateTeamCommand that will create a new team with the given name
+     * and set the given person id as the team's leader.
      *
-     * @param teamName non-null team name string
-     * @param leaderPersonId non-null leader person id
+     * @param teamName        non-null, validated team name
+     * @param leaderPersonId  non-null id of the leader person
      */
     public CreateTeamCommand(String teamName, String leaderPersonId) {
         requireNonNull(teamName);
@@ -51,9 +54,8 @@ public class CreateTeamCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         String id = String.format("T%04d", nextId++);
-        Team toAdd = new Team(id, teamName);
+        Team toAdd = new Team(id, new TeamName(teamName));
 
-        // leader is required; always resolve and attach (or fail)
         List<Person> persons = model.getFilteredPersonList();
         Optional<Person> leaderOpt = persons.stream()
                 .filter(p -> leaderPersonId.equals(p.id()))
@@ -61,14 +63,15 @@ public class CreateTeamCommand extends Command {
         if (leaderOpt.isEmpty()) {
             throw new CommandException(String.format(MESSAGE_LEADER_NOT_FOUND, leaderPersonId));
         }
-        toAdd.withLeader(leaderOpt.get());
+
+        toAdd.withLeader(leaderOpt.get().id());
 
         if (model.hasTeam(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_TEAM);
         }
 
         model.addTeam(toAdd);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd.getTeamName().teamName()));
     }
 
     @Override
