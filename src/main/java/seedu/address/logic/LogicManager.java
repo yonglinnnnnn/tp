@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.logic.commands.AuditCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -55,7 +54,7 @@ public class LogicManager implements Logic {
         // Only log commands that modify state
         if (shouldLogCommand(command)) {
             String action = extractAction(command);
-            String details = generateDetails(command, commandResult);
+            String details = generateDetails(commandResult);
             model.getAuditLog().addEntry(action, details, LocalDateTime.now());
         }
 
@@ -109,14 +108,10 @@ public class LogicManager implements Logic {
 
     /**
      * Generates meaningful details for the audit log based on the command and its result.
-     * @param command   The command executed
      * @param result    The result of the command execution
      * @return  String of details for the audit log
      */
-    private String generateDetails(Command command, CommandResult result) {
-        if (command instanceof AuditCommand) {
-            return "Viewed audit log.";
-        }
+    private String generateDetails(CommandResult result) {
         return result.getFeedbackToUser();
     }
 

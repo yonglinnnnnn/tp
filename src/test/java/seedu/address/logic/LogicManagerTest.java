@@ -304,4 +304,16 @@ public class LogicManagerTest {
         assertEquals(initialSize, model.getAuditLog().getEntries().size());
     }
 
+    @Test
+    public void execute_exitCommand_doesNotAddAuditEntry() throws Exception {
+        // Get initial audit log size
+        int initialSize = model.getAuditLog().getEntries().size();
+
+        // Execute audit command
+        logic.execute("exit");
+
+        // Verify no new audit entry was added (audit command shouldn't log itself)
+        assertEquals(initialSize, model.getAuditLog().getEntries().size());
+    }
+
 }
