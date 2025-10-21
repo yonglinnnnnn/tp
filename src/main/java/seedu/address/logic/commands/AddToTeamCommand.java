@@ -74,12 +74,6 @@ public class AddToTeamCommand extends Command {
             edited.withLeader(team.getLeaderId());
         }
 
-        // copy subteams and parent
-        //edited.withSubteams(new ArrayList<>(team.getSubteams()));
-        //if (team.getParentTeam() != null) {
-        //    edited.withParentTeam(team.getParentTeam());
-        //}
-
         model.setTeam(team, edited);
     }
 

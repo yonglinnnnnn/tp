@@ -49,7 +49,12 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Resets the existing data of this {@code AddressBook} with {@code newData}.
+     * Replaces this address book's data with the provided {@code newData}.
+     * Persons are always replaced. Teams are replaced only if {@code newData}
+     * exposes a team list; otherwise team data is left unchanged. (to be cleaned further later)
+     *
+     * @param newData the source data to copy; must not be null
+     * @throws NullPointerException if {@code newData} is null
      */
     public void resetData(ReadOnlyAddressBook newData) {
         requireNonNull(newData);
