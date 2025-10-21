@@ -1,4 +1,3 @@
-// java
 package seedu.address.model.team;
 
 import static java.util.Objects.requireNonNull;

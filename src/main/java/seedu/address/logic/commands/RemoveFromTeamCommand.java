@@ -56,33 +56,19 @@ public class RemoveFromTeamCommand extends Command {
             throw new CommandException(String.format(MESSAGE_PERSON_NOT_FOUND, personId));
         }
 
-        ReadOnlyAddressBook ab = model.getAddressBook();
-        Team team = ab.getTeamList().stream()
-                .filter(t -> Objects.equals(t.getId(), teamId))
-                .findFirst()
-                .orElse(null);
-        if (team == null) {
-            throw new CommandException(String.format(MESSAGE_TEAM_NOT_FOUND, teamId));
-        }
-
-        if (!team.getMembers().contains(personId)) {
-            throw new CommandException(String.format(MESSAGE_NOT_MEMBER, personId, teamId));
-        }
+        Team team = getTeam(model);
 
         // create edited team copy with the member removed
         Team edited = new Team(team.getId(), team.getTeamName());
         List<String> newMembers = new ArrayList<>(team.getMembers());
-        try {
-            Person editedPerson = person.withRemovedTeam(teamId);
-            model.setPerson(person, editedPerson);
-            newMembers.remove(personId);
-            edited.withMembers(newMembers);
-        } catch (DuplicatePersonException e) {
-            throw new CommandException("Failed to update person's teams: would create a duplicate person");
-        } catch (PersonNotFoundException e) {
-            throw new CommandException("Failed to update person's teams: person no longer exists");
-        }
 
+        updateSelectedPerson(model, person, newMembers, edited);
+
+        updateTeamDetails(model, team, newMembers, edited);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, personId, teamId));
+    }
+
+    private static void updateTeamDetails(Model model, Team team, List<String> newMembers, Team edited) {
         // copy leader if present and still a member -> if leader removed, leader is cleared
         if (team.getLeaderId() != null && newMembers.contains(team.getLeaderId())) {
             edited.withLeader(team.getLeaderId());
@@ -95,7 +81,36 @@ public class RemoveFromTeamCommand extends Command {
         }
 
         model.setTeam(team, edited);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, personId, teamId));
+    }
+
+    private Team getTeam(Model model) throws CommandException {
+        ReadOnlyAddressBook ab = model.getAddressBook();
+        Team team = ab.getTeamList().stream()
+                .filter(t -> Objects.equals(t.getId(), teamId))
+                .findFirst()
+                .orElse(null);
+        if (team == null) {
+            throw new CommandException(String.format(MESSAGE_TEAM_NOT_FOUND, teamId));
+        }
+
+        if (!team.getMembers().contains(personId)) {
+            throw new CommandException(String.format(MESSAGE_NOT_MEMBER, personId, teamId));
+        }
+        return team;
+    }
+
+    private void updateSelectedPerson(Model model, Person person, List<String> newMembers, Team edited)
+            throws CommandException {
+        try {
+            Person editedPerson = person.withRemovedTeam(teamId);
+            model.setPerson(person, editedPerson);
+            newMembers.remove(personId);
+            edited.withMembers(newMembers);
+        } catch (DuplicatePersonException e) {
+            throw new CommandException("Failed to update person's teams: would create a duplicate person");
+        } catch (PersonNotFoundException e) {
+            throw new CommandException("Failed to update person's teams: person no longer exists");
+        }
     }
 
     @Override

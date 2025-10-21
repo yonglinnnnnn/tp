@@ -1,4 +1,3 @@
-// java
 package seedu.address.model;
 
 import java.nio.file.Path;
