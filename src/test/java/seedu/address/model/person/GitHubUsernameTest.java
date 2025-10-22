@@ -14,6 +14,7 @@ class GitHubUsernameTest {
         assertThrows(NullPointerException.class, () -> GitHubUsername.isValidGitHubUsername(null));
 
         // invalid username
+        assertFalse(GitHubUsername.isValidGitHubUsername(" ")); // spaces only
         assertFalse(GitHubUsername.isValidGitHubUsername("^")); // only non-alphanumeric characters
         assertFalse(GitHubUsername.isValidGitHubUsername("@peter*")); // contains non-alphanumeric characters
         assertFalse(GitHubUsername.isValidGitHubUsername("peter01")); // does not start with '@'
@@ -27,7 +28,6 @@ class GitHubUsernameTest {
 
         // valid username
         assertTrue(GitHubUsername.isValidGitHubUsername("")); // empty string
-        assertTrue(GitHubUsername.isValidGitHubUsername(" ")); // spaces only
         assertTrue(GitHubUsername.isValidGitHubUsername("@peterjack")); // alphabets only
         assertTrue(GitHubUsername.isValidGitHubUsername("@12345")); // numbers only
         assertTrue(GitHubUsername.isValidGitHubUsername("@peterthe2nd")); // alphanumeric characters
