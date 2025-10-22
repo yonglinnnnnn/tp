@@ -19,7 +19,7 @@ public record Salary(int integerPart, int decimalPart) {
      * @param value The decimal value of the salary.
      */
     public Salary(double value) {
-        this((int)Math.floor(value), (int)Math.round((value - Math.floor(value)) * 100));
+        this((int) Math.floor(value), (int) Math.round((value - Math.floor(value)) * 100));
     }
 
     /**

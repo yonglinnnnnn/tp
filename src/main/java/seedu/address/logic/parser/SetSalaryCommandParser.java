@@ -21,7 +21,7 @@ public class SetSalaryCommandParser implements Parser<SetSalaryCommand> {
             return 0;
         }
 
-        return (int)(Double.parseDouble(String.format("0.%s", string)) * 100);
+        return (int) (Double.parseDouble(String.format("0.%s", string)) * 100);
     }
 
     /**
