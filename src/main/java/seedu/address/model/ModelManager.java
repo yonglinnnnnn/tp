@@ -183,6 +183,7 @@ public class ModelManager implements Model {
                         ├── Michael Ong
                         └── Derrick Lim
                 """;
+    }
 
     @Override
     public void removeTeam(Team team) {
