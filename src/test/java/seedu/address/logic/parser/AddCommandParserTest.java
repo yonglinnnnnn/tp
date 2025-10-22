@@ -247,4 +247,12 @@ public class AddCommandParserTest {
                 + " " + PREFIX_GITHUB + PREFIX_TAG + VALID_TAG_FRIEND;
         assertParseFailure(parser, userInput, GitHubUsername.MESSAGE_CONSTRAINTS);
     }
+
+    @Test
+    public void parse_githubUsernameMissing_success() {
+        // GitHub username prefix missing
+        Person expectedPerson = new PersonBuilder(AMY).withGitHubUsername("").withTags().withId(getNextId()).build();
+        assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY,
+                new AddCommand(expectedPerson));
+    }
 }
