@@ -22,6 +22,22 @@ public record Salary(int integerPart, int decimalPart) {
         this((int)Math.floor(value), (int)Math.round((value - Math.floor(value)) * 100));
     }
 
+    /**
+     * Converts the salary to a double value.
+     * @return The salary as a double value.
+     */
+    public double toDouble() {
+        return integerPart + decimalPart / 100.0;
+    }
+
+    /**
+     * Converts the salary to cents.
+     * @return The salary as cents.
+     */
+    public int inCents() {
+        return integerPart * 100 + decimalPart;
+    }
+
     @Override
     public String toString() {
         return String.format("$%.2f / month", integerPart + decimalPart / 100.0);

@@ -15,7 +15,7 @@ import seedu.address.model.tag.Tag;
 public record Person(
         String id, Name name, Phone phone, Email email,
         Address address, GitHubUsername gitHubUsername,
-        Set<String> teamIds, Set<Tag> tags, int salary
+        Set<String> teamIds, Set<Tag> tags, Salary salary
 ) {
     /**
      * Backwards-compatible constructor used in many places: creates a Person with no teams and default salary 0.
@@ -23,14 +23,14 @@ public record Person(
     public Person(String id, Name name, Phone phone, Email email, Address address,
                   GitHubUsername gitHubUsername, Set<Tag> tags) {
         this(id, name, phone, email, address, gitHubGitNullSafe(gitHubUsername),
-                new HashSet<>(), new HashSet<>(tags), 0);
+                new HashSet<>(), new HashSet<>(tags), new Salary(0));
     }
 
     /**
      * Canonical constructor.
      */
     public Person {
-        requireAllNonNull(id, name, phone, email, address, gitHubGitNullSafe(gitHubUsername), tags);
+        requireAllNonNull(id, name, phone, email, address, gitHubGitNullSafe(gitHubUsername), tags, salary);
     }
 
     private static GitHubUsername gitHubGitNullSafe(GitHubUsername username) {
