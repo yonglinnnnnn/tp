@@ -79,7 +79,7 @@ public record Person(
                 .withTags(tags)
                 .withGitHubUserName(gitHubUsername)
                 .withTeamIds(teamIds)
-                .withSalary(salary);
+                .withSalaryInCents(salary.inCents());
     }
 
     /**
@@ -94,7 +94,7 @@ public record Person(
                 .withTags(tags)
                 .withGitHubUserName(gitHubUsername)
                 .withTeamIds(teamIds)
-                .withSalary(salary);
+                .withSalaryInCents(salary.inCents());
     }
 
     /**
@@ -129,7 +129,7 @@ public record Person(
         private Set<Tag> tags = new HashSet<>();
         private GitHubUsername gitHubUsername;
         private Set<String> teamIds = new HashSet<>();
-        private int salary;
+        private Salary salary;
 
         /**
          * Constructs a {@code Builder} with the given {@code id}.
@@ -221,11 +221,21 @@ public record Person(
 
         /**
          * Sets the {@code salary} of the {@code Person} that we are building.
-         * @param salary The salary to set.
+         * @param salaryInDollars The salary to set.
          * @return This builder object.
          */
-        public Builder withSalary(int salary) {
-            this.salary = salary;
+        public Builder withSalary(double salaryInDollars) {
+            this.salary = new Salary(salaryInDollars);
+            return this;
+        }
+
+        /**
+         * Sets the {@code salary} of the {@code Person} that we are building. Use this if you require exact precision.
+         * @param salaryInCents The salary to set.
+         * @return This builder object.
+         */
+        public Builder withSalaryInCents(int salaryInCents) {
+            this.salary = new Salary(salaryInCents / 100, salaryInCents % 100);
             return this;
         }
 
