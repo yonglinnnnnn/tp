@@ -24,6 +24,7 @@ import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
+import seedu.address.model.team.Team;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandTest {
@@ -86,7 +87,7 @@ public class AddCommandTest {
     }
 
     /**
-     * A default model stub that have all the methods failing.
+     * A default model stub that have all of the methods failing.
      */
     private class ModelStub implements Model {
         @Override
@@ -171,6 +172,26 @@ public class AddCommandTest {
 
         @Override
         public AuditLog getAuditLog() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasTeam(Team team) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addTeam(Team team) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setTeam(Team target, Team editedTeam) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void removeTeam(Team team) {
             throw new AssertionError("This method should not be called.");
         }
     }

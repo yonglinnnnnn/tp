@@ -13,14 +13,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
+import seedu.address.model.team.Team;
 import seedu.address.testutil.AddressBookBuilder;
 import seedu.address.testutil.PersonBuilder;
+import seedu.address.testutil.TeamBuilder;
 
 public class ModelManagerTest {
 
@@ -95,6 +98,60 @@ public class ModelManagerTest {
     @Test
     public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredPersonList().remove(0));
+    }
+
+    @Test
+    public void hasTeam_nullTeam_throwsNullPointerException() {
+        ModelManager model = new ModelManager();
+        Assertions.assertThrows(NullPointerException.class, () -> model.hasTeam(null));
+    }
+
+    @Test
+    public void hasTeam_teamNotInModel_returnsFalse() {
+        ModelManager model = new ModelManager();
+        Team team = new TeamBuilder().withId("T0001").withTeamName("Core").build();
+        assertFalse(model.hasTeam(team));
+    }
+
+    @Test
+    public void hasTeam_teamInModel_returnsTrue() {
+        ModelManager model = new ModelManager();
+        Team team = new TeamBuilder().withId("T0001").withTeamName("Core").build();
+        model.addTeam(team);
+        assertTrue(model.hasTeam(team));
+    }
+
+    @Test
+    public void addTeam_addsTeamToAddressBook() {
+        ModelManager model = new ModelManager();
+        Team team = new TeamBuilder().withId("T0001").withTeamName("Core").build();
+        model.addTeam(team);
+        assertTrue(model.getAddressBook().getTeamList().contains(team));
+    }
+
+    @Test
+    public void removeTeam_removesTeamFromAddressBook() {
+        ModelManager model = new ModelManager();
+        Team team = new TeamBuilder().withId("T0001").withTeamName("Core").build();
+        model.addTeam(team);
+        model.removeTeam(team);
+        assertFalse(model.getAddressBook().getTeamList().contains(team));
+    }
+
+    @Test
+    public void setTeam_replacesExistingTeam() {
+        ModelManager model = new ModelManager();
+        Team original = new TeamBuilder().withId("T0001").withTeamName("Core").build();
+        model.addTeam(original);
+
+        Team edited = new TeamBuilder(original).withTeamName("Core Renamed").build();
+        model.setTeam(original, edited);
+
+        // find team with same id and verify updated name
+        boolean foundEditedName = model.getAddressBook().getTeamList().stream()
+                .filter(t -> "T0001".equals(t.getId()))
+                .anyMatch(t -> "Core Renamed".equals(t.getTeamName().teamName()));
+        assertTrue(foundEditedName);
     }
 
     @Test

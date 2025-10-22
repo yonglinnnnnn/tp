@@ -17,13 +17,16 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.AuditCommand;
+import seedu.address.logic.commands.AddToTeamCommand;
 import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.CreateTeamCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.RemoveFromTeamCommand;
 import seedu.address.logic.commands.SetSalaryCommand;
 import seedu.address.logic.commands.TagCommand;
 import seedu.address.logic.commands.UntagCommand;
@@ -127,6 +130,28 @@ public class AddressBookParserTest {
         assertTrue(parser.parseCommand(AuditCommand.COMMAND_WORD + " 3") instanceof AuditCommand);
     }
 
+
+    @Test
+    public void parseCommand_addToTeam() throws Exception {
+        AddToTeamCommand command = (AddToTeamCommand) parser.parseCommand(
+                AddToTeamCommand.COMMAND_WORD + " T0001 E0001");
+        assertEquals(new AddToTeamCommand("T0001", "E0001"), command);
+    }
+
+    @Test
+    public void parseCommand_removeFromTeam() throws Exception {
+        RemoveFromTeamCommand command = (RemoveFromTeamCommand) parser.parseCommand(
+                RemoveFromTeamCommand.COMMAND_WORD + " T0001 E0001");
+        assertEquals(new RemoveFromTeamCommand("T0001", "E0001"), command);
+    }
+
+    @Test
+    public void parseCommand_createTeam() throws Exception {
+        Person person = new PersonBuilder().build();
+        CreateTeamCommand command = (CreateTeamCommand) parser.parseCommand(
+                CreateTeamCommand.COMMAND_WORD + " Systems " + person.id());
+        assertEquals(new CreateTeamCommand("Systems", person.id()), command);
+    }
 
     @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {

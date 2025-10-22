@@ -4,32 +4,25 @@ import static java.util.Objects.requireNonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
+import seedu.address.model.team.Team;
+import seedu.address.model.team.UniqueTeamList;
 
 /**
- * Wraps all data at the address-book level
- * Duplicates are not allowed (by .isSamePerson comparison)
+ * Represents an in-memory address book containing persons and teams.
  */
 public class AddressBook implements ReadOnlyAddressBook {
 
-    private final UniquePersonList persons;
+    private final UniquePersonList persons = new UniquePersonList();
+    private final UniqueTeamList teams = new UniqueTeamList();
     private final AuditLog auditLog = new AuditLog();
 
-    /*
-     * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
-     * between constructors. See https://docs.oracle.com/javase/tutorial/java/javaOO/initial.html
-     *
-     * Note that non-static init blocks are not recommended to use. There are other ways to avoid duplication
-     *   among constructors.
-     */
-    {
-        persons = new UniquePersonList();
-    }
 
     public AddressBook() {}
 
@@ -52,17 +45,32 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Replaces the contents of the teams list with {@code teams}.
+     * {@code teams} must not contain duplicate teams.
+     */
+    public void setTeams(List<Team> teams) {
+        this.teams.setTeams(teams);
+    }
+
+    /**
      * Resets the existing data of this {@code AddressBook} with {@code newData}.
      */
     public void resetData(ReadOnlyAddressBook newData) {
         requireNonNull(newData);
-
         setPersons(newData.getPersonList());
 
         // Restore audit log from persisted data
         auditLog.clear();
         for (var entry : newData.getAuditLog().getEntries()) {
             auditLog.addEntry(entry.getAction(), entry.getDetails(), entry.getTimestamp());
+        }
+        // ReadOnlyAddressBook is expected to expose getTeamList()
+        if (newData instanceof ReadOnlyAddressBook) {
+            try {
+                setTeams(((ReadOnlyAddressBook) newData).getTeamList());
+            } catch (UnsupportedOperationException | ClassCastException e) {
+                // If the provided ReadOnlyAddressBook does not expose teams yet, ignore.
+            }
         }
     }
 
@@ -87,11 +95,8 @@ public class AddressBook implements ReadOnlyAddressBook {
     /**
      * Replaces the given person {@code target} in the list with {@code editedPerson}.
      * {@code target} must exist in the address book.
-     * The person identity of {@code editedPerson} must not be the same as another existing person in the address book.
      */
     public void setPerson(Person target, Person editedPerson) {
-        requireNonNull(editedPerson);
-
         persons.setPerson(target, editedPerson);
     }
 
@@ -112,18 +117,65 @@ public class AddressBook implements ReadOnlyAddressBook {
         auditLog.addEntry(action, details, LocalDateTime.now());
     }
 
+    //// team-level operations
+
+    /**
+     * Returns true if a team with the same identity as {@code team} exists in the address book.
+     */
+    public boolean hasTeam(Team team) {
+        requireNonNull(team);
+        return teams.contains(team);
+    }
+
+    /**
+     * Adds a team to the address book.
+     * The team must not already exist in the address book.
+     */
+    public void addTeam(Team team) {
+        requireNonNull(team);
+        teams.add(team);
+    }
+
+    /**
+     * Replaces the given team {@code target} in the list with {@code editedTeam}.
+     * {@code target} must exist in the address book.
+     */
+    public void setTeam(Team target, Team editedTeam) {
+        teams.setTeam(target, editedTeam);
+    }
+
+    /**
+     * Removes {@code toRemove} from this {@code AddressBook}.
+     * {@code toRemove} must exist in the address book.
+     */
+    public void removeTeam(Team toRemove) {
+        teams.remove(toRemove);
+    }
+
     //// util methods
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("persons", persons)
+                .add("teams", teams)
                 .toString();
     }
 
     @Override
     public ObservableList<Person> getPersonList() {
+        // Current Internal Code to check for changes
+        // (Due to not having UI implemented yet)
+        System.out.println(teams);
+        System.out.println(persons);
         return persons.asUnmodifiableObservableList();
+    }
+
+    /**
+     * Returns an unmodifiable view of the teams list.
+     */
+    public ObservableList<Team> getTeamList() {
+        return teams.asUnmodifiableObservableList();
     }
 
     @Override
