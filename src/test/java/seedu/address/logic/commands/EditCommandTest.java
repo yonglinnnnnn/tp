@@ -32,7 +32,8 @@ import seedu.address.testutil.PersonBuilder;
  * Contains integration tests (interaction with the Model) and unit tests for EditCommand.
  */
 public class EditCommandTest {
-
+    private static final int INDEX_FIRST_PERSON = 0;
+    private static final int INDEX_SECOND_PERSON = 1;
     private static final String INVALID_EMPLOYEE_ID = "E9999";
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
@@ -56,7 +57,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
-        Person firstPerson = model.getFilteredPersonList().get(0);
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         Person editedPerson = new PersonBuilder(firstPerson, false).build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(editedPerson).build();
         EditCommand editCommand = new EditCommand(firstPerson.id().toString(), descriptor);
@@ -92,7 +93,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_noFieldSpecifiedUnfilteredList_success() {
-        Person firstPerson = model.getFilteredPersonList().get(0);
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         EditCommand editCommand = new EditCommand(firstPerson.id().toString(), new EditPersonDescriptor());
         Person editedPerson = firstPerson;
 
@@ -105,7 +106,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_filteredList_success() {
-        Person firstPerson = model.getFilteredPersonList().get(0);
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         Person editedPerson = new PersonBuilder(firstPerson, true).withName(VALID_NAME_BOB).build();
         EditCommand editCommand = new EditCommand(firstPerson.id().toString(),
                 new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build());
@@ -120,8 +121,8 @@ public class EditCommandTest {
 
     @Test
     public void execute_duplicatePersonUnfilteredList_failure() {
-        Person firstPerson = model.getFilteredPersonList().get(0);
-        Person secondPerson = model.getFilteredPersonList().get(1);
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
+        Person secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON);
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(firstPerson).build();
         EditCommand editCommand = new EditCommand(secondPerson.id().toString(), descriptor);
 
@@ -130,8 +131,8 @@ public class EditCommandTest {
 
     @Test
     public void execute_duplicatePersonFilteredList_failure() {
-        Person firstPerson = model.getFilteredPersonList().get(0);
-        Person secondPerson = model.getFilteredPersonList().get(1);
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
+        Person secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON);
         EditCommand editCommand = new EditCommand(secondPerson.id().toString(),
                 new EditPersonDescriptorBuilder(firstPerson).build());
 
