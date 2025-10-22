@@ -62,7 +62,7 @@ public record Person(
             return true;
         }
 
-        return otherPerson != null && otherPerson.name.equals(name);
+        return otherPerson != null && otherPerson.name.equals(name) && otherPerson.id.equals(id);
     }
 
     /**

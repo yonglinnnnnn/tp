@@ -4,6 +4,11 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -171,6 +176,13 @@ public class ModelManager implements Model {
     public void removeTeam(Team team) {
         requireNonNull(team);
         addressBook.removeTeam(team);
+    }
+
+    @Override
+    public <T> ObservableList<Person> sortPersons(Function<Person, T> selector, Comparator<T> comparator) {
+        ObservableList<Person> sortedPersons = addressBook.getPersonList();
+        sortedPersons.sort(Comparator.comparing(selector, comparator));
+        return new FilteredList<>(sortedPersons);
     }
 
     @Override
