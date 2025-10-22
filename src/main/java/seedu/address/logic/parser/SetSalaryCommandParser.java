@@ -2,6 +2,8 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import seedu.address.logic.Messages;
@@ -12,6 +14,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
  * Parses input arguments and creates a new SetSalaryCommand object
  */
 public class SetSalaryCommandParser implements Parser<SetSalaryCommand> {
+    private static final Pattern NUMBER_REGEX_PATTERN = Pattern.compile("^(\\d+)(?:\\.(\\d+))?$");
     /**
      * Parses the given {@code String} of arguments in the context of the SetSalaryCommand
      * and returns a SetSalaryCommand object for execution.
@@ -25,16 +28,30 @@ public class SetSalaryCommandParser implements Parser<SetSalaryCommand> {
         }
 
         String id = tokens[0];
-        int salary = Integer.parseInt(tokens[1]);
         if (!id.startsWith("E")) {
             throw new ParseException(Messages.MESSAGE_INVALID_PERSON_ID);
         }
 
-        if (salary <= 0) {
-            throw new ParseException(Messages.MESSAGE_INVALID_SALARY);
+        Matcher matcher = NUMBER_REGEX_PATTERN.matcher(tokens[1]);
+
+        if (matcher.matches()) {
+            int integerPart = Integer.parseInt(matcher.group(1));
+            int decimalPart = 0;
+            if (matcher.group(2) != null) {
+                decimalPart = Integer.parseInt(matcher.group(2));
+                while (decimalPart >= 100) {
+                    decimalPart /= 10;
+                }
+            }
+
+            if (integerPart < 0 || decimalPart < 0) {
+                throw new ParseException(Messages.MESSAGE_INVALID_SALARY);
+            }
+
+            return new SetSalaryCommand(tokens[0], integerPart * 100 + decimalPart);
         }
 
-        return new SetSalaryCommand(tokens[0], Integer.parseInt(tokens[1]));
+        throw new ParseException(Messages.MESSAGE_INVALID_SALARY);
     }
 
     /**

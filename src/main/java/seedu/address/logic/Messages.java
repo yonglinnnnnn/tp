@@ -19,7 +19,7 @@ public class Messages {
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
     public static final String MESSAGE_INVALID_PERSON_ID = "Invalid person ID. ID must start with 'E'.";
-    public static final String MESSAGE_INVALID_SALARY = "Invalid salary. Salary must be a positive integer.";
+    public static final String MESSAGE_INVALID_SALARY = "Invalid salary. Salary must be a positive number.";
 
     /**
      * Returns an error message indicating the duplicate prefixes.
