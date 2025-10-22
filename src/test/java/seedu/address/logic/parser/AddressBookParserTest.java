@@ -8,23 +8,32 @@ import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AddToTeamCommand;
 import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.CreateTeamCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.RemoveFromTeamCommand;
+import seedu.address.logic.commands.SetSalaryCommand;
+import seedu.address.logic.commands.TagCommand;
+import seedu.address.logic.commands.UntagCommand;
 import seedu.address.logic.commands.ViewCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
@@ -93,6 +102,54 @@ public class AddressBookParserTest {
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
+    }
+
+    @Test
+    public void parseCommand_tag() throws Exception {
+        Set<Tag> tags = new HashSet<>();
+        tags.add(new Tag("friends"));
+        TagCommand command = (TagCommand) parser.parseCommand(
+                TagCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " friends");
+        assertEquals(new TagCommand(INDEX_FIRST_PERSON, tags), command);
+    }
+
+    @Test
+    public void parseCommand_untag() throws Exception {
+        Set<Tag> tags = new HashSet<>();
+        tags.add(new Tag("friends"));
+        UntagCommand command = (UntagCommand) parser.parseCommand(
+                UntagCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " friends");
+        assertEquals(new UntagCommand(INDEX_FIRST_PERSON, tags), command);
+    }
+
+    @Test
+    public void parseCommand_setSalary() throws Exception {
+        Person person = new PersonBuilder().build();
+        SetSalaryCommand command = (SetSalaryCommand) parser.parseCommand(
+                SetSalaryCommand.COMMAND_WORD + " " + person.id() + " 100");
+        assertEquals(new SetSalaryCommand(person.id(), 100), command);
+    }
+
+    @Test
+    public void parseCommand_addToTeam() throws Exception {
+        AddToTeamCommand command = (AddToTeamCommand) parser.parseCommand(
+                AddToTeamCommand.COMMAND_WORD + " T0001 E0001");
+        assertEquals(new AddToTeamCommand("T0001", "E0001"), command);
+    }
+
+    @Test
+    public void parseCommand_removeFromTeam() throws Exception {
+        RemoveFromTeamCommand command = (RemoveFromTeamCommand) parser.parseCommand(
+                RemoveFromTeamCommand.COMMAND_WORD + " T0001 E0001");
+        assertEquals(new RemoveFromTeamCommand("T0001", "E0001"), command);
+    }
+
+    @Test
+    public void parseCommand_createTeam() throws Exception {
+        Person person = new PersonBuilder().build();
+        CreateTeamCommand command = (CreateTeamCommand) parser.parseCommand(
+                CreateTeamCommand.COMMAND_WORD + " Systems " + person.id());
+        assertEquals(new CreateTeamCommand("Systems", person.id()), command);
     }
 
     @Test

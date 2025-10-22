@@ -12,6 +12,7 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
+import seedu.address.model.team.Team;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -94,6 +95,12 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public boolean hasTeam(Team team) {
+        requireNonNull(team);
+        return addressBook.hasTeam(team);
+    }
+
+    @Override
     public void deletePerson(Person target) {
         addressBook.removePerson(target);
     }
@@ -105,10 +112,22 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void addTeam(Team team) {
+        requireNonNull(team);
+        addressBook.addTeam(team);
+    }
+
+    @Override
     public void setPerson(Person target, Person editedPerson) {
         requireAllNonNull(target, editedPerson);
 
         addressBook.setPerson(target, editedPerson);
+    }
+
+    @Override
+    public Person find(Predicate<Person> predicate) {
+        requireNonNull(predicate);
+        return addressBook.getPersonList().stream().filter(predicate).findFirst().orElse(null);
     }
 
     //=========== Filtered Person List Accessors =============================================================
@@ -148,4 +167,15 @@ public class ModelManager implements Model {
                 && filteredPersons.equals(otherModelManager.filteredPersons);
     }
 
+    @Override
+    public void removeTeam(Team team) {
+        requireNonNull(team);
+        addressBook.removeTeam(team);
+    }
+
+    @Override
+    public void setTeam(Team target, Team editedTeam) {
+        requireAllNonNull(target, editedTeam);
+        addressBook.setTeam(target, editedTeam);
+    }
 }

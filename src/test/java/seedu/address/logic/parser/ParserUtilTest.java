@@ -6,6 +6,9 @@ import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -194,5 +197,45 @@ public class ParserUtilTest {
         Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
 
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    @Test
+    public void parseFileName_validFile_returnsPath() throws Exception {
+        Path dirPath = Paths.get("data");
+        Path testFilePath = Paths.get("data", "testImportData.json");
+        if (!Files.exists(dirPath)) {
+            Files.createDirectories(dirPath);
+        }
+        if (!Files.exists(testFilePath)) {
+            Files.createFile(testFilePath);
+        }
+        try {
+            Path result = ParserUtil.parseFileName("testImportData.json");
+            assertEquals(testFilePath.toAbsolutePath().normalize(), result.toAbsolutePath().normalize());
+        } finally {
+            if (Files.exists(testFilePath)) {
+                Files.delete(testFilePath);
+            }
+        }
+    }
+
+    @Test
+    public void parseFileName_withWhitespace_returnsTrimmedPath() throws Exception {
+        Path dirPath = Paths.get("data");
+        Path testFilePath = Paths.get("data", "testImportData.json");
+        if (!Files.exists(dirPath)) {
+            Files.createDirectories(dirPath);
+        }
+        if (!Files.exists(testFilePath)) {
+            Files.createFile(testFilePath);
+        }
+        try {
+            Path result = ParserUtil.parseFileName(WHITESPACE + "testImportData.json");
+            assertEquals(testFilePath.toAbsolutePath().normalize(), result.toAbsolutePath().normalize());
+        } finally {
+            if (Files.exists(testFilePath)) {
+                Files.delete(testFilePath);
+            }
+        }
     }
 }
