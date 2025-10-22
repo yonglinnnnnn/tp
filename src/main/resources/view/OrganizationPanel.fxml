@@ -12,6 +12,7 @@
         <Insets top="10" right="10" bottom="10" left="10" />
     </padding>
     <Text fx:id="organizationTitle" styleClass="title" text="Organization Hierarchy" StackPane.alignment="TOP_CENTER"/>
+    <Text fx:id="organizationDetails" styleClass="hierarchy-text"/>
     <Label fx:id="organizationPanelPlaceholder" styleClass="result-display" HBox.hgrow="ALWAYS" />
 </StackPane>
 

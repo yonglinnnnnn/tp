@@ -86,4 +86,10 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Returns the organization hierarchy in string format.
+     * @return a string in Linux tree format representing the organization hierarchy.
+     */
+    String getOrganizationHierarchyString();
 }

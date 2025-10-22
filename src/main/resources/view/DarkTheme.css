@@ -352,9 +352,15 @@
 }
 
 .title {
-    -fx-font-size: 10pt;
+    -fx-font-size: 12pt;
     -fx-font-family: "Segoe UI Light";
     -fx-fill: white;
     -fx-underline: true;
+}
+
+.hierarchy-text {
+    -fx-font-size: 12pt;
+    -fx-fill: white;
+    -fx-underline: false;
 }
 

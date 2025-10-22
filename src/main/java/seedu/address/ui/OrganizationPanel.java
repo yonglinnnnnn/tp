@@ -1,9 +1,6 @@
 package seedu.address.ui;
 
-import static java.util.Objects.requireNonNull;
-
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 
@@ -15,25 +12,17 @@ public class OrganizationPanel extends UiPart<Region> {
     private static final String FXML = "OrganizationPanel.fxml";
 
     @FXML
-    private Label organizationDetails;
+    private Text organizationDetails;
 
     @FXML
     private Text title;
 
     /**
      * Creates a {@code OrganizationPanel} with the given details.
+     * @param organizationHierarchyString the details of the organization in Linux tree format.
      */
-    public OrganizationPanel() {
+    public OrganizationPanel(String organizationHierarchyString) {
         super(FXML);
+        organizationDetails.setText(organizationHierarchyString);
     }
-
-    /**
-     * Sets the details of the organization to be displayed.
-     * @param details the details of the organization
-     */
-    public void setHierarchyDisplay(String details) {
-        requireNonNull(details);
-        organizationDetails.setText(details);
-    }
-
 }

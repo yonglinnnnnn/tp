@@ -126,7 +126,7 @@ public class MainWindow extends UiPart<Stage> {
         CommandBox commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
 
-        organizationPanel = new OrganizationPanel();
+        organizationPanel = new OrganizationPanel(logic.getOrganizationHierarchyString());
         organizationPanelPlaceholder.getChildren().add(organizationPanel.getRoot());
     }
 
