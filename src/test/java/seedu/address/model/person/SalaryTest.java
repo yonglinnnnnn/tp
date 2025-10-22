@@ -7,7 +7,7 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 class SalaryTest {
-    Random rand = new Random();
+    private static final Random rand = new Random();
 
     @Test
     void toDouble() {
@@ -18,7 +18,7 @@ class SalaryTest {
     @Test
     void inCents() {
         double value = rand.nextDouble(100000);
-        assertEquals(new Salary(value).inCents(), (int)Math.round(value * 100));
+        assertEquals(new Salary(value).inCents(), (int) Math.round(value * 100));
     }
 
     @Test
@@ -30,12 +30,12 @@ class SalaryTest {
     @Test
     void integerPart() {
         double value = rand.nextDouble(100000);
-        assertEquals(new Salary(value).integerPart(), (int)value);
+        assertEquals(new Salary(value).integerPart(), (int) value);
     }
 
     @Test
     void decimalPart() {
         double value = rand.nextDouble(100000);
-        assertEquals(new Salary(value).decimalPart(), (int)Math.round((value - (int)value) * 100));
+        assertEquals(new Salary(value).decimalPart(), (int) Math.round((value - (int) value) * 100));
     }
 }
