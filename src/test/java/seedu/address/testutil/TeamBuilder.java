@@ -5,52 +5,56 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamName;
 
 /**
- * Test utility to build {@link seedu.address.model.team.Team} instances.
- *
- * <p>Provides fluent setters for id, name, parent, leader, members and subteams
- * to simplify test setup.
+ * A utility class to help with building {@link seedu.address.model.team.Team} objects in tests.
  */
 public class TeamBuilder {
-    public static final String DEFAULT_ID = "T0000";
-    public static final String DEFAULT_NAME = "DefaultTeam";
+
+    public static final String DEFAULT_ID = "T0001";
+    public static final String DEFAULT_NAME = "Core";
 
     private String id;
-    private TeamName name;
+    private TeamName teamName;
+    private List<String> members;
+    private String leaderId;
+    private List<Team> subteams;
     private Team parentTeam;
-    private Person teamLeader;
-    private final List<Person> members = new ArrayList<>();
-    private final List<Team> subteams = new ArrayList<>();
 
     /**
      * Creates a {@code TeamBuilder} with default values.
      */
     public TeamBuilder() {
         this.id = DEFAULT_ID;
-        this.name = new TeamName(DEFAULT_NAME);
+        this.teamName = new TeamName(DEFAULT_NAME);
+        this.members = new ArrayList<>();
+        this.leaderId = null;
+        this.subteams = new ArrayList<>();
+        this.parentTeam = null;
     }
 
     /**
-     * Initializes the TeamBuilder with the data of {@code teamToCopy}.
+     * Creates a {@code TeamBuilder} initialized with the data of {@code teamToCopy}.
+     *
+     * @param teamToCopy the team whose data will be copied into this builder
      */
     public TeamBuilder(Team teamToCopy) {
         Objects.requireNonNull(teamToCopy);
         this.id = teamToCopy.getId();
-        this.name = teamToCopy.getTeamName();
+        this.teamName = teamToCopy.getTeamName();
+        this.members = new ArrayList<>(teamToCopy.getMembers());
+        this.leaderId = teamToCopy.getLeaderId();
+        this.subteams = new ArrayList<>(teamToCopy.getSubteams());
         this.parentTeam = teamToCopy.getParentTeam();
-        this.teamLeader = teamToCopy.getLeaderPerson();
-        this.members.clear();
-        this.members.addAll(teamToCopy.getMembers());
-        this.subteams.clear();
-        this.subteams.addAll(teamToCopy.getSubteams());
     }
 
     /**
-     * Sets the id to use for the built {@link Team}.
+     * Sets the id for the team being built.
+     *
+     * @param id the id to set
+     * @return this builder
      */
     public TeamBuilder withId(String id) {
         this.id = id;
@@ -58,15 +62,101 @@ public class TeamBuilder {
     }
 
     /**
-     * Sets the {@link TeamName} to use for the built {@link Team}.
+     * Sets the team name for the team being built.
+     *
+     * @param name the team name to set
+     * @return this builder
      */
-    public TeamBuilder withTeamName(TeamName teamName) {
-        this.name = Objects.requireNonNull(teamName);
+    public TeamBuilder withTeamName(String name) {
+        this.teamName = new TeamName(name);
         return this;
     }
 
     /**
-     * Sets the parent team for the built {@link Team}.
+     * Sets the team name for the team being built.
+     *
+     * @param teamName the {@code TeamName} to set
+     * @return this builder
+     */
+    public TeamBuilder withTeamName(TeamName teamName) {
+        this.teamName = teamName;
+        return this;
+    }
+
+    /**
+     * Replace members list.
+     *
+     * @param memberIds the list of member ids to set
+     * @return this builder
+     */
+    public TeamBuilder withMembers(List<String> memberIds) {
+        this.members = new ArrayList<>(memberIds);
+        return this;
+    }
+
+    /**
+     * Convenience: set members from varargs.
+     *
+     * @param memberIds the member ids to set
+     * @return this builder
+     */
+    public TeamBuilder withMembers(String... memberIds) {
+        this.members = new ArrayList<>(Arrays.asList(memberIds));
+        return this;
+    }
+
+    /**
+     * Adds a single member id to the members list.
+     *
+     * @param memberId the member id to add
+     * @return this builder
+     */
+    public TeamBuilder addMember(String memberId) {
+        if (this.members == null) {
+            this.members = new ArrayList<>();
+        }
+        this.members.add(memberId);
+        return this;
+    }
+
+    /**
+     * Sets the leader for the team being built.
+     *
+     * @param leaderId the leader id to set
+     * @return this builder
+     */
+    public TeamBuilder withLeader(String leaderId) {
+        this.leaderId = leaderId;
+        return this;
+    }
+
+    /**
+     * Sets the subteams list.
+     *
+     * @param subteams the list of subteams to set
+     * @return this builder
+     */
+    public TeamBuilder withSubteams(List<Team> subteams) {
+        this.subteams = new ArrayList<>(subteams);
+        return this;
+    }
+
+    /**
+     * Sets the subteams from varargs.
+     *
+     * @param subteams the subteams to set
+     * @return this builder
+     */
+    public TeamBuilder withSubteams(Team... subteams) {
+        this.subteams = new ArrayList<>(Arrays.asList(subteams));
+        return this;
+    }
+
+    /**
+     * Sets the parent team for the team being built.
+     *
+     * @param parent the parent team to set
+     * @return this builder
      */
     public TeamBuilder withParentTeam(Team parent) {
         this.parentTeam = parent;
@@ -74,51 +164,26 @@ public class TeamBuilder {
     }
 
     /**
-     * Sets the team leader for the built {@link Team}.
-     */
-    public TeamBuilder withTeamLeader(Person leader) {
-        this.teamLeader = leader;
-        return this;
-    }
-
-    /**
-     * Sets the member list for the built {@link Team}.
-     */
-    public TeamBuilder withMembers(Person... members) {
-        this.members.clear();
-        if (members != null) {
-            this.members.addAll(Arrays.asList(members));
-        }
-        return this;
-    }
-
-    /**
-     * Sets the subteam list for the built {@link Team}.
-     */
-    public TeamBuilder withSubteams(Team... subteams) {
-        this.subteams.clear();
-        if (subteams != null) {
-            this.subteams.addAll(Arrays.asList(subteams));
-        }
-        return this;
-    }
-
-    /**
-     * Builds and returns a {@link Team} configured with the builder's values.
+     * Builds a {@link Team} instance with the configured properties.
+     *
+     * @return the built Team
      */
     public Team build() {
-        Team team = new Team(id, name);
-        if (parentTeam != null) {
-            team.setParentTeam(parentTeam);
-        }
-        if (teamLeader != null) {
-            team.withLeader(teamLeader);
-        }
-        if (!members.isEmpty()) {
+        Team team = new Team(id, teamName);
+        // apply members
+        if (members != null) {
             team.withMembers(new ArrayList<>(members));
         }
-        if (!subteams.isEmpty()) {
+        // apply leader (will add to members if absent)
+        if (leaderId != null) {
+            team.withLeader(leaderId);
+        }
+        // apply subteams and parent
+        if (subteams != null) {
             team.withSubteams(new ArrayList<>(subteams));
+        }
+        if (parentTeam != null) {
+            team.withParentTeam(parentTeam);
         }
         return team;
     }

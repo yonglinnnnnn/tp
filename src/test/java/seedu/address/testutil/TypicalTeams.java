@@ -20,32 +20,32 @@ public class TypicalTeams {
     public static final Team CORE = new TeamBuilder()
             .withId("T0001")
             .withTeamName(new TeamName("Core"))
-            .withTeamLeader(TypicalPersons.BENSON)
-            .withMembers(TypicalPersons.BENSON, TypicalPersons.CARL)
+            .withLeader(TypicalPersons.BENSON.id())
+            .withMembers(TypicalPersons.BENSON.id(), TypicalPersons.CARL.id())
             .build();
 
     public static final Team BACKEND = new TeamBuilder()
             .withId("T0002")
             .withTeamName(new TeamName("Backend"))
             .withParentTeam(CORE)
-            .withTeamLeader(TypicalPersons.DANIEL)
-            .withMembers(TypicalPersons.DANIEL, TypicalPersons.ELLE)
+            .withLeader(TypicalPersons.DANIEL.id())
+            .withMembers(TypicalPersons.DANIEL.id(), TypicalPersons.ELLE.id())
             .build();
 
     public static final Team FRONTEND = new TeamBuilder()
             .withId("T0003")
             .withTeamName(new TeamName("Frontend"))
             .withParentTeam(CORE)
-            .withTeamLeader(TypicalPersons.ELLE)
-            .withMembers(TypicalPersons.ELLE)
+            .withLeader(TypicalPersons.ELLE.id())
+            .withMembers(TypicalPersons.ELLE.id())
             .build();
 
     public static final Team QA = new TeamBuilder()
             .withId("T0004")
             .withTeamName(new TeamName("QA"))
             .withParentTeam(CORE)
-            .withTeamLeader(TypicalPersons.FIONA)
-            .withMembers(TypicalPersons.FIONA)
+            .withLeader(TypicalPersons.FIONA.id())
+            .withMembers(TypicalPersons.FIONA.id())
             .withSubteams(FRONTEND, BACKEND)
             .build();
 

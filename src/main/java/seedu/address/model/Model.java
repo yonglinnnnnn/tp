@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.Person;
+import seedu.address.model.team.Team;
 
 /**
  * The API of the Model component.
@@ -63,11 +64,13 @@ public interface Model {
      */
     void deletePerson(Person target);
 
+
     /**
      * Adds the given person.
      * {@code person} must not already exist in the address book.
      */
     void addPerson(Person person);
+
 
     /**
      * Replaces the given person {@code target} with {@code editedPerson}.
@@ -76,7 +79,7 @@ public interface Model {
      */
     void setPerson(Person target, Person editedPerson);
 
-    Person find(Predicate<Person> predicate);
+    Person find(java.util.function.Predicate<Person> predicate);
 
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();
@@ -88,8 +91,28 @@ public interface Model {
     void updateFilteredPersonList(Predicate<Person> predicate);
 
     /**
-     * Returns the organization hierarchy in string format.
-     * @return a string in Linux tree format representing the organization hierarchy.
+     * Returns the organization hierarchy in Linux tree format.
      */
     String getOrganizationHierarchyString();
+
+    /**
+     * Returns true if a team with the same identity as {@code team} exists in the address book.
+     */
+    boolean hasTeam(Team team);
+
+    /**
+     * Adds a team to the address book.
+     */
+    void addTeam(Team team);
+
+    /**
+     * Replaces the given team {@code target} in the address book with {@code editedTeam}.
+     */
+    void setTeam(Team target, Team editedTeam);
+
+    /**
+     * Removes the given team from the address book.
+     */
+    void removeTeam(Team team);
+
 }

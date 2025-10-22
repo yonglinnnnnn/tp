@@ -35,7 +35,7 @@ public class TeamsManagerTest {
 
     @Test
     public void addTeam_addsAndIgnoresDuplicate() {
-        Team t = new Team("T1000", "Example");
+        Team t = new Team("T1000", new TeamName("Example"));
         manager.addTeam(t);
         List<Team> listAfterAdd = manager.getTeamList();
         assertTrue(listAfterAdd.contains(t));
@@ -53,7 +53,7 @@ public class TeamsManagerTest {
 
     @Test
     public void removeTeam_removesIfPresent() {
-        Team t = new Team("T1001", "RemoveMe");
+        Team t = new Team("T1001", new TeamName("RemoveMe"));
         manager.addTeam(t);
         assertTrue(manager.getTeamList().contains(t));
         manager.removeTeam(t);
@@ -62,10 +62,10 @@ public class TeamsManagerTest {
 
     @Test
     public void setTeam_replacesTarget_whenTargetExists() {
-        Team original = new Team("T2000", "Orig");
+        Team original = new Team("T2000", new TeamName("Orig"));
         manager.addTeam(original);
 
-        Team edited = new Team("T2000", "Edited");
+        Team edited = new Team("T2000", new TeamName("Edited"));
         manager.setTeam(original, edited);
 
         assertFalse(manager.getTeamList().contains(original));
@@ -74,7 +74,7 @@ public class TeamsManagerTest {
 
     @Test
     public void setTeam_nullTargetOrEdited_throwsNullPointerException() {
-        Team t = new Team("T3000", "Some");
+        Team t = new Team("T3000", new TeamName("Some"));
         manager.addTeam(t);
         assertThrows(NullPointerException.class, () -> manager.setTeam(null, t));
         assertThrows(NullPointerException.class, () -> manager.setTeam(t, null));
@@ -82,8 +82,8 @@ public class TeamsManagerTest {
 
     @Test
     public void setTeam_targetNotFound_throwsIllegalArgumentException() {
-        Team missing = new Team("T9999", "Missing");
-        Team edited = new Team("T9999", "Edited");
+        Team missing = new Team("T9999", new TeamName("Missing"));
+        Team edited = new Team("T9999", new TeamName("Edited"));
         assertThrows(IllegalArgumentException.class, () -> manager.setTeam(missing, edited));
     }
 
@@ -94,7 +94,7 @@ public class TeamsManagerTest {
 
     @Test
     public void hasTeam_returnsTrueWhenPresent_falseWhenAbsent() {
-        Team t = new Team("T4000", "Exists");
+        Team t = new Team("T4000", new TeamName("Exists"));
         assertFalse(manager.hasTeam(t));
         manager.addTeam(t);
         assertTrue(manager.hasTeam(t));
@@ -107,7 +107,7 @@ public class TeamsManagerTest {
 
     @Test
     public void getTeamById_returnsOptionalCorrectly() {
-        Team t = new Team("T5000", "Lookup");
+        Team t = new Team("T5000", new TeamName("Lookup"));
         manager.addTeam(t);
         Optional<Team> opt = manager.getTeamById("T5000");
         assertTrue(opt.isPresent());
@@ -119,10 +119,10 @@ public class TeamsManagerTest {
 
     @Test
     public void getTeamList_isUnmodifiable() {
-        Team t = new Team("T6000", "Immutable");
+        Team t = new Team("T6000", new TeamName("Immutable"));
         manager.addTeam(t);
         List<Team> list = manager.getTeamList();
-        assertThrows(UnsupportedOperationException.class, () -> list.add(new Team("TX", "X")));
+        assertThrows(UnsupportedOperationException.class, () -> list.add(new Team("TX", new TeamName("X"))));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class TeamsManagerTest {
 
     @Test
     public void getTeamList_returnsUnmodifiableView_consistentWithContents() {
-        Team t = new Team("T8000", "ViewTest");
+        Team t = new Team("T8000", new TeamName("ViewTest"));
         manager.addTeam(t);
         List<Team> view = manager.getTeamList();
         assertEquals(1, view.size());
