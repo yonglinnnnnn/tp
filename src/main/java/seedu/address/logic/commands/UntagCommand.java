@@ -51,9 +51,12 @@ public class UntagCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
+
+        // Find the person with the matching employee ID from the filtered list
+        // If not found, throw a CommandException with an appropriate error message
         Person personToUntag = lastShownList.stream()
-                .filter(person -> person.id().equals(employeeId))
-                .findFirst()
+                .filter(person -> person.id().equals(employeeId)) // Keep only persons matching the ID
+                .findFirst() // Get the first matching person (if any)
                 .orElseThrow(() -> new CommandException(String.format(MESSAGE_PERSON_NOT_FOUND, employeeId)));
 
         // Validate that all tags to remove exist on the person

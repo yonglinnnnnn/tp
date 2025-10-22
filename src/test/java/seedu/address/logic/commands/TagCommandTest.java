@@ -13,6 +13,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -25,12 +26,12 @@ import seedu.address.testutil.PersonBuilder;
  * Contains integration tests (interaction with the Model) and unit tests for TagCommand.
  */
 public class TagCommandTest {
-
+    private static final int INDEX_FIRST_PERSON = 0;
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_addSingleTagUnfilteredList_success() throws Exception {
-        Person personToTag = model.getFilteredPersonList().get(0);
+        Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         String employeeId = personToTag.id();
         Set<Tag> tagsToAdd = new HashSet<>();
         tagsToAdd.add(new Tag("newTag"));
@@ -52,7 +53,7 @@ public class TagCommandTest {
 
     @Test
     public void execute_addMultipleTagsUnfilteredList_success() throws Exception {
-        Person personToTag = model.getFilteredPersonList().get(0);
+        Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         String employeeId = personToTag.id();
         Set<Tag> tagsToAdd = new HashSet<>();
         tagsToAdd.add(new Tag("tag1"));
@@ -75,8 +76,8 @@ public class TagCommandTest {
     }
 
     @Test
-    public void execute_addDuplicateTag_success() throws Exception {
-        Person personToTag = model.getFilteredPersonList().get(0);
+    public void execute_addDuplicateTag_success() throws CommandException {
+        Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         String employeeId = personToTag.id();
 
         // Get an existing tag from the person
