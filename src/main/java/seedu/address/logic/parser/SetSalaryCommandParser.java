@@ -15,6 +15,15 @@ import seedu.address.logic.parser.exceptions.ParseException;
  */
 public class SetSalaryCommandParser implements Parser<SetSalaryCommand> {
     private static final Pattern NUMBER_REGEX_PATTERN = Pattern.compile("^(\\d+)(?:\\.(\\d+))?$");
+
+    private static int parseDecimalPart(String string) {
+        if (string == null) {
+            return 0;
+        }
+
+        return (int)(Double.parseDouble(String.format("0.%s", string)) * 100);
+    }
+
     /**
      * Parses the given {@code String} of arguments in the context of the SetSalaryCommand
      * and returns a SetSalaryCommand object for execution.
@@ -36,14 +45,7 @@ public class SetSalaryCommandParser implements Parser<SetSalaryCommand> {
 
         if (matcher.matches()) {
             int integerPart = Integer.parseInt(matcher.group(1));
-            int decimalPart = 0;
-            if (matcher.group(2) != null) {
-                decimalPart = Integer.parseInt(matcher.group(2));
-                while (decimalPart >= 100) {
-                    decimalPart /= 10;
-                }
-            }
-
+            int decimalPart = parseDecimalPart(matcher.group(2));
             if (integerPart < 0 || decimalPart < 0) {
                 throw new ParseException(Messages.MESSAGE_INVALID_SALARY);
             }
