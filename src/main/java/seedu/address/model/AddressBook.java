@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
