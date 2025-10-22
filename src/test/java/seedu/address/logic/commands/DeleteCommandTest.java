@@ -20,12 +20,12 @@ import seedu.address.model.person.Person;
  * {@code DeleteCommand}.
  */
 public class DeleteCommandTest {
-
+    private static final int INDEX_FIRST_PERSON = 0;
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_validEmployeeIdUnfilteredList_success() {
-        Person personToDelete = model.getFilteredPersonList().get(0);
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         String employeeId = personToDelete.id();
         DeleteCommand deleteCommand = new DeleteCommand(employeeId);
 
@@ -51,7 +51,7 @@ public class DeleteCommandTest {
     public void execute_validEmployeeIdFilteredList_success() {
         model.updateFilteredPersonList(p -> true);
 
-        Person personToDelete = model.getFilteredPersonList().get(0);
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         String employeeId = personToDelete.id();
         DeleteCommand deleteCommand = new DeleteCommand(employeeId);
 
