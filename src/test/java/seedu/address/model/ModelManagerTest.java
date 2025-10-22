@@ -151,6 +151,24 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void getOrganizationHierarchyString_validString() {
+        ModelManager model = new ModelManager();
+        assertEquals("""
+                    ├── Finance Department
+                    │   ├── Samuel Lee
+                    │   └── Rachel Tan
+                    ├── Engineering Department
+                    │   ├── API Development
+                    │   │   └── Alice Chen
+                    │   └── Frontend
+                    │       └── Felicia Wong
+                    └── Quality Assurance
+                        ├── Michael Ong
+                        └── Derrick Lim
+                """, model.getOrganizationHierarchyString());
+    }
+
+    @Test
     public void equals() {
         AddressBook addressBook = new AddressBookBuilder().withPerson(ALICE).withPerson(BENSON).build();
         AddressBook differentAddressBook = new AddressBook();
