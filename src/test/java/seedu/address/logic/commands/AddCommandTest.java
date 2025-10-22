@@ -187,7 +187,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public <T> ObservableList<Person> sortPersons(Function<Person, T> selector, Comparator<T> comparator) {
+        public <T> void sortPersons(Function<Person, T> selector, Comparator<T> comparator) {
             throw new AssertionError("This method should not be called.");
         }
     }

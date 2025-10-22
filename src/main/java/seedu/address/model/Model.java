@@ -115,9 +115,7 @@ public interface Model {
 
     /**
      * Sorts the list of persons according to the given selector and comparator.
-     * @param selector The function that selects a key from each person to be compared.
      * @param comparator The comparator used to compare the selected keys.
-     * @param <T> The type of the selected key.
      */
-    <T> ObservableList<Person> sortPersons(Function<Person, T> selector, Comparator<T> comparator);
+    void sortPersons(Comparator<Person> comparator);
 }

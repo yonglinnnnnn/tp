@@ -179,10 +179,8 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public <T> ObservableList<Person> sortPersons(Function<Person, T> selector, Comparator<T> comparator) {
-        ObservableList<Person> sortedPersons = addressBook.getPersonList();
-        sortedPersons.sort(Comparator.comparing(selector, comparator));
-        return new FilteredList<>(sortedPersons);
+    public <T> void sortPersons(Function<Person, T> selector, Comparator<T> comparator) {
+        filteredPersons.sort(Comparator.comparing(selector, comparator));
     }
 
     @Override
