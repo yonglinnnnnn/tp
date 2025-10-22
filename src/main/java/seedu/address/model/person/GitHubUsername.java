@@ -30,6 +30,6 @@ public record GitHubUsername(String value) {
      * Returns true if a given string is a valid GitHub username.
      */
     public static boolean isValidGitHubUsername(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return test.matches(VALIDATION_REGEX) || test.isEmpty();
     }
 }

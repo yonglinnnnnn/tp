@@ -37,8 +37,7 @@ public class AddCommandParser implements Parser<AddCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_ADDRESS, PREFIX_GITHUB, PREFIX_TAG);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_GITHUB,
-                PREFIX_PHONE, PREFIX_EMAIL)
+        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_EMAIL)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
@@ -49,8 +48,18 @@ public class AddCommandParser implements Parser<AddCommand> {
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
         Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
-        GitHubUsername gitHubUsername =
-                ParserUtil.parseGitHubUsername(argMultimap.getValue(PREFIX_GITHUB).get());
+
+        GitHubUsername gitHubUsername;
+        if (argMultimap.getValue(PREFIX_GITHUB).isPresent()) {
+            String usernameInput = argMultimap.getValue(PREFIX_GITHUB).get();
+            if (usernameInput.isEmpty()) {
+                throw new ParseException(GitHubUsername.MESSAGE_CONSTRAINTS);
+            }
+            gitHubUsername = ParserUtil.parseGitHubUsername(argMultimap.getValue(PREFIX_GITHUB).get());
+        } else {
+            gitHubUsername = new GitHubUsername("");
+        }
+
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
         Person person = new Person(String.format("E%04d", nextId++), name, phone, email, address,
