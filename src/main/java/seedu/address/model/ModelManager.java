@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 
@@ -166,6 +167,17 @@ public class ModelManager implements Model {
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
                 && filteredPersons.equals(otherModelManager.filteredPersons);
+    }
+
+    //=========== Audit Log Entry  =============================================================
+    @Override
+    public void addAuditEntry(String action, String details) {
+        addressBook.addAuditEntry(action, details);
+    }
+
+    @Override
+    public AuditLog getAuditLog() {
+        return addressBook.getAuditLog();
     }
 
     //=========== Organization Hierarchy Accessors =============================================================

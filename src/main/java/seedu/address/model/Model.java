@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 
@@ -95,6 +96,16 @@ public interface Model {
      * Returns the organization hierarchy in Linux tree format.
      */
     String getOrganizationHierarchyString();
+
+    /**
+     * Adds an entry to the audit log.
+     */
+    void addAuditEntry(String action, String details);
+
+    /**
+     * Returns the audit log.
+     */
+    AuditLog getAuditLog();
 
     /**
      * Returns true if a team with the same identity as {@code team} exists in the address book.

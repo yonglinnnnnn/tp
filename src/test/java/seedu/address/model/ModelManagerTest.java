@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -16,9 +17,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 import seedu.address.testutil.AddressBookBuilder;
+import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.TeamBuilder;
 
 public class ModelManagerTest {
@@ -203,5 +207,52 @@ public class ModelManagerTest {
         UserPrefs differentUserPrefs = new UserPrefs();
         differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
         assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs)));
+    }
+
+    @Test
+    public void addAuditEntry_validEntry_success() {
+        ModelManager modelManager = new ModelManager();
+        modelManager.addAuditEntry("ADD", "Added person: John Doe");
+
+        AuditLog auditLog = modelManager.getAuditLog();
+        assertFalse(auditLog.getEntries().isEmpty());
+        assertEquals(1, auditLog.getEntries().size());
+        assertEquals("ADD", auditLog.getEntries().get(0).getAction());
+        assertEquals("Added person: John Doe", auditLog.getEntries().get(0).getDetails());
+    }
+
+    @Test
+    public void addAuditEntry_multipleEntries_success() {
+        ModelManager modelManager = new ModelManager();
+        modelManager.addAuditEntry("ADD", "Added person: John");
+        modelManager.addAuditEntry("EDIT", "Edited person: Jane");
+        modelManager.addAuditEntry("DELETE", "Deleted person: Bob");
+
+        AuditLog auditLog = modelManager.getAuditLog();
+        assertEquals(3, auditLog.getEntries().size());
+    }
+
+    @Test
+    public void getAuditLog_returnsAddressBookAuditLog() {
+        ModelManager modelManager = new ModelManager();
+        modelManager.addAuditEntry("TEST", "Test entry");
+
+        AuditLog auditLog = modelManager.getAuditLog();
+        assertNotNull(auditLog);
+        assertEquals(1, auditLog.getEntries().size());
+    }
+
+    @Test
+    public void auditLog_persistsAcrossModelOperations() {
+        ModelManager modelManager = new ModelManager();
+        modelManager.addAuditEntry("ADD", "Initial entry");
+
+        // Perform other model operations
+        Person person = new PersonBuilder().withName("Test").build();
+        modelManager.addPerson(person);
+
+        // Audit log should still contain the entry
+        AuditLog auditLog = modelManager.getAuditLog();
+        assertEquals(1, auditLog.getEntries().size());
     }
 }

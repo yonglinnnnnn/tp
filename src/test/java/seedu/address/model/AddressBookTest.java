@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.team.Team;
@@ -54,6 +55,46 @@ public class AddressBookTest {
 
         assertThrows(DuplicatePersonException.class, () -> addressBook.resetData(newData));
     }
+
+    @Test
+    public void resetData_withAuditLog_restoresAuditLog() {
+        // Create an address book with audit log entries
+        AddressBook sourceAddressBook = new AddressBook();
+        sourceAddressBook.addPerson(ALICE);
+        sourceAddressBook.addAuditEntry("ADD", "Added Alice");
+        sourceAddressBook.addAuditEntry("EDIT", "Edited Alice");
+
+        // Reset data to a new address book
+        AddressBook targetAddressBook = new AddressBook();
+        targetAddressBook.resetData(sourceAddressBook);
+
+        // Verify audit log is restored
+        assertEquals(2, targetAddressBook.getAuditLog().getEntries().size());
+        assertEquals("ADD", targetAddressBook.getAuditLog().getEntries().get(0).getAction());
+        assertEquals("Added Alice", targetAddressBook.getAuditLog().getEntries().get(0).getDetails());
+        assertEquals("EDIT", targetAddressBook.getAuditLog().getEntries().get(1).getAction());
+        assertEquals("Edited Alice", targetAddressBook.getAuditLog().getEntries().get(1).getDetails());
+    }
+
+    @Test
+    public void resetData_withExistingAuditLog_clearsAndRestores() {
+        // Create target address book with existing audit log
+        AddressBook targetAddressBook = new AddressBook();
+        targetAddressBook.addAuditEntry("DELETE", "Old entry");
+
+        // Create source address book with different audit log
+        AddressBook sourceAddressBook = new AddressBook();
+        sourceAddressBook.addAuditEntry("ADD", "New entry");
+
+        // Reset data
+        targetAddressBook.resetData(sourceAddressBook);
+
+        // Verify old audit log is cleared and new one is restored
+        assertEquals(1, targetAddressBook.getAuditLog().getEntries().size());
+        assertEquals("ADD", targetAddressBook.getAuditLog().getEntries().get(0).getAction());
+        assertEquals("New entry", targetAddressBook.getAuditLog().getEntries().get(0).getDetails());
+    }
+
 
     @Test
     public void hasPerson_nullPerson_throwsNullPointerException() {
@@ -110,6 +151,11 @@ public class AddressBookTest {
         @Override
         public ObservableList<Team> getTeamList() {
             throw new UnsupportedOperationException("Teams not supported in this stub");
+        }
+
+        @Override
+        public AuditLog getAuditLog() {
+            return new AuditLog();
         }
     }
 }

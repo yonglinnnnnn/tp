@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.AddToTeamCommand;
+import seedu.address.logic.commands.AuditCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CreateTeamCommand;
 import seedu.address.logic.commands.DeleteCommand;
@@ -132,6 +133,13 @@ public class AddressBookParserTest {
                 SetSalaryCommand.COMMAND_WORD + " " + person.id() + " 100.23");
         assertEquals(new SetSalaryCommand(person.id(), 10023), command);
     }
+
+    @Test
+    public void parseCommand_audit() throws Exception {
+        assertTrue(parser.parseCommand(AuditCommand.COMMAND_WORD) instanceof AuditCommand);
+        assertTrue(parser.parseCommand(AuditCommand.COMMAND_WORD + " 3") instanceof AuditCommand);
+    }
+
 
     @Test
     public void parseCommand_addToTeam() throws Exception {
