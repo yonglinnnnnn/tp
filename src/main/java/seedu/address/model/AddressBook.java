@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -136,6 +137,11 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removeTeam(Team toRemove) {
         teams.remove(toRemove);
+    }
+
+    public void sortPersons(Comparator<Person> comparator) {
+        requireNonNull(comparator);
+        persons.sort(comparator);
     }
 
     //// util methods
