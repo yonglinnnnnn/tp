@@ -22,7 +22,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 
 class SortCommandTest {
-    private final static String[] VALID_TOKENS = {
+    private static final String[] VALID_TOKENS = {
             "name",
             "hp",
             "em",

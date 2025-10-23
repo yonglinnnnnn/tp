@@ -139,6 +139,10 @@ public class AddressBook implements ReadOnlyAddressBook {
         teams.remove(toRemove);
     }
 
+    /**
+     * Sorts the list of persons according to the given comparator.
+     * @param comparator The comparator used to compare the selected keys.
+     */
     public void sortPersons(Comparator<Person> comparator) {
         requireNonNull(comparator);
         persons.sort(comparator);

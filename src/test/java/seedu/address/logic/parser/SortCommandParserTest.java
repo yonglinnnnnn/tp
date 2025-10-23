@@ -23,9 +23,9 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 
 class SortCommandParserTest {
-    private final static Random RAND = new Random();
+    private static final Random RAND = new Random();
 
-    private final static String[] VALID_TOKENS = {
+    private static final String[] VALID_TOKENS = {
             "name",
             "hp",
             "em",
@@ -36,7 +36,7 @@ class SortCommandParserTest {
             "team"
     };
 
-    private final static String[] EXAMPLE_INVALID_TOKENS = {
+    private static final String[] EXAMPLE_INVALID_TOKENS = {
             "phone",
             "email",
             "address",

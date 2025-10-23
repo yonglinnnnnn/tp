@@ -2,24 +2,11 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SALARY;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.Command;
-import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.SortCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
@@ -28,14 +15,14 @@ import seedu.address.model.person.Person;
  * Parses input arguments and creates a new SortCommand object
  */
 public class SortCommandParser implements Parser<SortCommand> {
-    private final static String FIELD_NAME = "name";
-    private final static String FIELD_PHONE = "hp";
-    private final static String FIELD_EMAIL = "em";
-    private final static String FIELD_ADDRESS = "addr";
-    private final static String FIELD_GITHUB = "gh";
-    private final static String FIELD_ID = "id";
-    private final static String FIELD_SALARY = "salary";
-    private final static String FIELD_TEAM = "team";
+    private static final String FIELD_NAME = "name";
+    private static final String FIELD_PHONE = "hp";
+    private static final String FIELD_EMAIL = "em";
+    private static final String FIELD_ADDRESS = "addr";
+    private static final String FIELD_GITHUB = "gh";
+    private static final String FIELD_ID = "id";
+    private static final String FIELD_SALARY = "salary";
+    private static final String FIELD_TEAM = "team";
 
     public static Comparator<Person> createComparator(String[] tokens) throws ParseException {
         Comparator<Person> comparator = (x, y) -> 0;
