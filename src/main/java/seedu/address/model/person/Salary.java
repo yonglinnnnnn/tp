@@ -2,12 +2,14 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.util.Comparator;
+
 /**
  * Represents a Person's salary in the address book, rounded to 2 decimal places.
  * @param integerPart The integer part of the salary.
  * @param decimalPart The decimal part of the salary.
  */
-public record Salary(int integerPart, int decimalPart) {
+public record Salary(int integerPart, int decimalPart) implements Comparable<Salary> {
     private static final String MESSAGE_CONSTRAINTS = "Salary should be a positive number in at most 2 decimal places";
 
     public Salary {
@@ -36,6 +38,11 @@ public record Salary(int integerPart, int decimalPart) {
      */
     public int inCents() {
         return integerPart * 100 + decimalPart;
+    }
+
+    @Override
+    public int compareTo(Salary other) {
+        return other.inCents() - this.inCents();
     }
 
     @Override

@@ -38,4 +38,11 @@ class SalaryTest {
         double value = RAND.nextDouble(100000);
         assertEquals(new Salary(value).decimalPart(), (int) Math.round((value - (int) value) * 100));
     }
+
+    @Test
+    void compareTo() {
+        double value1 = RAND.nextDouble(100000);
+        double value2 = RAND.nextDouble(100000);
+        assertEquals(Math.signum(new Salary(value1).compareTo(new Salary(value2))), Math.signum(value1 - value2));
+    }
 }
