@@ -4,6 +4,8 @@ import java.util.Comparator;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -46,6 +48,16 @@ public class PersonCard extends UiPart<Region> {
     private Label salary;
     @FXML
     private FlowPane tags;
+    @FXML
+    private ImageView phoneIcon;
+    @FXML
+    private ImageView addrIcon;
+    @FXML
+    private ImageView emailIcon;
+    @FXML
+    private ImageView gitHubIcon;
+    @FXML
+    private ImageView salaryIcon;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -61,6 +73,11 @@ public class PersonCard extends UiPart<Region> {
         gitHubUsername.setText(person.gitHubUsername().value());
         email.setText(person.email().value());
         salary.setText(String.valueOf(person.salary()));
+        phoneIcon.setImage(new Image(getClass().getResourceAsStream("/images/phone_icon.png")));
+        addrIcon.setImage(new Image(getClass().getResourceAsStream("/images/addr_icon.png")));
+        emailIcon.setImage(new Image(getClass().getResourceAsStream("/images/email_icon.png")));
+        gitHubIcon.setImage(new Image(getClass().getResourceAsStream("/images/github_icon.png")));
+        salaryIcon.setImage(new Image(getClass().getResourceAsStream("/images/salary_icon.png")));
         person.tags().stream()
               .sorted(Comparator.comparing(tag -> tag.tagName))
               .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));

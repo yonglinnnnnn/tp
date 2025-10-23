@@ -47,4 +47,10 @@ public interface Logic {
      * Set the user prefs' GUI settings.
      */
     void setGuiSettings(GuiSettings guiSettings);
+
+    /**
+     * Returns the organization hierarchy in string format.
+     * @return a string in Linux tree format representing the organization hierarchy.
+     */
+    String getOrganizationHierarchyString();
 }
