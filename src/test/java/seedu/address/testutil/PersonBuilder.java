@@ -23,6 +23,7 @@ public class PersonBuilder {
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_GITHUBUSERNAME = "@amybee01";
+    public static final Tag DEFAULT_TAG = new Tag("friends");
 
     private String id;
     private Name name;
@@ -141,6 +142,22 @@ public class PersonBuilder {
     }
 
     /**
+     * Clears the list of {@code tags} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withoutTags() {
+        this.tags.clear();
+        return this;
+    }
+
+    /**
+     * Adds the default {@code tag} to the list of {@code tags} of the {@code Person} that we are building to null.
+     */
+    public PersonBuilder addDefaultTag() {
+        this.tags.add(DEFAULT_TAG);
+        return this;
+    }
+
+    /**
      * Sets the {@code Address} of the {@code Person} that we are building.
      */
     public PersonBuilder withAddress(String address) {
@@ -175,5 +192,4 @@ public class PersonBuilder {
     public Person build() {
         return new Person(id, name, phone, email, address, gitHubUsername, tags);
     }
-
 }
