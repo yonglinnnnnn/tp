@@ -20,7 +20,7 @@ Class Name
 Class Phone
 Class Tag
 Class GitHubUsername
-Class Team
+Class TeamId
 
 Class I #FFFFFF
 }
@@ -45,7 +45,7 @@ Person *--> Email
 Person *--> Address
 Person *--> GitHubUsername
 Person *--> "*" Tag
-Person --> "*" Team
+Person --> "*" TeamId
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
