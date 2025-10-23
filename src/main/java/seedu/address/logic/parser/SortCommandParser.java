@@ -24,6 +24,12 @@ public class SortCommandParser implements Parser<SortCommand> {
     private static final String FIELD_SALARY = "salary";
     private static final String FIELD_TEAM = "team";
 
+    /**
+     * Creates a comparator for sorting persons based on the given tokens.
+     * @param tokens The tokens to use for sorting.
+     * @return A comparator for sorting persons.
+     * @throws ParseException If the given tokens are invalid.
+     */
     public static Comparator<Person> createComparator(String[] tokens) throws ParseException {
         Comparator<Person> comparator = (x, y) -> 0;
         for (String token : tokens) {
