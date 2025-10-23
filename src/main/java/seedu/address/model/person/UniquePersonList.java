@@ -3,6 +3,7 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,6 +28,15 @@ public class UniquePersonList implements Iterable<Person> {
     private final ObservableList<Person> internalList = FXCollections.observableArrayList();
     private final ObservableList<Person> internalUnmodifiableList =
             FXCollections.unmodifiableObservableList(internalList);
+
+    /**
+     * Sorts the internal list using the given comparator.
+     * @param comparator The comparator used to sort the internal list.
+     */
+    public void sort(Comparator<Person> comparator) {
+        requireNonNull(comparator);
+        internalList.sort(comparator);
+    }
 
     /**
      * Returns true if the list contains an equivalent person as the given argument.

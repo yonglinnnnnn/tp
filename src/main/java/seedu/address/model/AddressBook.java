@@ -3,7 +3,9 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
@@ -26,7 +28,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     public AddressBook() {}
 
     /**
-     * Creates an AddressBook using the Persons in the {@code toBeCopied}
+     * Creates an AddressBook using the Persons and Teams in the {@code toBeCopied}.
      */
     public AddressBook(ReadOnlyAddressBook toBeCopied) {
         this();
@@ -36,7 +38,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     //// list overwrite operations
 
     /**
-     * Replaces the contents of the person list with {@code persons}.
+     * Replaces the contents of the persons list with {@code persons}.
      * {@code persons} must not contain duplicate persons.
      */
     public void setPersons(List<Person> persons) {
@@ -52,7 +54,12 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Resets the existing data of this {@code AddressBook} with {@code newData}.
+     * Replaces this address book's data with the provided {@code newData}.
+     * Persons are always replaced. Teams are replaced only if {@code newData}
+     * exposes a team list; otherwise team data is left unchanged. (to be cleaned further later)
+     *
+     * @param newData the source data to copy; must not be null
+     * @throws NullPointerException if {@code newData} is null
      */
     public void resetData(ReadOnlyAddressBook newData) {
         requireNonNull(newData);
@@ -151,6 +158,15 @@ public class AddressBook implements ReadOnlyAddressBook {
         teams.remove(toRemove);
     }
 
+    /**
+     * Sorts the list of persons according to the given comparator.
+     * @param comparator The comparator used to compare the selected keys.
+     */
+    public void sortPersons(Comparator<Person> comparator) {
+        requireNonNull(comparator);
+        persons.sort(comparator);
+    }
+
     //// util methods
 
     @Override
@@ -188,11 +204,12 @@ public class AddressBook implements ReadOnlyAddressBook {
             return false;
         }
 
-        return persons.equals(otherAddressBook.persons);
+        AddressBook otherAb = (AddressBook) other;
+        return persons.equals(otherAb.persons) && teams.equals(otherAb.teams);
     }
 
     @Override
     public int hashCode() {
-        return persons.hashCode();
+        return Objects.hash(persons, teams);
     }
 }

@@ -22,6 +22,7 @@ import seedu.address.logic.commands.ImportCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RemoveFromTeamCommand;
 import seedu.address.logic.commands.SetSalaryCommand;
+import seedu.address.logic.commands.SortCommand;
 import seedu.address.logic.commands.TagCommand;
 import seedu.address.logic.commands.UntagCommand;
 import seedu.address.logic.commands.ViewCommand;
@@ -108,6 +109,9 @@ public class AddressBookParser {
 
         case RemoveFromTeamCommand.COMMAND_WORD:
             return new RemoveFromTeamCommandParser().parse(arguments);
+
+        case SortCommand.COMMAND_WORD:
+            return new SortCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);
