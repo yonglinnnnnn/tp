@@ -2,8 +2,6 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
-import java.util.Comparator;
-
 /**
  * Represents a Person's salary in the address book, rounded to 2 decimal places.
  * @param integerPart The integer part of the salary.
