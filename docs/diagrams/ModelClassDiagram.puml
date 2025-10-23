@@ -13,6 +13,12 @@ Class ModelManager
 Class UserPrefs
 
 Class UniquePersonList
+Class UniqueTeamList
+Class Team
+Class TeamName
+Class Members
+Class LeaderId
+Class Id
 Class Person
 Class Address
 Class Email
@@ -36,12 +42,23 @@ ModelManager -right-> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
 
 AddressBook *--> "1" UniquePersonList
+AddressBook *--> "1" UniqueTeamList
+
 UniquePersonList --> "~* all" Person
 Person *--> Name
 Person *--> Phone
 Person *--> Email
 Person *--> Address
 Person *--> "*" Tag
+
+UniqueTeamList --> "~* all" Team
+Team *--> Id
+Team *--> TeamName
+Team *--> LeaderId
+Team *--> "*" Members
+Team -up-> "~* SubTeams" Team
+Team -right-> "1 ParentTeam" Team
+
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
