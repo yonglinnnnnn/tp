@@ -48,7 +48,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[portfolio](team/yonglinnnnnn.md)]
 
 * Role: Deliverables and deadlines
-* Responsibilities: Ensure project deliverables are done on time and in the right format. 
+* Responsibilities: Ensure project deliverables are done on time and in the right format.
 
 ### Zhang Puyu
 

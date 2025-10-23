@@ -14,7 +14,11 @@ class SetSalaryCommandParserTest {
 
     @Test
     void parse_validFormat_success() {
-        assertParseSuccess(parser, "E12345 100", new SetSalaryCommand("E12345", 100));
+        assertParseSuccess(parser, "E12345 100", new SetSalaryCommand("E12345", 10000));
+        assertParseSuccess(parser, "E12345 100.45", new SetSalaryCommand("E12345", 10045));
+        assertParseSuccess(parser, "E12345 100.3", new SetSalaryCommand("E12345", 10030));
+        assertParseSuccess(parser, "E12345 100.03", new SetSalaryCommand("E12345", 10003));
+        assertParseSuccess(parser, "E12345 100.126", new SetSalaryCommand("E12345", 10012));
     }
 
     @Test
