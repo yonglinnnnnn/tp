@@ -12,7 +12,7 @@ public record GitHubUsername(String value) {
     public static final String MESSAGE_CONSTRAINTS = """
                 GitHub username should begin with '@', only contain alphanumeric characters and hyphens,
                 start with an alphanumeric character, cannot have multiple consecutive hyphens,
-                cannot begin or end with a hyphen, and must be 1-39 chars.""";
+                cannot begin or end with a hyphen, and must be 3-39 chars.""";
 
     public static final String VALIDATION_REGEX = "^@[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9])){2,38}$";
 
@@ -30,6 +30,6 @@ public record GitHubUsername(String value) {
      * Returns true if a given string is a valid GitHub username.
      */
     public static boolean isValidGitHubUsername(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return test.matches(VALIDATION_REGEX) || test.isEmpty();
     }
 }

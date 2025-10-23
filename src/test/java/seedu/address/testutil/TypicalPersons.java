@@ -10,8 +10,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +45,8 @@ public class TypicalPersons {
             .withPhone("95352563")
             .withEmail("heinz@example.com")
             .withGitHubUsername("@carl03")
-            .withAddress("wall street").build();
+            .withAddress("wall street")
+            .withoutTags().build();
     public static final Person DANIEL = new PersonBuilder()
             .withId(3)
             .withName("Daniel Meier")
@@ -62,21 +61,24 @@ public class TypicalPersons {
             .withPhone("9482224")
             .withEmail("werner@example.com")
             .withGitHubUsername("@elle05")
-            .withAddress("michegan ave").build();
+            .withAddress("michegan ave")
+            .withoutTags().build();
     public static final Person FIONA = new PersonBuilder()
             .withId(5)
             .withName("Fiona Kunz")
             .withPhone("9482427")
             .withEmail("lydia@example.com")
             .withGitHubUsername("@fiona06")
-            .withAddress("little tokyo").build();
+            .withAddress("little tokyo")
+            .withoutTags().build();
     public static final Person GEORGE = new PersonBuilder()
             .withId(6)
             .withName("George Best")
             .withPhone("9482442")
             .withEmail("anna@example.com")
             .withGitHubUsername("@george07")
-            .withAddress("4th street").build();
+            .withAddress("4th street")
+            .withoutTags().build();
 
     // Manually added
     public static final Person HOON = new PersonBuilder()
@@ -85,14 +87,16 @@ public class TypicalPersons {
             .withPhone("8482424")
             .withEmail("stefan@example.com")
             .withGitHubUsername("@hoon08")
-            .withAddress("little india").build();
+            .withAddress("little india")
+            .withoutTags().build();
     public static final Person IDA = new PersonBuilder()
             .withId(8)
             .withName("Ida Mueller")
             .withPhone("8482131")
             .withEmail("hans@example.com")
             .withGitHubUsername("@ida09")
-            .withAddress("chicago ave").build();
+            .withAddress("chicago ave")
+            .withoutTags().build();
 
     // Manually added - Person's details found in {@code CommandTestUtil}
     public static final Person AMY = new PersonBuilder()
@@ -102,7 +106,7 @@ public class TypicalPersons {
             .withEmail(VALID_EMAIL_AMY)
             .withAddress(VALID_ADDRESS_AMY)
             .withGitHubUsername(VALID_GITHUBUSERNAME_AMY)
-            .withTags(VALID_TAG_FRIEND).build();
+            .build();
     public static final Person BOB = new PersonBuilder()
             .withId(10)
             .withName(VALID_NAME_BOB)
@@ -110,7 +114,6 @@ public class TypicalPersons {
             .withEmail(VALID_EMAIL_BOB)
             .withAddress(VALID_ADDRESS_BOB)
             .withGitHubUsername(VALID_GITHUBUSERNAME_BOB)
-            .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
             .build();
 
     public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER

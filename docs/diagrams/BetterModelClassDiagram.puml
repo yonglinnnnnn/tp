@@ -19,6 +19,8 @@ Person *--> Name
 Person *--> Phone
 Person *--> Email
 Person *--> Address
+Person *--> GithubUsername
+Person --> "*" TeamId
 
 UniqueTeamList --> "~* all" Team
 Team *--> Id

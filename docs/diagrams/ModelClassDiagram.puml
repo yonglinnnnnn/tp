@@ -25,6 +25,8 @@ Class Email
 Class Name
 Class Phone
 Class Tag
+Class GitHubUsername
+Class TeamId
 
 Class I #FFFFFF
 }
@@ -49,7 +51,9 @@ Person *--> Name
 Person *--> Phone
 Person *--> Email
 Person *--> Address
+Person *--> GitHubUsername
 Person *--> "*" Tag
+Person --> "*" TeamId
 
 UniqueTeamList --> "~* all" Team
 Team *--> Id
@@ -65,7 +69,8 @@ UniquePersonList -[hidden]right-> I
 
 Name -[hidden]right-> Phone
 Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+Address -[hidden]right-> GitHubUsername
+GitHubUsername -[hidden]right-> Email
 
 ModelManager --> "~* filtered" Person
 @enduml

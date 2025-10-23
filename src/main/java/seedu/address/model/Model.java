@@ -1,10 +1,12 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 
@@ -91,6 +93,21 @@ public interface Model {
     void updateFilteredPersonList(Predicate<Person> predicate);
 
     /**
+     * Returns the organization hierarchy in Linux tree format.
+     */
+    String getOrganizationHierarchyString();
+
+    /**
+     * Adds an entry to the audit log.
+     */
+    void addAuditEntry(String action, String details);
+
+    /**
+     * Returns the audit log.
+     */
+    AuditLog getAuditLog();
+
+    /**
      * Returns true if a team with the same identity as {@code team} exists in the address book.
      */
     boolean hasTeam(Team team);
@@ -109,4 +126,10 @@ public interface Model {
      * Removes the given team from the address book.
      */
     void removeTeam(Team team);
+
+    /**
+     * Sorts the list of persons according to the given selector and comparator.
+     * @param comparator The comparator used to compare the selected keys.
+     */
+    void sortPersons(Comparator<Person> comparator);
 }
