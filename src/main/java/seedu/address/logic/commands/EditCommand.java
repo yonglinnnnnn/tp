@@ -6,7 +6,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.Collections;
@@ -40,12 +39,11 @@ public class EditCommand extends Command {
             + "by the employee ID. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: EMPLOYEE_ID (must be in format Exxxx) "
-            + "[" + PREFIX_NAME + "NAME] "
-            + "[" + PREFIX_PHONE + "PHONE] "
-            + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_ADDRESS + "ADDRESS] "
-            + "[" + PREFIX_GITHUB + "GITHUB_USERNAME] "
-            + "[" + PREFIX_TAG + "TAG]...\n"
+            + "[" + PREFIX_NAME + " NAME] "
+            + "[" + PREFIX_PHONE + " PHONE] "
+            + "[" + PREFIX_EMAIL + " EMAIL] "
+            + "[" + PREFIX_ADDRESS + " ADDRESS] "
+            + "[" + PREFIX_GITHUB + " GITHUB_USERNAME]\n"
             + "Example: " + COMMAND_WORD + " E1234 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
@@ -104,7 +102,7 @@ public class EditCommand extends Command {
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.address());
         GitHubUsername updatedGitHubUsername =
                 editPersonDescriptor.getGitHubUsername().orElse(personToEdit.gitHubUsername());
-        Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.tags());
+        Set<Tag> updatedTags = personToEdit.tags();
 
         return new Person(personToEdit.id(), updatedName, updatedPhone, updatedEmail,
                 updatedAddress, updatedGitHubUsername, updatedTags);
