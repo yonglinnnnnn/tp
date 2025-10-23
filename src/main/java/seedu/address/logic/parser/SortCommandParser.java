@@ -41,25 +41,25 @@ public class SortCommandParser implements Parser<SortCommand> {
         Comparator<Person> comparator = (x, y) -> 0;
         for (String token : tokens) {
             comparator = switch (token) {
-                case FIELD_NAME -> comparator.thenComparing(person -> person.name().fullName());
-                case FIELD_PHONE -> comparator.thenComparing(person -> person.phone().value());
-                case FIELD_EMAIL -> comparator.thenComparing(person -> person.email().value());
-                case FIELD_ADDRESS -> comparator.thenComparing(person -> person.address().value());
-                case FIELD_GITHUB -> comparator.thenComparing(person -> person.gitHubUsername().value());
-                case FIELD_ID -> comparator.thenComparing(Person::id);
-                case FIELD_SALARY -> comparator.thenComparing(person -> person.salary());
-                case FIELD_TEAM -> {
-                    Function<Person, String> selector = person ->
-                            person.teamIds()
-                                  .stream()
-                                  .sorted()
-                                  .reduce((x, y) -> x + y)
-                                  .orElse("");
-                    yield comparator.thenComparing(selector);
-                }
+            case FIELD_NAME -> comparator.thenComparing(person -> person.name().fullName());
+            case FIELD_PHONE -> comparator.thenComparing(person -> person.phone().value());
+            case FIELD_EMAIL -> comparator.thenComparing(person -> person.email().value());
+            case FIELD_ADDRESS -> comparator.thenComparing(person -> person.address().value());
+            case FIELD_GITHUB -> comparator.thenComparing(person -> person.gitHubUsername().value());
+            case FIELD_ID -> comparator.thenComparing(Person::id);
+            case FIELD_SALARY -> comparator.thenComparing(person -> person.salary());
+            case FIELD_TEAM -> {
+                Function<Person, String> selector = person ->
+                        person.teamIds()
+                              .stream()
+                              .sorted()
+                              .reduce((x, y) -> x + y)
+                              .orElse("");
+                yield comparator.thenComparing(selector);
+            }
 
-                default -> throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+            default -> throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                                                              SortCommand.MESSAGE_USAGE));
             };
         }
 
