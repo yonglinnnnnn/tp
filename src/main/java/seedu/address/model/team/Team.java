@@ -19,7 +19,7 @@ public class Team {
     private final TeamName teamName;
     private List<String> members = new ArrayList<>();
     private String leaderId = null;
-    private List<Team> subteams = new ArrayList<>();
+    private Subteams subteams = new Subteams();
     private Team parentTeam = null;
 
     /**
@@ -58,8 +58,36 @@ public class Team {
         return Collections.unmodifiableList(subteams);
     }
 
+    /**
+     * Adds a new subteam to this team.
+     * @return true if the subteam was added, false if it was already present
+     */
+    public boolean addToSubteam(Team subteam) {
+        requireNonNull(subteam);
+        if (subteam == this) {
+            return false;
+        }
+        // prevent cycles
+        if (!subteams.contains(subteam)) {
+            subteams.add(subteam);
+        }
+        return false;
+    }
+
+    /**
+     * Gets the parent team of this team.
+     * @return the parent team; null if this is a root level team
+     */
     public Team getParentTeam() {
         return parentTeam;
+    }
+
+    /**
+     * Sets the parent team for this team.
+     * @param parentTeam the parent team to set; null indicates root level team
+     */
+    public void setParentTeam(Team parentTeam) {
+        this.parentTeam = parentTeam;
     }
 
     /**
@@ -122,6 +150,7 @@ public class Team {
         changeLeader(leaderId);
         return this;
     }
+
     /**
      * Replaces this team's subteams with the provided list and sets their parent to this team.
      *
@@ -148,7 +177,6 @@ public class Team {
         this.parentTeam = parent;
         return this;
     }
-
 
     /**
      * Compares this team to another team for a deep identity match used in tests.
