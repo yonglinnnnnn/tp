@@ -3,14 +3,12 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.TagCommand;
 import seedu.address.model.tag.Tag;
 
@@ -23,7 +21,7 @@ public class TagCommandParserTest {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("friends"));
 
-        assertParseSuccess(parser, "1 friends", new TagCommand(INDEX_FIRST_PERSON, tags));
+        assertParseSuccess(parser, "E1001 friends", new TagCommand("E1001", tags));
     }
 
     @Test
@@ -33,32 +31,32 @@ public class TagCommandParserTest {
         tags.add(new Tag("colleagues"));
         tags.add(new Tag("family"));
 
-        assertParseSuccess(parser, "1 friends colleagues family", new TagCommand(INDEX_FIRST_PERSON, tags));
+        assertParseSuccess(parser, "E1001 friends colleagues family", new TagCommand("E1001", tags));
     }
 
     @Test
-    public void parse_invalidIndex_throwsParseException() {
-        // negative index
-        assertParseFailure(parser, "-1 friends", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+    public void parse_invalidEmployeeId_throwsParseException() {
+        // doesn't start with E
+        assertParseFailure(parser, "1001 friends", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 TagCommand.MESSAGE_USAGE));
 
-        // zero index
-        assertParseFailure(parser, "0 friends", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+        // starts with lowercase e
+        assertParseFailure(parser, "e1001 friends", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 TagCommand.MESSAGE_USAGE));
 
-        // non-numeric index
-        assertParseFailure(parser, "a friends", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+        // random string
+        assertParseFailure(parser, "ABC friends", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 TagCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_missingParts_throwsParseException() {
-        // no index specified
+        // no employee ID specified
         assertParseFailure(parser, "friends", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 TagCommand.MESSAGE_USAGE));
 
         // no tags specified
-        assertParseFailure(parser, "1", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+        assertParseFailure(parser, "E1001", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 TagCommand.MESSAGE_USAGE));
 
         // empty string
@@ -73,10 +71,10 @@ public class TagCommandParserTest {
     @Test
     public void parse_invalidTag_throwsParseException() {
         // tag with special characters
-        assertParseFailure(parser, "1 friends*", Tag.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "E1001 friends*", Tag.MESSAGE_CONSTRAINTS);
 
         // tag with spaces (each word becomes separate tag, but if invalid chars present)
-        assertParseFailure(parser, "1 friend$ colleague", Tag.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "E1001 friend$ colleague", Tag.MESSAGE_CONSTRAINTS);
     }
 
     @Test
@@ -84,14 +82,14 @@ public class TagCommandParserTest {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("friends"));
 
-        // extra spaces between index and tag
-        assertParseSuccess(parser, "1    friends", new TagCommand(INDEX_FIRST_PERSON, tags));
+        // extra spaces between employee ID and tag
+        assertParseSuccess(parser, "E1001    friends", new TagCommand("E1001", tags));
 
         // leading spaces
-        assertParseSuccess(parser, "   1 friends", new TagCommand(INDEX_FIRST_PERSON, tags));
+        assertParseSuccess(parser, "   E1001 friends", new TagCommand("E1001", tags));
 
         // trailing spaces
-        assertParseSuccess(parser, "1 friends   ", new TagCommand(INDEX_FIRST_PERSON, tags));
+        assertParseSuccess(parser, "E1001 friends   ", new TagCommand("E1001", tags));
     }
 
     @Test
@@ -102,27 +100,22 @@ public class TagCommandParserTest {
         tags.add(new Tag("tag3"));
 
         // multiple tags with varying spaces
-        assertParseSuccess(parser, "1   tag1  tag2    tag3", new TagCommand(INDEX_FIRST_PERSON, tags));
+        assertParseSuccess(parser, "E1001   tag1  tag2    tag3", new TagCommand("E1001", tags));
     }
 
     @Test
-    public void parse_largeIndex_success() throws Exception {
+    public void parse_differentEmployeeIds_success() throws Exception {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("friends"));
 
-        assertParseSuccess(parser, "999 friends", new TagCommand(Index.fromOneBased(999), tags));
+        assertParseSuccess(parser, "E1 friends", new TagCommand("E1", tags));
+        assertParseSuccess(parser, "E9999 friends", new TagCommand("E9999", tags));
+        assertParseSuccess(parser, "E123456 friends", new TagCommand("E123456", tags));
     }
 
     @Test
     public void parse_emptyTagAfterTrim_throwsParseException() {
-        // Note: This tests the edge case where ParserUtil.parseTags might return an empty set
-        // In practice, ParserUtil.parseTag throws an exception for empty/whitespace-only tags,
-        // but this ensures the isEmpty() check in TagCommandParser is covered
-
-        // Tags that are only whitespace should be caught by Tag validation
-        // This will throw Tag.MESSAGE_CONSTRAINTS, not MESSAGE_NO_TAGS_PROVIDED
-        // because parseTag validates each tag before the isEmpty check
-        assertParseFailure(parser, "1  ", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+        assertParseFailure(parser, "E1001  ", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 TagCommand.MESSAGE_USAGE));
     }
 }
