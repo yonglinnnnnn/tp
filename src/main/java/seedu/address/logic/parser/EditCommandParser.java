@@ -10,7 +10,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
-import seedu.address.commons.core.index.Index;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -20,27 +22,29 @@ import seedu.address.logic.parser.exceptions.ParseException;
  */
 public class EditCommandParser implements Parser<EditCommand> {
 
-    /**
-     * Parses the given {@code String} of arguments in the context of the EditCommand
-     * and returns an EditCommand object for execution.
-     * @throws ParseException if the user input does not conform the expected format
-     */
+    private static final Pattern EMPLOYEE_ID_FORMAT = Pattern.compile("^E\\d{4}$");
+
+    @Override
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_ADDRESS, PREFIX_GITHUB, PREFIX_TAG);
 
+        String employeeId;
         if (!argMultimap.getAllValues(PREFIX_TAG).isEmpty()) {
             throw new ParseException(MESSAGE_TAG_UNALLOWED);
         }
 
-        Index index;
-
         try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
-        } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), pe);
+            employeeId = argMultimap.getPreamble().trim();
+            if (!isValidEmployeeId(employeeId)) {
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                        EditCommand.MESSAGE_USAGE));
+            }
+        } catch (Exception e) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    EditCommand.MESSAGE_USAGE), e);
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
@@ -69,7 +73,12 @@ public class EditCommandParser implements Parser<EditCommand> {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
         }
 
-        return new EditCommand(index, editPersonDescriptor);
+        return new EditCommand(employeeId, editPersonDescriptor);
+    }
+
+    private boolean isValidEmployeeId(String employeeId) {
+        Matcher matcher = EMPLOYEE_ID_FORMAT.matcher(employeeId);
+        return matcher.matches();
     }
 
 }
