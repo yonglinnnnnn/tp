@@ -19,5 +19,5 @@ Person *--> Phone
 Person *--> Email
 Person *--> Address
 Person *--> GithubUsername
-Person --> "*" Team
+Person --> "*" TeamId
 @enduml
