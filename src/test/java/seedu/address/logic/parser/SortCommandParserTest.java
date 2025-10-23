@@ -28,23 +28,9 @@ import seedu.address.model.person.Phone;
 class SortCommandParserTest {
     private static final Random RAND = new Random();
 
-    private static final String[] VALID_TOKENS = {
-            "name",
-            "hp",
-            "em",
-            "addr",
-            "gh",
-            "id",
-            "salary",
-            "team"
-    };
+    private static final String[] VALID_TOKENS = { "name", "hp", "em", "addr", "gh", "id", "salary", "team" };
 
-    private static final String[] EXAMPLE_INVALID_TOKENS = {
-            "phone",
-            "email",
-            "address",
-            "github"
-    };
+    private static final String[] EXAMPLE_INVALID_TOKENS = { "phone", "email", "address", "github" };
 
     // Produce "sort" or "sort -name -hp ..." correctly (space before first "-")
     private String getRandomValidCommand() {
