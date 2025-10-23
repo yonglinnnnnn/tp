@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,16 +23,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 
 class SortCommandTest {
-    private static final String[] VALID_TOKENS = {
-            "name",
-            "hp",
-            "em",
-            "addr",
-            "gh",
-            "id",
-            "salary",
-            "team"
-    };
+    private static final String[] VALID_TOKENS = { "name", "hp", "em", "addr", "gh", "id", "salary", "team" };
 
     private static final Random RAND = new Random();
 
