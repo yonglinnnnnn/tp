@@ -42,7 +42,7 @@ public record Salary(int integerPart, int decimalPart) implements Comparable<Sal
 
     @Override
     public int compareTo(Salary other) {
-        return other.inCents() - this.inCents();
+        return this.inCents() - other.inCents();
     }
 
     @Override
