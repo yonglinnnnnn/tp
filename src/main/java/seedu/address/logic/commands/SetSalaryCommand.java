@@ -18,20 +18,20 @@ public final class SetSalaryCommand extends Command {
             + "Example: " + COMMAND_WORD + " "
             + "E12046 3670\n";
 
-    public static final String MESSAGE_SUCCESS = "Set salary %1$d for: %2$s";
+    public static final String MESSAGE_SUCCESS = "Set salary %1$.2f for: %2$s";
     public static final String MESSAGE_NON_EXISTENT_PERSON = "The person does not exist!";
 
 
     private final String toSet;
-    private final int salary;
+    private final int salaryInCents;
 
     /**
      * Creates an SetSalaryCommand for the specified {@code Person}
      */
-    public SetSalaryCommand(String personId, int salary) {
+    public SetSalaryCommand(String personId, int salaryInCents) {
         requireNonNull(personId);
         toSet = personId;
-        this.salary = salary;
+        this.salaryInCents = salaryInCents;
     }
 
     @Override
@@ -39,8 +39,8 @@ public final class SetSalaryCommand extends Command {
         requireNonNull(model);
         Person person = model.find(p -> p.id().equals(toSet));
         model.deletePerson(person);
-        model.addPerson(person.duplicate(toSet).withSalary(salary).build());
-        return new CommandResult(String.format(MESSAGE_SUCCESS, salary, person.id()));
+        model.addPerson(person.duplicate(toSet).withSalary(salaryInCents).build());
+        return new CommandResult(String.format(MESSAGE_SUCCESS, salaryInCents / 100.0, person.id()));
     }
 
     @Override
@@ -54,14 +54,14 @@ public final class SetSalaryCommand extends Command {
             return false;
         }
 
-        return command.toSet.equals(this.toSet) && command.salary == this.salary;
+        return command.toSet.equals(this.toSet) && command.salaryInCents == this.salaryInCents;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("toSet", toSet)
-                .add("salary", salary)
+                .add("salaryInCents", salaryInCents)
                 .toString();
     }
 }

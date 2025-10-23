@@ -194,6 +194,11 @@ public class AddCommandTest {
         public void removeTeam(Team team) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public String getOrganizationHierarchyString() {
+            throw new AssertionError("This method should not be called.");
+        };
     }
 
     /**

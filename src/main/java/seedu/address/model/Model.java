@@ -80,7 +80,7 @@ public interface Model {
      */
     void setPerson(Person target, Person editedPerson);
 
-    Person find(Predicate<Person> predicate);
+    Person find(java.util.function.Predicate<Person> predicate);
 
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();
@@ -90,6 +90,11 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Returns the organization hierarchy in Linux tree format.
+     */
+    String getOrganizationHierarchyString();
 
     /**
      * Adds an entry to the audit log.
@@ -120,4 +125,5 @@ public interface Model {
      * Removes the given team from the address book.
      */
     void removeTeam(Team team);
+
 }

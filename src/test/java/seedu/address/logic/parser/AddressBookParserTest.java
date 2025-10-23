@@ -67,9 +67,10 @@ public class AddressBookParserTest {
     public void parseCommand_edit() throws Exception {
         Person person = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
+        String employeeId = "E0001";
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
-        assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
+                + employeeId + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
+        assertEquals(new EditCommand(employeeId, descriptor), command);
     }
 
     @Test
@@ -122,7 +123,10 @@ public class AddressBookParserTest {
         Person person = new PersonBuilder().build();
         SetSalaryCommand command = (SetSalaryCommand) parser.parseCommand(
                 SetSalaryCommand.COMMAND_WORD + " " + person.id() + " 100");
-        assertEquals(new SetSalaryCommand(person.id(), 100), command);
+        assertEquals(new SetSalaryCommand(person.id(), 10000), command);
+        command = (SetSalaryCommand) parser.parseCommand(
+                SetSalaryCommand.COMMAND_WORD + " " + person.id() + " 100.23");
+        assertEquals(new SetSalaryCommand(person.id(), 10023), command);
     }
 
     @Test

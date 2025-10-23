@@ -179,6 +179,24 @@ public class ModelManager implements Model {
         return addressBook.getAuditLog();
     }
 
+    //=========== Organization Hierarchy Accessors =============================================================
+    @Override
+    public String getOrganizationHierarchyString() {
+        return """
+                    ├── Finance Department
+                    │   ├── Samuel Lee
+                    │   └── Rachel Tan
+                    ├── Engineering Department
+                    │   ├── API Development
+                    │   │   └── Alice Chen
+                    │   └── Frontend
+                    │       └── Felicia Wong
+                    └── Quality Assurance
+                        ├── Michael Ong
+                        └── Derrick Lim
+                """;
+    }
+
     @Override
     public void removeTeam(Team team) {
         requireNonNull(team);

@@ -350,3 +350,24 @@
     -fx-background-radius: 2;
     -fx-font-size: 11;
 }
+
+.organization-panel {
+    -fx-background-color: gainsboro;
+    -fx-padding: 1 3 1 3;
+    -fx-border-radius: 10;
+    -fx-padding: 14 14;
+}
+
+.title {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-fill: black;
+    -fx-underline: true;
+}
+
+.hierarchy-text {
+    -fx-font-size: 12pt;
+    -fx-fill: black;
+    -fx-underline: false;
+}
+

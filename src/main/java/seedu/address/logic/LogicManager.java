@@ -160,4 +160,9 @@ public class LogicManager implements Logic {
                 && !action.equals(VIEW_ACTION)
                 && !action.equals(FIND_ACTION);
     }
+
+    @Override
+    public String getOrganizationHierarchyString() {
+        return model.getOrganizationHierarchyString();
+    }
 }
