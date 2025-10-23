@@ -59,12 +59,6 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private ImageView salaryIcon;
 
-
-//    public Image addrImage = new Image(getClass().getResourceAsStream("/images/addr_icon.png"));
-//    public Image emailImage = new Image(getClass().getResourceAsStream("/images/email_icon.png"));
-//    public Image gitHubImage = new Image(getClass().getResourceAsStream("/images/github_icon.png"));
-//    public Image salaryImage = new Image(getClass().getResourceAsStream("/images/salary_icon.png"));
-
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
      */
