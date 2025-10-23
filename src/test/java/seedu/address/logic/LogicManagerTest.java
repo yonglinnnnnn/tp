@@ -1,7 +1,6 @@
 package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
@@ -23,10 +22,12 @@ import org.junit.jupiter.api.io.TempDir;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddCommandParser;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
@@ -81,8 +82,8 @@ public class LogicManagerTest {
 
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
-        String deleteCommand = "delete 9";
-        assertCommandException(deleteCommand, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        String deleteCommand = "delete E9999";
+        assertCommandException(deleteCommand, String.format(DeleteCommand.MESSAGE_PERSON_NOT_FOUND, "E9999"));
     }
 
     @Test
@@ -193,5 +194,72 @@ public class LogicManagerTest {
         ModelManager expectedModel = new ModelManager();
         expectedModel.addPerson(expectedPerson);
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_emptyAddressBook_nextIdRemainsUnchanged() throws Exception {
+        // Setup empty model
+        Model emptyModel = new ModelManager(new AddressBook(), new UserPrefs());
+
+        // Get current nextId before initialization
+        Field field = AddCommandParser.class.getDeclaredField("nextId");
+        field.setAccessible(true);
+        long initialNextId = field.getLong(null);
+
+        // Create LogicManager with empty model (should not update nextId)
+        JsonAddressBookStorage addressBookStorage =
+                new JsonAddressBookStorage(temporaryFolder.resolve("addressBook.json"));
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        Logic logic = new LogicManager(emptyModel, storage);
+
+        // Verify nextId hasn't changed
+        long afterNextId = field.getLong(null);
+        assertEquals(initialNextId, afterNextId);
+    }
+
+    @Test
+    public void execute_addressBookWithPersons_nextIdUpdatedCorrectly() throws Exception {
+        // Setup model with persons having different IDs
+        AddressBook ab = new AddressBook();
+        ab.addPerson(new PersonBuilder().withName("Alice").withId(5000).build());
+        ab.addPerson(new PersonBuilder().withName("Bob").withId(5001).build());
+        ab.addPerson(new PersonBuilder().withName("Charlie").withId(5002).build());
+        Model modelWithPersons = new ModelManager(ab, new UserPrefs());
+
+        JsonAddressBookStorage addressBookStorage =
+                new JsonAddressBookStorage(temporaryFolder.resolve("addressBook.json"));
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        Logic logic = new LogicManager(modelWithPersons, storage);
+
+        Field field = AddCommandParser.class.getDeclaredField("nextId");
+        field.setAccessible(true);
+        long nextId = field.getLong(null);
+        assertEquals(5003L, nextId);
+    }
+
+    @Test
+    public void execute_addressBookWithMixedIds_ignoresNonEPrefixedIds() throws Exception {
+        // Setup with mixed IDs
+        AddressBook ab = new AddressBook();
+        ab.addPerson(new PersonBuilder().withName("David").withId(7123).build());
+        ab.addPerson(new PersonBuilder().withName("Eve").withId(23).build());
+        ab.addPerson(new PersonBuilder().withName("Frank").withId(1225).build());
+        Model modelWithPersons = new ModelManager(ab, new UserPrefs());
+
+        JsonAddressBookStorage addressBookStorage =
+                new JsonAddressBookStorage(temporaryFolder.resolve("addressBook.json"));
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        Logic logic = new LogicManager(modelWithPersons, storage);
+
+        Field field = AddCommandParser.class.getDeclaredField("nextId");
+        field.setAccessible(true);
+        long nextId = field.getLong(null);
+        assertEquals(7124L, nextId);
     }
 }

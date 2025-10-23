@@ -92,6 +92,11 @@ public interface Model {
     void updateFilteredPersonList(Predicate<Person> predicate);
 
     /**
+     * Returns the organization hierarchy in Linux tree format.
+     */
+    String getOrganizationHierarchyString();
+
+    /**
      * Returns true if a team with the same identity as {@code team} exists in the address book.
      */
     boolean hasTeam(Team team);
