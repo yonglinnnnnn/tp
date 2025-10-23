@@ -103,8 +103,8 @@ public class AddressBookParserTest {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("friends"));
         TagCommand command = (TagCommand) parser.parseCommand(
-                TagCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " friends");
-        assertEquals(new TagCommand(INDEX_FIRST_PERSON, tags), command);
+                TagCommand.COMMAND_WORD + " E1001 friends");
+        assertEquals(new TagCommand("E1001", tags), command);
     }
 
     @Test
@@ -112,9 +112,10 @@ public class AddressBookParserTest {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("friends"));
         UntagCommand command = (UntagCommand) parser.parseCommand(
-                UntagCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " friends");
-        assertEquals(new UntagCommand(INDEX_FIRST_PERSON, tags), command);
+                UntagCommand.COMMAND_WORD + " E1001 friends");
+        assertEquals(new UntagCommand("E1001", tags), command);
     }
+
 
     @Test
     public void parseCommand_setSalary() throws Exception {
