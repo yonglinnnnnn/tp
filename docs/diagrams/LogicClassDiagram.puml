@@ -34,6 +34,9 @@ ParserClasses ..> XYZCommand : <<create>>
 XYZCommand -up-|> Command
 LogicManager .left.> Command : <<call>>
 
+Command .up.> Storage
+note right of Storage: Command uses Storage\ndirectly in ImportCommand
+
 LogicManager --> Model
 LogicManager --> Storage
 Storage --[hidden] Model
