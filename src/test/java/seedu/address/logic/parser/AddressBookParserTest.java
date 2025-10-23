@@ -66,9 +66,10 @@ public class AddressBookParserTest {
     public void parseCommand_edit() throws Exception {
         Person person = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
+        String employeeId = "E0001";
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
-        assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
+                + employeeId + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
+        assertEquals(new EditCommand(employeeId, descriptor), command);
     }
 
     @Test
@@ -102,8 +103,8 @@ public class AddressBookParserTest {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("friends"));
         TagCommand command = (TagCommand) parser.parseCommand(
-                TagCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " friends");
-        assertEquals(new TagCommand(INDEX_FIRST_PERSON, tags), command);
+                TagCommand.COMMAND_WORD + " E1001 friends");
+        assertEquals(new TagCommand("E1001", tags), command);
     }
 
     @Test
@@ -111,16 +112,20 @@ public class AddressBookParserTest {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("friends"));
         UntagCommand command = (UntagCommand) parser.parseCommand(
-                UntagCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " friends");
-        assertEquals(new UntagCommand(INDEX_FIRST_PERSON, tags), command);
+                UntagCommand.COMMAND_WORD + " E1001 friends");
+        assertEquals(new UntagCommand("E1001", tags), command);
     }
+
 
     @Test
     public void parseCommand_setSalary() throws Exception {
         Person person = new PersonBuilder().build();
         SetSalaryCommand command = (SetSalaryCommand) parser.parseCommand(
                 SetSalaryCommand.COMMAND_WORD + " " + person.id() + " 100");
-        assertEquals(new SetSalaryCommand(person.id(), 100), command);
+        assertEquals(new SetSalaryCommand(person.id(), 10000), command);
+        command = (SetSalaryCommand) parser.parseCommand(
+                SetSalaryCommand.COMMAND_WORD + " " + person.id() + " 100.23");
+        assertEquals(new SetSalaryCommand(person.id(), 10023), command);
     }
 
     @Test

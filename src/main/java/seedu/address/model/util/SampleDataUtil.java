@@ -29,18 +29,18 @@ public class SampleDataUtil {
                 getTagSet("colleagues", "friends")),
             new Person("E1003", new Name("Charlotte Oliveiro"), new Phone("93210283"),
                 new Email("charlotte@example.com"), new Address("Blk 11 Ang Mo Kio Street 74, #11-04"),
-                    new GitHubUsername("@char-olive-3"),
+                    new GitHubUsername("@charolive3"),
                 getTagSet("neighbours")),
             new Person("E1004", new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
                 new Address("Blk 436 Serangoon Gardens Street 26, #16-43"), new GitHubUsername(
-                        "@li-david-01"),
+                        "@lidavid01"),
                 getTagSet("family")),
             new Person("E1005", new Name("Irfan Ibrahim"), new Phone("92492021"), new Email("irfan@example.com"),
                 new Address("Blk 47 Tampines Street 20, #17-35"), new GitHubUsername(
                         "@irfanibrahim23"),
                 getTagSet("classmates")),
             new Person("E1006", new Name("Roy Balakrishnan"), new Phone("92624417"), new Email("royb@example.com"),
-                new Address("Blk 45 Aljunied Street 85, #11-31"), new GitHubUsername("@roy-b"),
+                new Address("Blk 45 Aljunied Street 85, #11-31"), new GitHubUsername("@royb"),
                 getTagSet("colleagues"))
         };
     }

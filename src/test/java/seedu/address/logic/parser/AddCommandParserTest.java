@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
@@ -37,8 +38,7 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 import static seedu.address.testutil.TypicalPersons.AMY;
 import static seedu.address.testutil.TypicalPersons.BOB;
 
-import java.lang.reflect.Field;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
@@ -55,20 +55,14 @@ import seedu.address.testutil.PersonBuilder;
 public class AddCommandParserTest {
     private AddCommandParser parser = new AddCommandParser();
 
-    private static long getNextId() {
-        Field field;
-        try {
-            field = AddCommandParser.class.getDeclaredField("nextId");
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
+    @BeforeEach
+    public void setUp() {
+        // Reset nextId before each test to ensure consistent behavior
+        AddCommandParser.setNextId(1);
+    }
 
-        field.setAccessible(true);
-        try {
-            return field.getLong(null);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+    private static long getNextId() {
+        return AddCommandParser.getNextId();
     }
 
     @Test
@@ -255,4 +249,45 @@ public class AddCommandParserTest {
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY,
                 new AddCommand(expectedPerson));
     }
+
+
+    @Test
+    public void setNextId_validId_success() {
+        AddCommandParser.setNextId(100);
+        assertEquals(100, AddCommandParser.getNextId());
+    }
+
+    @Test
+    public void setNextId_afterMultipleAdds_incrementsCorrectly() throws Exception {
+        AddCommandParser.setNextId(1);
+
+        // Parse first person
+        parser.parse(NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                + ADDRESS_DESC_BOB + GITHUBUSERNAME_DESC_BOB);
+        assertEquals(2, AddCommandParser.getNextId());
+
+        // Parse second person
+        parser.parse(NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
+                + ADDRESS_DESC_AMY + GITHUBUSERNAME_DESC_AMY);
+        assertEquals(3, AddCommandParser.getNextId());
+    }
+
+    @Test
+    public void setNextId_largeValue_success() {
+        AddCommandParser.setNextId(1007);
+        assertEquals(1007, AddCommandParser.getNextId());
+
+        // Next person should get E1007
+        Person expectedPerson = new PersonBuilder(BOB)
+                .withTags(VALID_TAG_FRIEND)
+                .withId(1007)
+                .build();
+
+        assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                        + ADDRESS_DESC_BOB + GITHUBUSERNAME_DESC_BOB + TAG_DESC_FRIEND,
+                new AddCommand(expectedPerson));
+
+        assertEquals(1008, AddCommandParser.getNextId());
+    }
+
 }
