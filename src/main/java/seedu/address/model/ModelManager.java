@@ -179,8 +179,8 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public <T> void sortPersons(Function<Person, T> selector, Comparator<T> comparator) {
-        filteredPersons.sort(Comparator.comparing(selector, comparator));
+    public void sortPersons(Comparator<Person> comparator) {
+        filteredPersons.sort(comparator);
     }
 
     @Override

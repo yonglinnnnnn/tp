@@ -32,6 +32,10 @@ public class SortCommand extends Command {
 
     private Comparator<Person> comparator;
 
+    public SortCommand(Comparator<Person> comparator) {
+        this.comparator = comparator;
+    }
+
     @Override
     public CommandResult execute(Model model) throws CommandException {
         model.sortPersons(comparator);
