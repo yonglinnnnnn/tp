@@ -186,14 +186,13 @@ public class AddCommandTest {
         }
 
         @Override
-        public String getOrganizationHierarchyString() {
-            throw new AssertionError("This method should not be called.");
-        };
-
-        @Override
         public void sortPersons(Comparator<Person> comparator) {
             throw new AssertionError("This method should not be called.");
         }
+
+        public String getOrganizationHierarchyString() {
+            throw new AssertionError("This method should not be called.");
+        };
     }
 
     /**
