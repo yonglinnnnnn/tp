@@ -21,6 +21,7 @@ public class Messages {
     public static final String MESSAGE_TAG_UNALLOWED = "Use the tag/untag command to add/remove tags";
     public static final String MESSAGE_INVALID_PERSON_ID = "Invalid person ID. ID must start with 'E'.";
     public static final String MESSAGE_INVALID_SALARY = "Invalid salary. Salary must be a positive integer.";
+    public static final String MESSAGE_PERSON_NOT_FOUND = "Person with employee ID %1$s not found.";
 
     /**
      * Returns an error message indicating the duplicate prefixes.
