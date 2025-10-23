@@ -28,6 +28,13 @@ public class LogicManager implements Logic {
     public static final String FILE_OPS_PERMISSION_ERROR_FORMAT =
             "Could not save data to file %s due to insufficient permissions to write to the file or the folder.";
 
+    private static final String AUDIT_ACTION = "AUDIT";
+    private static final String EXIT_ACTION = "EXIT";
+    private static final String HELP_ACTION = "HELP";
+    private static final String LIST_ACTION = "LIST";
+    private static final String VIEW_ACTION = "VIEW";
+    private static final String FIND_ACTION = "FIND";
+
     private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     private final Model model;
@@ -101,9 +108,15 @@ public class LogicManager implements Logic {
      * @return The action type as a string.
      */
     private String extractAction(Command command) {
-        // Extract command type from class name
-        String className = command.getClass().getSimpleName();
-        return className.replace("Command", "").toUpperCase();
+        try {
+            java.lang.reflect.Field field = command.getClass().getField("COMMAND_WORD");
+            return ((String) field.get(null)).toUpperCase();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            // Fallback to class name if COMMAND_WORD field doesn't exist
+            logger.warning("Could not access COMMAND_WORD for " + command.getClass().getSimpleName());
+            String className = command.getClass().getSimpleName();
+            return className.replace("Command", "").toUpperCase();
+        }
     }
 
     /**
@@ -125,11 +138,11 @@ public class LogicManager implements Logic {
     private boolean shouldLogCommand(Command command) {
         String action = extractAction(command);
         // Exclude read-only commands
-        return !action.equals("AUDIT")
-                && !action.equals("EXIT")
-                && !action.equals("HELP")
-                && !action.equals("LIST")
-                && !action.equals("VIEW")
-                && !action.equals("FIND"); // Add other read-only commands as needed
+        return !action.equals(AUDIT_ACTION)
+                && !action.equals(EXIT_ACTION)
+                && !action.equals(HELP_ACTION)
+                && !action.equals(LIST_ACTION)
+                && !action.equals(VIEW_ACTION)
+                && !action.equals(FIND_ACTION);
     }
 }
