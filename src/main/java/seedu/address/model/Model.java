@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
@@ -115,4 +116,9 @@ public interface Model {
      */
     void removeTeam(Team team);
 
+    /**
+     * Sorts the list of persons according to the given selector and comparator.
+     * @param comparator The comparator used to compare the selected keys.
+     */
+    void sortPersons(Comparator<Person> comparator);
 }

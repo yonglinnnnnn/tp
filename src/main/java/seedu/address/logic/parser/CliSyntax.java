@@ -13,4 +13,6 @@ public class CliSyntax {
     public static final Prefix PREFIX_TAG = new Prefix("-tag");
     public static final Prefix PREFIX_GITHUB = new Prefix("-gh");
     public static final Prefix PREFIX_TEAM = new Prefix("-team");
+    public static final Prefix PREFIX_ID = new Prefix("-id");
+    public static final Prefix PREFIX_SALARY = new Prefix("-salary");
 }
