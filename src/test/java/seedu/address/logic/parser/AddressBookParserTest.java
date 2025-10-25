@@ -20,6 +20,7 @@ import seedu.address.logic.commands.AuditCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CreateTeamCommand;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.DeleteTeamCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
@@ -161,6 +162,13 @@ public class AddressBookParserTest {
         CreateTeamCommand command = (CreateTeamCommand) parser.parseCommand(
                 CreateTeamCommand.COMMAND_WORD + " Systems " + person.id());
         assertEquals(new CreateTeamCommand("Systems", person.id()), command);
+    }
+
+    @Test
+    public void parseCommand_deleteTeam() throws Exception {
+        DeleteTeamCommand command = (DeleteTeamCommand) parser.parseCommand(
+                DeleteTeamCommand.COMMAND_WORD + " T0001");
+        assertEquals(new DeleteTeamCommand("T0001"), command);
     }
 
     @Test
