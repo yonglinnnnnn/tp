@@ -66,6 +66,15 @@ public class Subteams {
     }
 
     /**
+     * Returns an unmodifiable view of the internal list.
+     *
+     * @return unmodifiable list of teams
+     */
+    public List<Team> getUnmodifiableList() {
+        return Collections.unmodifiableList(internalList);
+    }
+
+    /**
      * Returns true if the list contains the given team.
      * This checks the top-level list and recursively checks subteams of contained teams.
      *

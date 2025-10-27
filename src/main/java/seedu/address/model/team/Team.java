@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.team.exceptions.InvalidSubteamNesting;
 
 /**
  * Represents a Team in the address book.
@@ -20,7 +21,7 @@ public class Team {
     private List<String> members = new ArrayList<>();
     private String leaderId = null;
     private Subteams subteams = new Subteams();
-    private Team parentTeam = null;
+    private String parentTeamId = null;
 
     /**
      * Constructs a Team with the given id and name.
@@ -55,39 +56,41 @@ public class Team {
     }
 
     public List<Team> getSubteams() {
-        return Collections.unmodifiableList(subteams);
+        return subteams.getUnmodifiableList();
     }
 
     /**
      * Adds a new subteam to this team.
      * @return true if the subteam was added, false if it was already present
      */
-    public boolean addToSubteam(Team subteam) {
+    public Team addToSubteam(Team subteam) throws InvalidSubteamNesting {
         requireNonNull(subteam);
         if (subteam == this) {
-            return false;
+            throw new InvalidSubteamNesting();
         }
         // prevent cycles
         if (!subteams.contains(subteam)) {
             subteams.add(subteam);
         }
-        return false;
+        return this;
     }
 
     /**
      * Gets the parent team of this team.
      * @return the parent team; null if this is a root level team
      */
-    public Team getParentTeam() {
-        return parentTeam;
+    public String getParentTeamId() {
+        return parentTeamId;
     }
 
     /**
      * Sets the parent team for this team.
-     * @param parentTeam the parent team to set; null indicates root level team
+     * @param parentTeamId the parent team ID to set; null indicates root level team
+     * @return this team with the parent set
      */
-    public void setParentTeam(Team parentTeam) {
-        this.parentTeam = parentTeam;
+    public Team setParentTeamId(String parentTeamId) {
+        this.parentTeamId = parentTeamId;
+        return this;
     }
 
     /**
@@ -159,9 +162,9 @@ public class Team {
      * @throws NullPointerException if {@code subteamList} is null
      */
     public Team withSubteams(List<Team> subteams) {
-        this.subteams.clear();
+        this.subteams = new Subteams();
         if (subteams != null) {
-            this.subteams.addAll(subteams);
+            this.subteams.setAll(subteams);
         }
         return this;
     }
@@ -169,12 +172,12 @@ public class Team {
     /**
      * Sets the parent team for this team and returns this instance.
      *
-     * @param parent parent {@link Team}; must not be null
+     * @param parentId parent {@link Team}; must not be null
      * @return this team with the parent set
      * @throws NullPointerException if {@code parent} is null
      */
-    public Team withParentTeam(Team parent) {
-        this.parentTeam = parent;
+    public Team withParentTeamId(String parentId) {
+        this.parentTeamId = parentId;
         return this;
     }
 
@@ -199,7 +202,7 @@ public class Team {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, teamName, members, leaderId, subteams, parentTeam);
+        return Objects.hash(id, teamName, members, leaderId, subteams, parentTeamId);
     }
 
     @Override
@@ -210,7 +213,7 @@ public class Team {
                 .add("leaderId", leaderId)
                 .add("members", members)
                 .add("subteams", subteams)
-                .add("parentTeam", parentTeam)
+                .add("parentTeam", parentTeamId)
                 .toString();
     }
 }

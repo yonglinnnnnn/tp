@@ -109,4 +109,9 @@ public interface Model {
      * Removes the given team from the address book.
      */
     void removeTeam(Team team);
+
+    /**
+     * Adds a subteam to a parent team.
+     */
+    boolean setSubteam(String parentTeamId, String subteamId);
 }
