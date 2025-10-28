@@ -68,7 +68,7 @@ public class Team {
             throw new InvalidSubteamNesting();
         }
         // prevent cycles
-        if (subteams.contains(subteam)) {
+        if (subteams.contains(subteam) || subteam.getSubteams().contains(this)) {
             throw new InvalidSubteamNesting();
         } else {
             subteams.add(subteam);

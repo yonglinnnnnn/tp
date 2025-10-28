@@ -1,5 +1,7 @@
 package seedu.address.model.team;
 
+import seedu.address.model.team.exceptions.InvalidSubteamNesting;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -46,13 +48,13 @@ class SubteamTest {
     }
 
     @Test
-    void contains_cyclicSubteamsGraph_returnsTrue() {
+    void contains_cyclicSubteamsGraph_throwsInvalidSubteamNesting() {
         Team teamA = new Team("T1000", new TeamName("Example"));
         Team teamB = new Team("T2000", new TeamName("Example"));
-        Team teamANew = teamA.addToSubteam(teamB);
-        Team teamBNew = teamB.addToSubteam(teamANew);
-        Subteams subteams = new Subteams(Collections.singletonList(teamANew));
-        assertTrue(subteams.contains(teamBNew));
+        assertThrows(InvalidSubteamNesting.class, () -> {
+            teamA.addToSubteam(teamB);
+            teamB.addToSubteam(teamA);
+        });
     }
 
     @Test
