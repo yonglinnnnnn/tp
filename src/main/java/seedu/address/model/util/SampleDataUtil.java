@@ -54,6 +54,14 @@ public class SampleDataUtil {
     }
 
     /**
+     * Returns a teamId set containing the list of strings given.
+     */
+    public static Set<String> getTeamIdSet(String... strings) {
+        return Arrays.stream(strings)
+                .collect(Collectors.toSet());
+    }
+
+    /**
      * Returns a tag set containing the list of strings given.
      */
     public static Set<Tag> getTagSet(String... strings) {
