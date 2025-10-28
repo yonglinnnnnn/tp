@@ -116,15 +116,6 @@ public class Subteams {
     }
 
     /**
-     * Returns an unmodifiable view of the teams list.
-     *
-     * @return unmodifiable list of teams
-     */
-    public List<Team> asUnmodifiableList() {
-        return Collections.unmodifiableList(internalList);
-    }
-
-    /**
      * Returns the number of teams in this list.
      *
      * @return size of list
@@ -138,15 +129,14 @@ public class Subteams {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Subteams)) {
+        if (!(other instanceof Subteams otherList)) {
             return false;
         }
-        Subteams otherList = (Subteams) other;
         return internalList.equals(otherList.internalList);
     }
 
     @Override
     public String toString() {
-        return "Subteams" + internalList.toString();
+        return "Subteams" + internalList;
     }
 }

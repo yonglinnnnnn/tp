@@ -47,7 +47,7 @@ class SetSubteamCommandTest {
 
     @Test
     void execute_nullSubteam_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> { new SetSubteamCommand("T0001", null); });
+        assertThrows(NullPointerException.class, () -> new SetSubteamCommand("T0001", null));
     }
 
     @Test

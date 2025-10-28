@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import seedu.address.logic.commands.SetSubteamCommand;
-import seedu.address.logic.commands.TagCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
@@ -22,11 +21,13 @@ public class SetSubteamCommandParser implements Parser<SetSubteamCommand> {
             requireNonNull(args);
             String trimmed = args.trim();
             if (trimmed.isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE));
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                        SetSubteamCommand.MESSAGE_USAGE));
             }
             String[] tokens = trimmed.split("\\s+");
             if (tokens.length != 2) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE));
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                        SetSubteamCommand.MESSAGE_USAGE));
             }
             return new SetSubteamCommand(tokens[0], tokens[1]);
         } catch (ParseException pe) {

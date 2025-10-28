@@ -61,7 +61,6 @@ public class Team {
 
     /**
      * Adds a new subteam to this team.
-     * @return true if the subteam was added, false if it was already present
      */
     public Team addToSubteam(Team subteam) throws InvalidSubteamNesting {
         requireNonNull(subteam);
@@ -69,7 +68,9 @@ public class Team {
             throw new InvalidSubteamNesting();
         }
         // prevent cycles
-        if (!subteams.contains(subteam)) {
+        if (subteams.contains(subteam)) {
+            throw new InvalidSubteamNesting();
+        } else {
             subteams.add(subteam);
         }
         return this;
@@ -77,6 +78,7 @@ public class Team {
 
     /**
      * Gets the parent team of this team.
+     *
      * @return the parent team; null if this is a root level team
      */
     public String getParentTeamId() {
@@ -85,6 +87,7 @@ public class Team {
 
     /**
      * Sets the parent team for this team.
+     *
      * @param parentTeamId the parent team ID to set; null indicates root level team
      * @return this team with the parent set
      */
@@ -95,6 +98,8 @@ public class Team {
 
     /**
      * Fluent mutator: replace members list.
+     *
+     * @param newMembers list of new member IDs; must not be null
      */
     public Team withMembers(List<String> newMembers) {
         requireNonNull(newMembers);
@@ -119,7 +124,6 @@ public class Team {
      * Removes a member from this team. If the removed member was the team leader, the leader is cleared.
      *
      * @param personId member to remove; must not be null
-     * @throws NullPointerException if {@code person} is null
      */
     public void removeMember(String personId) {
         requireNonNull(personId);
@@ -159,7 +163,6 @@ public class Team {
      *
      * @param subteams list of {@link Team} to set as subteams; must not be null
      * @return this team with subteams replaced
-     * @throws NullPointerException if {@code subteamList} is null
      */
     public Team withSubteams(List<Team> subteams) {
         this.subteams = new Subteams();
@@ -174,7 +177,6 @@ public class Team {
      *
      * @param parentId parent {@link Team}; must not be null
      * @return this team with the parent set
-     * @throws NullPointerException if {@code parent} is null
      */
     public Team withParentTeamId(String parentId) {
         this.parentTeamId = parentId;
