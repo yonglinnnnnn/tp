@@ -80,7 +80,6 @@ public class Subteams {
      *
      * @param team the team to check
      * @return true if present in this list or any nested subteams
-     * @throws NullPointerException if team is null
      */
     public boolean contains(Team team) {
         Objects.requireNonNull(team);

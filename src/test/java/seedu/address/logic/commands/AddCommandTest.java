@@ -180,6 +180,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean setSubteam(String parentTeamId, String subteamId) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void removeTeam(Team team) {
             throw new AssertionError("This method should not be called.");
         }

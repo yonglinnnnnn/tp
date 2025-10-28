@@ -25,7 +25,7 @@ public class SetSubteamCommandParser implements Parser<SetSubteamCommand> {
                 throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE));
             }
             String[] tokens = trimmed.split("\\s+");
-            if (tokens.length < 2) {
+            if (tokens.length != 2) {
                 throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE));
             }
             return new SetSubteamCommand(tokens[0], tokens[1]);
