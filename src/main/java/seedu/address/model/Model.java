@@ -131,7 +131,7 @@ public interface Model {
      * Adds a subteam to a parent team.
      */
     boolean setSubteam(String parentTeamId, String subteamId);
-  
+
     /* Sorts the list of persons according to the given selector and comparator.
      * @param comparator The comparator used to compare the selected keys.
      */

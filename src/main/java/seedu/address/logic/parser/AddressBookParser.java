@@ -113,7 +113,7 @@ public class AddressBookParser {
 
         case SetSubteamCommand.COMMAND_WORD:
             return new SetSubteamCommandParser().parse(arguments);
-            
+
         case SortCommand.COMMAND_WORD:
             return new SortCommandParser().parse(arguments);
 
