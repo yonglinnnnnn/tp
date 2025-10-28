@@ -10,6 +10,7 @@ import static seedu.address.testutil.TypicalPersons.ALICE;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 import seedu.address.testutil.PersonBuilder;
@@ -165,6 +167,16 @@ public class AddCommandTest {
         }
 
         @Override
+        public void addAuditEntry(String action, String details) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public AuditLog getAuditLog() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public boolean hasTeam(Team team) {
             throw new AssertionError("This method should not be called.");
         }
@@ -188,6 +200,15 @@ public class AddCommandTest {
         public void removeTeam(Team team) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public void sortPersons(Comparator<Person> comparator) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        public String getOrganizationHierarchyString() {
+            throw new AssertionError("This method should not be called.");
+        };
     }
 
     /**
@@ -231,5 +252,4 @@ public class AddCommandTest {
             return new AddressBook();
         }
     }
-
 }

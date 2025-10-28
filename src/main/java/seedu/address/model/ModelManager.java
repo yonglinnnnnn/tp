@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -11,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamsManager;
@@ -178,10 +180,45 @@ public class ModelManager implements Model {
                 && filteredPersons.equals(otherModelManager.filteredPersons);
     }
 
+    //=========== Audit Log Entry  =============================================================
+    @Override
+    public void addAuditEntry(String action, String details) {
+        addressBook.addAuditEntry(action, details);
+    }
+
+    @Override
+    public AuditLog getAuditLog() {
+        return addressBook.getAuditLog();
+    }
+
+    //=========== Organization Hierarchy Accessors =============================================================
+    @Override
+    public String getOrganizationHierarchyString() {
+        return """
+                    ├── Finance Department
+                    │   ├── Samuel Lee
+                    │   └── Rachel Tan
+                    ├── Engineering Department
+                    │   ├── API Development
+                    │   │   └── Alice Chen
+                    │   └── Frontend
+                    │       └── Felicia Wong
+                    └── Quality Assurance
+                        ├── Michael Ong
+                        └── Derrick Lim
+                """;
+    }
+
     @Override
     public void removeTeam(Team team) {
         requireNonNull(team);
         addressBook.removeTeam(team);
+    }
+
+    @Override
+    public void sortPersons(Comparator<Person> comparator) {
+        requireNonNull(comparator);
+        addressBook.sortPersons(comparator);
     }
 
     @Override

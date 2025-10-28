@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.testutil.Assert.assertThrows;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.AddToTeamCommand;
+import seedu.address.logic.commands.AuditCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CreateTeamCommand;
 import seedu.address.logic.commands.DeleteCommand;
@@ -44,7 +44,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_add() throws Exception {
-        Person person = new PersonBuilder().build();
+        Person person = new PersonBuilder().withoutTags().build();
         AddCommand command = (AddCommand) parser.parseCommand(PersonUtil.getAddCommand(person));
         assertEquals(new AddCommand(person), command);
     }
@@ -58,17 +58,24 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_delete() throws Exception {
         DeleteCommand command = (DeleteCommand) parser.parseCommand(
-                DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
-        assertEquals(new DeleteCommand(INDEX_FIRST_PERSON), command);
+                DeleteCommand.COMMAND_WORD + " E1234");
+        assertEquals(new DeleteCommand("E1234"), command);
     }
 
     @Test
     public void parseCommand_edit() throws Exception {
-        Person person = new PersonBuilder().build();
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
+        Person person = new PersonBuilder().withoutTags().build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withName(person.name().fullName())
+                .withPhone(person.phone().value())
+                .withEmail(person.email().value())
+                .withAddress(person.address().value())
+                .withGitHubUsername(person.gitHubUsername().value())
+                .build();
+        String employeeId = "E0001";
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
-        assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
+                + employeeId + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
+        assertEquals(new EditCommand(employeeId, descriptor), command);
     }
 
     @Test
@@ -102,8 +109,8 @@ public class AddressBookParserTest {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("friends"));
         TagCommand command = (TagCommand) parser.parseCommand(
-                TagCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " friends");
-        assertEquals(new TagCommand(INDEX_FIRST_PERSON, tags), command);
+                TagCommand.COMMAND_WORD + " E1001 friends");
+        assertEquals(new TagCommand("E1001", tags), command);
     }
 
     @Test
@@ -111,17 +118,28 @@ public class AddressBookParserTest {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("friends"));
         UntagCommand command = (UntagCommand) parser.parseCommand(
-                UntagCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " friends");
-        assertEquals(new UntagCommand(INDEX_FIRST_PERSON, tags), command);
+                UntagCommand.COMMAND_WORD + " E1001 friends");
+        assertEquals(new UntagCommand("E1001", tags), command);
     }
+
 
     @Test
     public void parseCommand_setSalary() throws Exception {
         Person person = new PersonBuilder().build();
         SetSalaryCommand command = (SetSalaryCommand) parser.parseCommand(
                 SetSalaryCommand.COMMAND_WORD + " " + person.id() + " 100");
-        assertEquals(new SetSalaryCommand(person.id(), 100), command);
+        assertEquals(new SetSalaryCommand(person.id(), 10000), command);
+        command = (SetSalaryCommand) parser.parseCommand(
+                SetSalaryCommand.COMMAND_WORD + " " + person.id() + " 100.23");
+        assertEquals(new SetSalaryCommand(person.id(), 10023), command);
     }
+
+    @Test
+    public void parseCommand_audit() throws Exception {
+        assertTrue(parser.parseCommand(AuditCommand.COMMAND_WORD) instanceof AuditCommand);
+        assertTrue(parser.parseCommand(AuditCommand.COMMAND_WORD + " 3") instanceof AuditCommand);
+    }
+
 
     @Test
     public void parseCommand_addToTeam() throws Exception {

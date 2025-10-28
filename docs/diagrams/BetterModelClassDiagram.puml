@@ -6,6 +6,7 @@ skinparam classBackgroundColor MODEL_COLOR
 
 AddressBook *-right-> "1" UniquePersonList
 AddressBook *-right-> "1" UniqueTagList
+AddressBook *-down-> "1" UniqueTeamList
 UniqueTagList -[hidden]down- UniquePersonList
 UniqueTagList -[hidden]down- UniquePersonList
 
@@ -18,4 +19,14 @@ Person *--> Name
 Person *--> Phone
 Person *--> Email
 Person *--> Address
+Person *--> GithubUsername
+Person --> "*" TeamId
+
+UniqueTeamList --> "~* all" Team
+Team *--> Id
+Team *--> TeamName
+Team *--> LeaderId
+Team *--> "*" Members
+Team::west -> Team::west : " * SubTeams"
+Team::east -> Team::east : "1 ParentTeam"
 @enduml

@@ -2,11 +2,14 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 import seedu.address.model.team.Team;
@@ -20,6 +23,8 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons = new UniquePersonList();
     private final UniqueTeamList teams = new UniqueTeamList();
+    private final AuditLog auditLog = new AuditLog();
+
 
     public AddressBook() {}
 
@@ -60,6 +65,12 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void resetData(ReadOnlyAddressBook newData) {
         requireNonNull(newData);
         setPersons(newData.getPersonList());
+
+        // Restore audit log from persisted data
+        auditLog.clear();
+        for (var entry : newData.getAuditLog().getEntries()) {
+            auditLog.addEntry(entry.getAction(), entry.getDetails(), entry.getTimestamp());
+        }
         // ReadOnlyAddressBook is expected to expose getTeamList()
         if (newData instanceof ReadOnlyAddressBook) {
             try {
@@ -102,6 +113,15 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removePerson(Person key) {
         persons.remove(key);
+    }
+
+    @Override
+    public AuditLog getAuditLog() {
+        return auditLog;
+    }
+
+    public void addAuditEntry(String action, String details) {
+        auditLog.addEntry(action, details, LocalDateTime.now());
     }
 
     //// team-level operations
@@ -174,6 +194,13 @@ public class AddressBook implements ReadOnlyAddressBook {
             return;
         }
         subteam.setParentTeamId(parentTeamId);
+
+    /** Sorts the list of persons according to the given comparator.
+     * @param comparator The comparator used to compare the selected keys.
+     */
+    public void sortPersons(Comparator<Person> comparator) {
+        requireNonNull(comparator);
+        persons.sort(comparator);
     }
 
     //// util methods
@@ -208,7 +235,8 @@ public class AddressBook implements ReadOnlyAddressBook {
             return true;
         }
 
-        if (!(other instanceof AddressBook)) {
+        // instanceof handles nulls
+        if (!(other instanceof AddressBook otherAddressBook)) {
             return false;
         }
 
