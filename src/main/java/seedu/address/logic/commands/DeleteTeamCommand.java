@@ -102,8 +102,12 @@ public class DeleteTeamCommand extends Command {
     }
 
     /**
-     * If the potentialParent references the team being deleted in its subteams,
-     * returns an edited copy excluding that subteam; otherwise returns null.
+     * Returns a copy of {@code potentialParent} with the subteam matching {@code teamId} removed,
+     * preserving members, remaining subteams, the leader (only if still a member), and the parent reference.
+     * Returns {@code null} if {@code potentialParent} does not contain the team. Input is not mutated.
+     *
+     * @param potentialParent non-null team to inspect
+     * @return edited copy with the subteam removed, or {@code null}
      */
     private Team getEditedParentDetails(Team potentialParent) {
         boolean contains = potentialParent.getSubteams().stream()
