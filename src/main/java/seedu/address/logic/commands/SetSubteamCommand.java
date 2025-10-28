@@ -22,7 +22,7 @@ public class SetSubteamCommand extends Command {
             + "Example: " + COMMAND_WORD + " T0001 T0002";
 
     public static final String MESSAGE_TEAM_NOT_FOUND = "No team with ID %1$s found";
-    public static final String MESSAGE_INVALID_SUBTEAM = "Team %2$s cannot be a subteam of team %2$s";
+    public static final String MESSAGE_INVALID_SUBTEAM = "Team %2$s cannot be a subteam of team %1$s";
     public static final String MESSAGE_SUCCESS = "Team %2$s added as a subteam to team %1$s";
     private static final Logger modelLogger = LogsCenter.getLogger(ModelManager.class);
 
@@ -45,6 +45,10 @@ public class SetSubteamCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        if (!model.hasTeamWithId(parentTeamId) || !model.hasTeamWithId(subteamId)) {
+            throw new CommandException(String.format(MESSAGE_TEAM_NOT_FOUND,
+                    !model.hasTeamWithId(parentTeamId) ? parentTeamId : subteamId));
+        }
         boolean status = model.setSubteam(parentTeamId, subteamId);
         if (!status) {
             throw new CommandException(String.format(MESSAGE_INVALID_SUBTEAM, subteamId, parentTeamId));

@@ -113,6 +113,11 @@ public interface Model {
     boolean hasTeam(Team team);
 
     /**
+     * Returns true if a team with the given ID exists in the address book.
+     */
+    boolean hasTeamWithId(String teamId);
+
+    /**
      * Adds a team to the address book.
      */
     void addTeam(Team team);

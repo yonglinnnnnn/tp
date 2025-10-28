@@ -106,6 +106,12 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public boolean hasTeamWithId(String teamId) {
+        requireNonNull(teamId);
+        return (addressBook.getTeamById(teamId) != null);
+    }
+
+    @Override
     public void deletePerson(Person target) {
         addressBook.removePerson(target);
     }

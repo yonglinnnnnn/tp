@@ -2,7 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,26 +11,20 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.team.Team;
+import seedu.address.model.team.TeamName;
 
 class SetSubteamCommandTest {
+    private static final String INDEX_FIRST = "T0001";
+    private static final String INDEX_SECOND = "T0002";
 
     @Test
     void execute_validSubteam_setsSubteamSuccessfully() {
-        final boolean[] called = {false};
-        final String[] parentCaptured = new String[1];
-        final String[] subCaptured = new String[1];
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        model.addTeam(new Team(INDEX_FIRST, new TeamName("A")));
+        model.addTeam(new Team(INDEX_SECOND, new TeamName("B")));
 
-        Model model = new ModelManager(new AddressBook(), new UserPrefs()) {
-            @Override
-            public boolean setSubteam(String parentId, String subteamId) {
-                called[0] = true;
-                parentCaptured[0] = parentId;
-                subCaptured[0] = subteamId;
-                return true;
-            }
-        };
-
-        SetSubteamCommand command = new SetSubteamCommand("T0001", "T0002");
+        SetSubteamCommand command = new SetSubteamCommand(INDEX_FIRST, INDEX_SECOND);
         CommandResult result;
         try {
             result = command.execute(model);
@@ -38,16 +32,13 @@ class SetSubteamCommandTest {
             throw new AssertionError("Execution of valid SetSubteamCommand should not fail.", e);
         }
 
-        assertTrue(called[0]);
-        assertEquals("T0001", parentCaptured[0]);
-        assertEquals("T0002", subCaptured[0]);
-        assertEquals(String.format(SetSubteamCommand.MESSAGE_SUCCESS, "T0002", "T0001"),
+        assertEquals(String.format(SetSubteamCommand.MESSAGE_SUCCESS, INDEX_SECOND, INDEX_FIRST),
                 result.getFeedbackToUser());
     }
 
     @Test
     void execute_nullSubteam_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new SetSubteamCommand("T0001", null));
+        assertThrows(NullPointerException.class, () -> new SetSubteamCommand(INDEX_FIRST, null));
     }
 
     @Test
@@ -58,8 +49,8 @@ class SetSubteamCommandTest {
                 throw new IllegalArgumentException("Subteam id cannot be empty");
             }
         };
-        assertThrows(IllegalArgumentException.class, () ->
-                new SetSubteamCommand("T0001", "").execute(model));
+        assertThrows(CommandException.class, () ->
+                new SetSubteamCommand(INDEX_FIRST, "").execute(model));
     }
 
     @Test
@@ -71,6 +62,6 @@ class SetSubteamCommandTest {
             }
         };
         assertThrows(seedu.address.logic.commands.exceptions.CommandException.class, () ->
-                new SetSubteamCommand("T0001", "T0002").execute(model));
+                new SetSubteamCommand(INDEX_FIRST, INDEX_SECOND).execute(model));
     }
 }
