@@ -22,6 +22,7 @@ import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.team.Team;
+import seedu.address.model.team.TeamName;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddressBookTest {
@@ -123,6 +124,14 @@ public class AddressBookTest {
     @Test
     public void getPersonList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> addressBook.getPersonList().remove(0));
+    }
+
+    @Test
+    public void setNullTeam_returnsFalse() {
+        Team team = new Team("T1001", new TeamName("A"));
+        assertFalse(addressBook.setSubteam(null, team));
+        assertFalse(addressBook.setSubteam(team, null));
+        assertFalse(addressBook.setSubteam(null, null));
     }
 
     @Test

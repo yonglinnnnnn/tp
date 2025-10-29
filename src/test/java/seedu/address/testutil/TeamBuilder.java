@@ -21,7 +21,7 @@ public class TeamBuilder {
     private List<String> members;
     private String leaderId;
     private List<Team> subteams;
-    private Team parentTeam;
+    private String parentTeamId;
 
     /**
      * Creates a {@code TeamBuilder} with default values.
@@ -32,7 +32,7 @@ public class TeamBuilder {
         this.members = new ArrayList<>();
         this.leaderId = null;
         this.subteams = new ArrayList<>();
-        this.parentTeam = null;
+        this.parentTeamId = null;
     }
 
     /**
@@ -47,7 +47,7 @@ public class TeamBuilder {
         this.members = new ArrayList<>(teamToCopy.getMembers());
         this.leaderId = teamToCopy.getLeaderId();
         this.subteams = new ArrayList<>(teamToCopy.getSubteams());
-        this.parentTeam = teamToCopy.getParentTeam();
+        this.parentTeamId = teamToCopy.getParentTeamId();
     }
 
     /**
@@ -155,11 +155,11 @@ public class TeamBuilder {
     /**
      * Sets the parent team for the team being built.
      *
-     * @param parent the parent team to set
+     * @param parentId the parent team to set
      * @return this builder
      */
-    public TeamBuilder withParentTeam(Team parent) {
-        this.parentTeam = parent;
+    public TeamBuilder withParentTeamId(String parentId) {
+        this.parentTeamId = parentId;
         return this;
     }
 
@@ -182,8 +182,8 @@ public class TeamBuilder {
         if (subteams != null) {
             team.withSubteams(new ArrayList<>(subteams));
         }
-        if (parentTeam != null) {
-            team.withParentTeam(parentTeam);
+        if (parentTeamId != null) {
+            team.withParentTeamId(parentTeamId);
         }
         return team;
     }
