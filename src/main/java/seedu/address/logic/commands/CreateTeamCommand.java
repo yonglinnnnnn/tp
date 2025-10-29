@@ -10,6 +10,8 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.exceptions.DuplicatePersonException;
+import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamName;
 
@@ -53,8 +55,15 @@ public class CreateTeamCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        final TeamName validatedName;
+        try {
+            validatedName = new TeamName(teamName);
+        } catch (IllegalArgumentException e) {
+            throw new CommandException(e.getMessage());
+        }
+
         String id = String.format("T%04d", nextId++);
-        Team toAdd = new Team(id, new TeamName(teamName));
+        Team toAdd = new Team(id, validatedName);
 
         List<Person> persons = model.getFilteredPersonList();
         Optional<Person> leaderOpt = persons.stream()
@@ -65,6 +74,7 @@ public class CreateTeamCommand extends Command {
         }
 
         toAdd.withLeader(leaderOpt.get().id());
+        updateLeaderPersonDetails(model, leaderOpt, id);
 
         if (model.hasTeam(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_TEAM);
@@ -79,6 +89,18 @@ public class CreateTeamCommand extends Command {
 
         model.addTeam(toAdd);
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd.getTeamName().teamName()));
+    }
+
+    private static void updateLeaderPersonDetails(Model model, Optional<Person> leaderOpt, String id)
+            throws CommandException {
+        try {
+            Person editedPerson = leaderOpt.get().withAddedTeam(id);
+            model.setPerson(leaderOpt.get(), editedPerson);
+        } catch (DuplicatePersonException e) {
+            throw new CommandException("Failed to update Leader's teams: would create a duplicate leader");
+        } catch (PersonNotFoundException e) {
+            throw new CommandException("Failed to update Leader's teams: leader no longer exists");
+        }
     }
 
     @Override
