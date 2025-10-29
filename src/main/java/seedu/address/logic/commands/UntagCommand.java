@@ -76,12 +76,15 @@ public class UntagCommand extends Command {
             }
         }
 
-        // Remove the valid tags (even if some are invalid)
-        Person untaggedPerson = createUntaggedPerson(personToUntag, actualTagsToRemove);
-        model.setPerson(personToUntag, untaggedPerson);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        // Build result message with removed tags
+        String resultMessage;
+        if (actualTagsToRemove.isEmpty()) {
+            resultMessage = String.format("No tags were removed from: %s", employeeId);
+        } else {
+            String removedTags = formatTagNames(actualTagsToRemove);
+            resultMessage = String.format("Removed tags from %s: %s", employeeId, removedTags);
+        }
 
-        String resultMessage = String.format(MESSAGE_UNTAG_SUCCESS, employeeId);
         if (!nonExistentTags.isEmpty()) {
             String invalidTags = formatTagNames(nonExistentTags);
             resultMessage += "\n" + String.format(MESSAGE_TAG_NOT_FOUND, invalidTags);
