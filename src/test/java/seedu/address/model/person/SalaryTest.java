@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import seedu.address.logic.commands.SetSalaryCommand;
 
 class SalaryTest {
     private static final Random RAND = new Random();
@@ -27,6 +28,12 @@ class SalaryTest {
         double value = RAND.nextDouble(100000);
         assertEquals(new Salary(value).toString(),
                      String.format("$%s / month", new DecimalFormat("#,###.##").format(value)));
+    }
+
+    @Test
+    void value_withManyDecimalPlaces_roundedToTwoDecimalPlaces() {
+        assertEquals(100.13, new Salary(100.13234).value());
+        assertEquals(100.13, new Salary(100.12567).value());
     }
 
     @Test

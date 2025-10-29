@@ -40,7 +40,7 @@ public class SetSalaryCommandParser implements Parser<SetSalaryCommand> {
             throw new ParseException(Messages.MESSAGE_INVALID_SALARY);
         }
 
-        return new SetSalaryCommand(id, (int) Math.round(value * 100));
+        return new SetSalaryCommand(id, value);
     }
 
     /**
