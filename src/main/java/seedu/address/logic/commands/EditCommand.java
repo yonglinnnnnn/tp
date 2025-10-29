@@ -147,7 +147,6 @@ public class EditCommand extends Command {
         private Salary salary;
         private Set<String> teamIds;
         private Set<Tag> tags;
-        private Salary salary;
 
         public EditPersonDescriptor() {}
 
@@ -161,7 +160,6 @@ public class EditCommand extends Command {
             setEmail(toCopy.email);
             setAddress(toCopy.address);
             setGitHubUsername(toCopy.gitHubUsername);
-            setSalary(toCopy.salary);
             setTeamIds(toCopy.teamIds);
             setTags(toCopy.tags);
             setSalary(toCopy.salary);
@@ -212,14 +210,6 @@ public class EditCommand extends Command {
 
         public Optional<GitHubUsername> getGitHubUsername() {
             return Optional.ofNullable(gitHubUsername);
-        }
-
-        public void setSalary(Salary salary) {
-            this.salary = salary;
-        }
-
-        public Optional<Salary> getSalary() {
-            return Optional.ofNullable(salary);
         }
 
         public void setTeamIds(Set<String> teamIds) {
