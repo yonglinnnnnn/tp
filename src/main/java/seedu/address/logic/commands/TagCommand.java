@@ -27,7 +27,7 @@ public class TagCommand extends Command {
             + "Parameters: EMPLOYEE_ID (must start with E) TAG [MORE_TAGS]...\n"
             + "Example: " + COMMAND_WORD + " E1001 friends colleagues";
 
-    public static final String MESSAGE_TAG_SUCCESS = "Added tags to Person: %1$s";
+    public static final String MESSAGE_TAG_SUCCESS = "Added [%s] tags for: %s";
     public static final String MESSAGE_NO_TAGS_PROVIDED = "At least one tag must be provided.";
     public static final String MESSAGE_PERSON_NOT_FOUND = "No person with employee ID %1$s found.";
     public static final String MESSAGE_DUPLICATE_TAGS = "The following tags already exist (case-insensitive) "
@@ -73,7 +73,8 @@ public class TagCommand extends Command {
         model.setPerson(personToTag, taggedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        String successMessage = String.format(MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson));
+        String successMessage = String.format(MESSAGE_TAG_SUCCESS,
+                formatTagNames(newTags), taggedPerson.id());
 
         // Add warning about duplicates if any
         if (!duplicateTags.isEmpty()) {
