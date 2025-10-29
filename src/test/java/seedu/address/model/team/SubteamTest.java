@@ -52,6 +52,14 @@ class SubteamTest {
     }
 
     @Test
+    void teamNotNested_returnsFalse() {
+        Team teamA = new Team(INDEX_FIRST, new TeamName("Example"));
+        Team teamB = new Team(INDEX_SECOND, new TeamName("Example"));
+        Subteams subteams = new Subteams(Collections.singletonList(teamA));
+        assertFalse(subteams.contains(teamB));
+    }
+
+    @Test
     void cyclicSubteamsGraph_throwsInvalidSubteamNesting() {
         Team teamA = new Team(INDEX_FIRST, new TeamName("Example"));
         Team teamB = new Team(INDEX_SECOND, new TeamName("Example"));

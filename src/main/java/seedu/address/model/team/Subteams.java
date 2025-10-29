@@ -97,9 +97,7 @@ public class Subteams {
      * @param target the target team to find
      */
     private boolean containsRecursive(Team current, Team target) {
-        if (current == null) {
-            return false;
-        }
+        assert(current != null && target != null);
         if (current.equals(target)) {
             return true;
         }

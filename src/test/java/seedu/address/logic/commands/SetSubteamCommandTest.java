@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
@@ -63,5 +64,44 @@ class SetSubteamCommandTest {
         };
         assertThrows(seedu.address.logic.commands.exceptions.CommandException.class, () ->
                 new SetSubteamCommand(INDEX_FIRST, INDEX_SECOND).execute(model));
+    }
+
+    @Test
+    void execute_setSubteamFail_throwsCommandException() {
+        Model model = new ModelManager(new AddressBook(), new UserPrefs()) {
+            @Override
+            public boolean setSubteam(String parentId, String subteamId) {
+                return false;
+            }
+        };
+        assertThrows(CommandException.class, () ->
+                new SetSubteamCommand(INDEX_FIRST, INDEX_SECOND).execute(model));
+    }
+
+    @Test
+    void equals() {
+        SetSubteamCommand commandA = new SetSubteamCommand("T0001", "T0002");
+        SetSubteamCommand commandB = new SetSubteamCommand("T0001", "T0002");
+        SetSubteamCommand commandC = new SetSubteamCommand("T0002", "T0003");
+
+        // same object -> returns true
+        assertEquals(commandA, commandA);
+
+        // same values -> returns true
+        assertEquals(commandA, commandB);
+
+        // different types -> returns false
+        assertNotEquals("T123", commandA);
+
+        // different team -> returns false
+        assertNotEquals(commandA, commandC);
+    }
+
+    @Test
+    void toString_validSubteamCommand_returnsCorrectString() {
+        SetSubteamCommand command = new SetSubteamCommand("T0001", "T0002");
+        String expectedString = "seedu.address.logic.commands.SetSubteamCommand{parentTeamId=T0001, subteamId=T0002}";
+        String actualString = command.toString();
+        assertEquals(expectedString, actualString);
     }
 }
