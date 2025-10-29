@@ -12,7 +12,6 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.logic.Messages;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -53,7 +52,7 @@ public class UntagCommandTest {
         Person untaggedPerson = new PersonBuilder(personToUntag, true).withTags(
                 updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
 
-        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, Messages.format(untaggedPerson));
+        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, employeeId);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(personToUntag, untaggedPerson);
@@ -83,7 +82,7 @@ public class UntagCommandTest {
         Person untaggedPerson = new PersonBuilder(personToUntag, true).withTags(
                 updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
 
-        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, Messages.format(untaggedPerson));
+        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, employeeId);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(personToUntag, untaggedPerson);
@@ -92,16 +91,91 @@ public class UntagCommandTest {
     }
 
     @Test
-    public void execute_removeNonExistentTag_failure() throws Exception {
+    public void execute_removeCaseInsensitiveTag_success() throws Exception {
         Person personToUntag = model.getFilteredPersonList().get(0);
         String employeeId = personToUntag.id();
 
+        // Add tags with specific casing
+        Person personWithTags = new PersonBuilder(personToUntag, true)
+                .withTags("friends", "colleagues").build();
+        model.setPerson(personToUntag, personWithTags);
+        personToUntag = personWithTags;
+
+        // Try to remove with different casing
         Set<Tag> tagsToRemove = new HashSet<>();
-        tagsToRemove.add(new Tag("nonExistentTag"));
+        tagsToRemove.add(new Tag("FRIENDS"));
 
         UntagCommand untagCommand = new UntagCommand(employeeId, tagsToRemove);
 
-        assertCommandFailure(untagCommand, model, String.format(UntagCommand.MESSAGE_TAG_NOT_FOUND, tagsToRemove));
+        // Expected: "friends" should be removed (case-insensitive match)
+        Person untaggedPerson = new PersonBuilder(personToUntag, true)
+                .withTags("colleagues").build();
+
+        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, employeeId);
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToUntag, untaggedPerson);
+
+        assertCommandSuccess(untagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_removeValidAndInvalidTags_partialSuccess() throws Exception {
+        Person personToUntag = model.getFilteredPersonList().get(0);
+        String employeeId = personToUntag.id();
+
+        // Add tags
+        Person personWithTags = new PersonBuilder(personToUntag, true)
+                .withTags("meow", "woof").build();
+        model.setPerson(personToUntag, personWithTags);
+        personToUntag = personWithTags;
+
+        // Try to remove one valid and one invalid tag
+        Set<Tag> tagsToRemove = new HashSet<>();
+        tagsToRemove.add(new Tag("MEOW")); // valid (case-insensitive)
+        tagsToRemove.add(new Tag("hello")); // invalid
+
+        UntagCommand untagCommand = new UntagCommand(employeeId, tagsToRemove);
+
+        // Expected: "meow" removed, "woof" remains
+        Person untaggedPerson = new PersonBuilder(personToUntag, true)
+                .withTags("woof").build();
+
+        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, employeeId)
+                + "\n" + String.format(UntagCommand.MESSAGE_TAG_NOT_FOUND, "hello");
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToUntag, untaggedPerson);
+
+        assertCommandSuccess(untagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_removeAllNonExistentTags_successWithWarning() throws Exception {
+        Person personToUntag = model.getFilteredPersonList().get(0);
+        String employeeId = personToUntag.id();
+
+        // Add tags
+        Person personWithTags = new PersonBuilder(personToUntag, true)
+                .withTags("existing").build();
+        model.setPerson(personToUntag, personWithTags);
+        personToUntag = personWithTags;
+
+        Set<Tag> tagsToRemove = new HashSet<>();
+        tagsToRemove.add(new Tag("nonExistent1"));
+        tagsToRemove.add(new Tag("nonExistent2"));
+
+        UntagCommand untagCommand = new UntagCommand(employeeId, tagsToRemove);
+
+        // Expected: no tags removed, warning message shown
+        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, employeeId)
+                + "\n" + String.format(UntagCommand.MESSAGE_TAG_NOT_FOUND, "nonExistent1, nonExistent2");
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        // Person should remain unchanged
+        expectedModel.setPerson(personToUntag, personToUntag);
+
+        assertCommandSuccess(untagCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
