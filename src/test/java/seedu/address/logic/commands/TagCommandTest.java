@@ -75,11 +75,11 @@ public class TagCommandTest {
     }
 
     @Test
-    public void execute_addDuplicateTag_success() {
+    public void execute_addOnlyDuplicateTags_showsDuplicateMessage() {
         Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         String employeeId = personToTag.id();
 
-        // Get an existing tag from the person
+        // Get existing tags from the person
         Set<Tag> existingTags = personToTag.tags();
         if (existingTags.isEmpty()) {
             // If no tags exist, add one first
@@ -89,17 +89,66 @@ public class TagCommandTest {
                     .withTags("existingTag").build();
             model.setPerson(personToTag, personWithTag);
             personToTag = personWithTag;
+            existingTags = personToTag.tags();
         }
 
-        // Try to add a tag that already exists
-        Set<Tag> tagsToAdd = new HashSet<>(personToTag.tags());
+        // Try to add only tags that already exist
+        Set<Tag> tagsToAdd = new HashSet<>(existingTags);
 
         TagCommand tagCommand = new TagCommand(employeeId, tagsToAdd);
 
-        // Should succeed without error (idempotent operation)
-        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, Messages.format(personToTag));
+        // Format duplicate tag names for expected message
+        String duplicateTagNames = tagsToAdd.stream()
+                .map(tag -> tag.tagName)
+                .collect(java.util.stream.Collectors.joining(", "));
+        String expectedMessage = String.format(TagCommand.MESSAGE_DUPLICATE_TAGS, duplicateTagNames);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+
+        assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_addMixedNewAndDuplicateTags_partialSuccess() {
+        Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
+        String employeeId = personToTag.id();
+
+        // Ensure person has at least one existing tag
+        Set<Tag> existingTags = personToTag.tags();
+        if (existingTags.isEmpty()) {
+            Set<Tag> initialTag = new HashSet<>();
+            initialTag.add(new Tag("existingTag"));
+            Person personWithTag = new PersonBuilder(personToTag, true)
+                    .withTags("existingTag").build();
+            model.setPerson(personToTag, personWithTag);
+            personToTag = personWithTag;
+            existingTags = personToTag.tags();
+        }
+
+        // Add mix of duplicate and new tags
+        Set<Tag> tagsToAdd = new HashSet<>();
+        tagsToAdd.addAll(existingTags); // Add duplicates
+        tagsToAdd.add(new Tag("newTag1")); // Add new tags
+        tagsToAdd.add(new Tag("newTag2"));
+
+        TagCommand tagCommand = new TagCommand(employeeId, tagsToAdd);
+
+        // Expected: only new tags added
+        Set<Tag> updatedTags = new HashSet<>(existingTags);
+        updatedTags.add(new Tag("newTag1"));
+        updatedTags.add(new Tag("newTag2"));
+        Person taggedPerson = new PersonBuilder(personToTag, true).withTags(
+                updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
+
+        // Format duplicate tag names for expected message
+        String duplicateTagNames = existingTags.stream()
+                .map(tag -> tag.tagName)
+                .collect(java.util.stream.Collectors.joining(", "));
+        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson))
+                + "\n" + String.format(TagCommand.MESSAGE_DUPLICATE_TAGS, duplicateTagNames);
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToTag, taggedPerson);
 
         assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
     }
