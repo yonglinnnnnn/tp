@@ -33,7 +33,7 @@ public class SortCommandParser implements Parser<SortCommand> {
     public static Comparator<Person> createComparator(String[] tokens) throws ParseException {
         Comparator<Person> comparator = (x, y) -> 0;
         for (String token : tokens) {
-            comparator = switch (token) {
+            comparator = switch (token.trim().toLowerCase()) {
             case FIELD_NAME -> comparator.thenComparing(person -> person.name().fullName());
             case FIELD_PHONE -> comparator.thenComparing(person -> person.phone().value());
             case FIELD_EMAIL -> comparator.thenComparing(person -> person.email().value());
@@ -62,15 +62,11 @@ public class SortCommandParser implements Parser<SortCommand> {
     @Override
     public SortCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        String[] tokens = args.trim().split(" -");
-        if (!tokens[0].equals(SortCommand.COMMAND_WORD)) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
-        }
-
-        if (tokens.length == 1) {
+        String[] tokens = Arrays.stream(args.trim().split("-")).filter(x -> !x.isBlank()).toArray(String[]::new);
+        if (tokens.length == 0) {
             return new SortCommand(Comparator.comparing(person -> person.name().fullName()));
         }
 
-        return new SortCommand(createComparator(Arrays.copyOfRange(tokens, 1, tokens.length)));
+        return new SortCommand(createComparator(Arrays.copyOfRange(tokens, 0, tokens.length)));
     }
 }

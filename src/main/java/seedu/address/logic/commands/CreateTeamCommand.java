@@ -73,8 +73,10 @@ public class CreateTeamCommand extends Command {
         String id = String.format("T%04d", nextId++);
         Team toAdd = new Team(id, validatedName);
 
-        toAdd.withLeader(leaderOpt.get().id());
+        Person leader = leaderOpt.get();
+        toAdd.withLeader(leader.id());
         updateLeaderPersonDetails(model, leaderOpt, id);
+
 
         if (model.hasTeam(toAdd)) {
             // revert id increment

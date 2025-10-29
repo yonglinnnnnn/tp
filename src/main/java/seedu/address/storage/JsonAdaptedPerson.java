@@ -16,6 +16,7 @@ import seedu.address.model.person.GitHubUsername;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Salary;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -31,7 +32,9 @@ class JsonAdaptedPerson {
     private final String email;
     private final String address;
     private final String gitHubUsername;
+    private final String salary;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
+    private final List<String> teamIds = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -40,13 +43,20 @@ class JsonAdaptedPerson {
     public JsonAdaptedPerson(@JsonProperty("id") String id, @JsonProperty("name") String name,
             @JsonProperty("phone") String phone, @JsonProperty("email") String email,
             @JsonProperty("address") String address, @JsonProperty("gitHubUsername") String gitHubUsername,
-                             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+            @JsonProperty("salary") String salary, @JsonProperty("teamIds") List<String> teamIds,
+            @JsonProperty("tags") List<JsonAdaptedTag> tags) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.gitHubUsername = gitHubUsername;
+        this.salary = salary;
+
+        if (teamIds != null) {
+            this.teamIds.addAll(teamIds);
+        }
+
         if (tags != null) {
             this.tags.addAll(tags);
         }
@@ -62,6 +72,10 @@ class JsonAdaptedPerson {
         email = source.email().value();
         address = source.address().value();
         gitHubUsername = source.gitHubUsername().value();
+        salary = String.valueOf(source.salary().toDouble());
+        if (!source.teamIds().isEmpty()) {
+            teamIds.addAll(source.teamIds());
+        }
         tags.addAll(source.tags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
@@ -73,11 +87,6 @@ class JsonAdaptedPerson {
      * @throws IllegalValueException if there were any data constraints violated in the adapted person.
      */
     public Person toModelType() throws IllegalValueException {
-        final List<Tag> personTags = new ArrayList<>();
-        for (JsonAdaptedTag tag : tags) {
-            personTags.add(tag.toModelType());
-        }
-
         if (id == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, "id"));
         }
@@ -122,9 +131,22 @@ class JsonAdaptedPerson {
         }
         final GitHubUsername modelGitHubUsername = new GitHubUsername(gitHubUsername);
 
+        final List<Tag> personTags = new ArrayList<>();
+        for (JsonAdaptedTag tag : tags) {
+            personTags.add(tag.toModelType());
+        }
         final Set<Tag> modelTags = new HashSet<>(personTags);
+
+        final Set<String> teamIds = new HashSet<>(this.teamIds);
+
+        if (salary == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    Salary.class.getSimpleName()));
+        }
+        final Salary modelSalary = new Salary(Double.parseDouble(salary));
+
         return new Person(id, modelName, modelPhone, modelEmail, modelAddress,
-                modelGitHubUsername, modelTags);
+                modelGitHubUsername, teamIds, modelTags, modelSalary);
     }
 
 }
