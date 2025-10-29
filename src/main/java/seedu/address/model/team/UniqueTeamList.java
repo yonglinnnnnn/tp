@@ -158,6 +158,15 @@ public class UniqueTeamList implements Iterable<Team> {
     }
 
     /**
+     * Helper method to build the hierarchy string recursively.
+     *
+     * @return String representation of all the teams in Linux tree format.
+     */
+    public String getHierarchyString() {
+        return String.valueOf(internalList.size());
+    }
+
+    /**
      * Returns true if {@code teams} contains only unique teams.
      */
     private boolean teamsAreUnique(List<Team> teams) {

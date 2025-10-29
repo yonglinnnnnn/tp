@@ -203,19 +203,7 @@ public class ModelManager implements Model {
     //=========== Organization Hierarchy Accessors =============================================================
     @Override
     public String getOrganizationHierarchyString() {
-        return """
-                    ├── Finance Department
-                    │   ├── Samuel Lee
-                    │   └── Rachel Tan
-                    ├── Engineering Department
-                    │   ├── API Development
-                    │   │   └── Alice Chen
-                    │   └── Frontend
-                    │       └── Felicia Wong
-                    └── Quality Assurance
-                        ├── Michael Ong
-                        └── Derrick Lim
-                """;
+        return addressBook.getOrganizationHierarchyString();
     }
 
     @Override

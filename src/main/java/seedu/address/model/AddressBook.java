@@ -221,6 +221,13 @@ public class AddressBook implements ReadOnlyAddressBook {
         return teams.asUnmodifiableObservableList();
     }
 
+    /**
+     * Returns the organization hierarchy string in a Linux tree format.
+     */
+    public String getOrganizationHierarchyString() {
+        return teams.getHierarchyString();
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
