@@ -10,7 +10,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public record Name(String fullName) {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Names should only contain letters and spaces, and it should be 1-50 characters long.";
+            "Names should only contain alphanumeric characters and spaces, and it should be 1-50 characters long.";
 
     /*
      * The first character of the address must not be a whitespace,
