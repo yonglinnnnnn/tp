@@ -3,6 +3,7 @@ package seedu.address.model.person;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 import java.text.DecimalFormat;
+import java.util.Comparator;
 
 /**
  * Represents a Person's salary in the address book, rounded to 2 decimal places.
@@ -17,25 +18,34 @@ public record Salary(double value) implements Comparable<Salary> {
 
     @Override
     public double value() {
-        return Math.round(value * 100) / 100.0;
+        return Double.parseDouble(String.format("%.2f", value));
     }
 
     /**
      * Converts the salary to cents.
      * @return The salary as cents.
      */
-    public int inCents() {
-        return (int) Math.round(value * 100);
+    public long inCents() {
+        return Math.round(value * 100);
+    }
+
+    /**
+     * Converts the salary to a double.
+     * @return The salary as a double.
+     */
+    @Deprecated
+    public double toDouble() {
+        return value();
     }
 
     @Override
     public int compareTo(Salary other) {
-        return this.inCents() - other.inCents();
+        return Double.compare(this.value(), other.value());
     }
 
     @Override
     public String toString() {
         DecimalFormat format = new DecimalFormat("#,###.##");
-        return String.format("$%s / month", format.format(inCents() / 100.0));
+        return String.format("$%s / month", format.format(value()));
     }
 }
