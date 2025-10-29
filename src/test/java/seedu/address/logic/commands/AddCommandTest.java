@@ -23,6 +23,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 import seedu.address.testutil.PersonBuilder;
@@ -166,7 +167,22 @@ public class AddCommandTest {
         }
 
         @Override
+        public void addAuditEntry(String action, String details) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public AuditLog getAuditLog() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public boolean hasTeam(Team team) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasTeamWithId(String teamId) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -177,6 +193,11 @@ public class AddCommandTest {
 
         @Override
         public void setTeam(Team target, Team editedTeam) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean setSubteam(String parentTeamId, String subteamId) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -236,5 +257,4 @@ public class AddCommandTest {
             return new AddressBook();
         }
     }
-
 }

@@ -15,6 +15,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.model.person.Person;
+import seedu.address.model.team.exceptions.InvalidSubteamNesting;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.TypicalPersons;
 
@@ -75,69 +76,31 @@ public class TeamTest {
         assertFalse(team.getMembers().contains(TypicalPersons.DANIEL.id()));
     }
 
-    //    @Test
-    //    public void withParentTeam_setsParentAndReturnsThis() {
-    //        Team parent = new Team("T0001", new TeamName("Core"));
-    //        Team child = new Team("T0002", new TeamName("Backend"));
-    //
-    //        Team returned = child.withParentTeam(parent);
-    //
-    //        assertSame(child, returned);
-    //        assertSame(parent, child.getParentTeam());
-    //        assertEquals(parent.getId(), child.getParentTeam());
-    //    }
+    @Test
+    public void addToSubteam_null_throwsNullPointerException() {
+        Team t = new Team("T1004", new TeamName("SubteamTest"));
+        assertThrows(NullPointerException.class, () -> t.addToSubteam(null));
+    }
 
-    //    @Test
-    //    public void addSubteam_null_throwsNullPointerException() {
-    //        Team t = new Team("T1004", new TeamName("SubteamTest"));
-    //        assertThrows(NullPointerException.class, () -> t.addSubteam(null));
-    //    }
-    //
-    //    @Test
-    //    public void addSubteam_duplicateIgnoredAndRemoveSubteamWorks() {
-    //        Team parent = new Team("T2000", "Parent");
-    //        Team sub1 = new Team("T2001", "Child1");
-    //        parent.addSubteam(sub1);
-    //        parent.addSubteam(sub1);
-    //        assertEquals(1, parent.getSubteamIds().size());
-    //        Team sub2 = new Team("T2002", "Child2");
-    //        parent.addSubteam(sub2);
-    //        assertTrue(parent.getSubteamIds().contains("T2001"));
-    //        parent.removeSubteam(sub1);
-    //        assertFalse(parent.getSubteamIds().contains("T2001"));
-    //    }
-    //
-    //    @Test
-    //    public void addSubteam_setsParent() {
-    //        Team parent = new Team("T0001", "Core");
-    //        Team sub = new Team("T0003", "Frontend");
-    //
-    //        parent.addSubteam(sub);
-    //
-    //        assertEquals(parent, sub.getParentTeam());
-    //        assertTrue(parent.getSubteams().contains(sub));
-    //    }
-    //
-    //    @Test
-    //    public void getMemberPersonIds_returnsExpectedIds() {
-    //        Team team = new Team("T0001", "Core");
-    //        team.withMembers(Arrays.asList(TypicalPersons.BENSON, TypicalPersons.CARL));
-    //
-    //        List<String> expectedIds = Arrays.asList(TypicalPersons.BENSON.id(), TypicalPersons.CARL.id());
-    //        assertEquals(expectedIds, team.getMemberPersonIds());
-    //    }
-    //
-    //    @Test
-    //    public void returnedLists_areUnmodifiable() {
-    //        Team t = new Team("T3000", "ImmutableTest");
-    //        Person p = new PersonBuilder().withId(1).build();
-    //        t.addMember(p);
-    //        Team sub = new Team("T1", "Sub");
-    //        t.addSubteam(sub);
-    //
-    //        assertThrows(UnsupportedOperationException.class, () )-> t.getMemberPersonIds().add("E2"));
-    //        assertThrows(UnsupportedOperationException.class, () -> t.getSubteamIds(.add("T2"));
-    //    }
+    @Test
+    public void addToSubteam_addingSelf_throwsInvalidSubteamNestingException() {
+        Team t = new Team("T2000", new TeamName("TestTeam"));
+        assertThrows(InvalidSubteamNesting.class, () -> t.addToSubteam(t));
+    }
+
+    @Test
+    public void addToSubteam_cyclicTeams_throwsInvalidSubteamNestingException() {
+        Team teamA = new Team("T0001", new TeamName("A"));
+        Team teamB = new Team("T0003", new TeamName("B"));
+        assertThrows(InvalidSubteamNesting.class, () -> {
+            Team at = teamA.addToSubteam(teamB);
+            at.addToSubteam(teamB);
+        });
+        assertThrows(InvalidSubteamNesting.class, () -> {
+            teamB.addToSubteam(teamA);
+            teamA.addToSubteam(teamB);
+        });
+    }
 
     @Test
     public void typicalTeams_examplesHaveExpectedProperties() {

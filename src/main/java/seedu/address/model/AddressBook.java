@@ -2,16 +2,19 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.UniqueTeamList;
+import seedu.address.model.team.exceptions.TeamNotFoundException;
 
 /**
  * Represents an in-memory address book containing persons and teams.
@@ -20,6 +23,8 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons = new UniquePersonList();
     private final UniqueTeamList teams = new UniqueTeamList();
+    private final AuditLog auditLog = new AuditLog();
+
 
     public AddressBook() {}
 
@@ -60,6 +65,12 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void resetData(ReadOnlyAddressBook newData) {
         requireNonNull(newData);
         setPersons(newData.getPersonList());
+
+        // Restore audit log from persisted data
+        auditLog.clear();
+        for (var entry : newData.getAuditLog().getEntries()) {
+            auditLog.addEntry(entry.getAction(), entry.getDetails(), entry.getTimestamp());
+        }
         // ReadOnlyAddressBook is expected to expose getTeamList()
         if (newData instanceof ReadOnlyAddressBook) {
             try {
@@ -104,6 +115,15 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons.remove(key);
     }
 
+    @Override
+    public AuditLog getAuditLog() {
+        return auditLog;
+    }
+
+    public void addAuditEntry(String action, String details) {
+        auditLog.addEntry(action, details, LocalDateTime.now());
+    }
+
     //// team-level operations
 
     /**
@@ -112,6 +132,19 @@ public class AddressBook implements ReadOnlyAddressBook {
     public boolean hasTeam(Team team) {
         requireNonNull(team);
         return teams.contains(team);
+    }
+
+    /**
+     * Finds and returns a team by its ID.
+     * Returns null if no such team exists.
+     */
+    public Team getTeamById(String teamId) {
+        requireNonNull(teamId);
+        try {
+            return teams.getTeamById(teamId);
+        } catch (TeamNotFoundException e) {
+            return null;
+        }
     }
 
     /**
@@ -140,7 +173,21 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Sets {@code subteamId} as a subteam of {@code parentTeamId}.
+     * Both teams must exist in the address book.
+     *
+     * @return true if the subteam was set successfully, false otherwise
+     */
+    public boolean setSubteam(Team parentTeam, Team subteam) {
+        if (parentTeam == null || subteam == null) {
+            return false;
+        }
+        return teams.setSubteam(parentTeam, subteam);
+    }
+
+    /**
      * Sorts the list of persons according to the given comparator.
+     *
      * @param comparator The comparator used to compare the selected keys.
      */
     public void sortPersons(Comparator<Person> comparator) {
@@ -180,7 +227,8 @@ public class AddressBook implements ReadOnlyAddressBook {
             return true;
         }
 
-        if (!(other instanceof AddressBook)) {
+        // instanceof handles nulls
+        if (!(other instanceof AddressBook otherAddressBook)) {
             return false;
         }
 

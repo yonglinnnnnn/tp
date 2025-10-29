@@ -75,9 +75,9 @@ public class RemoveFromTeamCommand extends Command {
         }
 
         // copy subteams and parent
-        edited.withSubteams(new ArrayList<>(team.getSubteams()));
-        if (team.getParentTeam() != null) {
-            edited.withParentTeam(team.getParentTeam());
+        edited.withSubteams(team.getSubteams());
+        if (team.getParentTeamId() != null) {
+            edited.withParentTeamId(team.getParentTeamId());
         }
 
         model.setTeam(team, edited);
