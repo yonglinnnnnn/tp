@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.HashSet;
 import java.util.List;
@@ -75,6 +74,11 @@ public class UntagCommand extends Command {
                 nonExistentTags.add(tagToRemove);
             }
         }
+
+        // Remove the valid tags (even if some are invalid)
+        Person untaggedPerson = createUntaggedPerson(personToUntag, actualTagsToRemove);
+        model.setPerson(personToUntag, untaggedPerson);
+        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
         // Build result message with removed tags
         String resultMessage;
