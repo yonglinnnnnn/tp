@@ -26,7 +26,7 @@ public class UntagCommand extends Command {
             + "Parameters: EMPLOYEE_ID (must start with E) TAG [MORE_TAGS]...\n"
             + "Example: " + COMMAND_WORD + " E1001 friends colleagues";
 
-    public static final String MESSAGE_UNTAG_SUCCESS = "Removed tags from: %s";
+    public static final String MESSAGE_UNTAG_SUCCESS = "Removed [%s] tags from: %s";
     public static final String MESSAGE_NO_TAGS_PROVIDED = "At least one tag must be provided.";
     public static final String MESSAGE_TAG_NOT_FOUND = "Some tags were not found on this person: %1$s";
     public static final String MESSAGE_PERSON_NOT_FOUND = "No person with employee ID %1$s found.";
@@ -82,7 +82,7 @@ public class UntagCommand extends Command {
             resultMessage = String.format("No tags were removed from: %s", employeeId);
         } else {
             String removedTags = formatTagNames(actualTagsToRemove);
-            resultMessage = String.format("Removed tags from %s: %s", employeeId, removedTags);
+            resultMessage = String.format(MESSAGE_UNTAG_SUCCESS, removedTags, employeeId);
         }
 
         if (!nonExistentTags.isEmpty()) {
