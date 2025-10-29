@@ -38,10 +38,11 @@ class SortCommandParserTest {
         Collections.shuffle(tokens, RAND);
         int numTaken = tokens.isEmpty() ? 0 : RAND.nextInt(tokens.size() + 1); // 0..size
         if (numTaken == 0) {
-            return "sort";
+            return "";
         }
+
         List<String> taken = tokens.subList(0, numTaken);
-        return "sort -" + String.join(" -", taken);
+        return "-" + String.join(" -", taken);
     }
 
     // Mix at least one invalid token among possibly some valid ones; ensure proper spacing

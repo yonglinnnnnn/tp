@@ -119,7 +119,7 @@ class SortCommandTest {
         List<Person> before = new ArrayList<>(model.getFilteredPersonList());
 
         // Default comparator is used when only "sort" is provided
-        SortCommand defaultSort = new SortCommandParser().parse("sort");
+        SortCommand defaultSort = new SortCommandParser().parse("");
         defaultSort.execute(model);
 
         List<Person> after = new ArrayList<>(model.getFilteredPersonList());

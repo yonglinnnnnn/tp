@@ -182,12 +182,22 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasTeamWithId(String teamId) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void addTeam(Team team) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
         public void setTeam(Team target, Team editedTeam) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean setSubteam(String parentTeamId, String subteamId) {
             throw new AssertionError("This method should not be called.");
         }
 
