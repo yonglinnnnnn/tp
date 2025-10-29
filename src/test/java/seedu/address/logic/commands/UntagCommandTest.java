@@ -43,7 +43,8 @@ public class UntagCommandTest {
         }
 
         Set<Tag> tagsToRemove = new HashSet<>();
-        tagsToRemove.add(personToUntag.tags().iterator().next());
+        Tag tagToRemove = personToUntag.tags().iterator().next();
+        tagsToRemove.add(tagToRemove);
 
         UntagCommand untagCommand = new UntagCommand(employeeId, tagsToRemove);
 
@@ -52,7 +53,8 @@ public class UntagCommandTest {
         Person untaggedPerson = new PersonBuilder(personToUntag, true).withTags(
                 updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
 
-        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, employeeId);
+        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS,
+                tagToRemove.tagName, employeeId);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(personToUntag, untaggedPerson);
@@ -82,7 +84,8 @@ public class UntagCommandTest {
         Person untaggedPerson = new PersonBuilder(personToUntag, true).withTags(
                 updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
 
-        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, employeeId);
+        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS,
+                "tag1, tag2", employeeId);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(personToUntag, untaggedPerson);
@@ -111,7 +114,7 @@ public class UntagCommandTest {
         Person untaggedPerson = new PersonBuilder(personToUntag, true)
                 .withTags("colleagues").build();
 
-        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, employeeId);
+        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, "friends", employeeId);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(personToUntag, untaggedPerson);
@@ -141,7 +144,7 @@ public class UntagCommandTest {
         Person untaggedPerson = new PersonBuilder(personToUntag, true)
                 .withTags("woof").build();
 
-        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, employeeId)
+        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, "meow", employeeId)
                 + "\n" + String.format(UntagCommand.MESSAGE_TAG_NOT_FOUND, "hello");
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
@@ -168,7 +171,7 @@ public class UntagCommandTest {
         UntagCommand untagCommand = new UntagCommand(employeeId, tagsToRemove);
 
         // Expected: no tags removed, warning message shown
-        String expectedMessage = String.format(UntagCommand.MESSAGE_UNTAG_SUCCESS, employeeId)
+        String expectedMessage = String.format("No tags were removed from: %s", employeeId)
                 + "\n" + String.format(UntagCommand.MESSAGE_TAG_NOT_FOUND, "nonExistent1, nonExistent2");
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
