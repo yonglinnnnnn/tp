@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -102,6 +101,7 @@ public class TagCommand extends Command {
     private String formatTagNames(Set<Tag> tags) {
         return tags.stream()
                 .map(tag -> tag.tagName)
+                .sorted()
                 .collect(Collectors.joining(", "));
     }
 

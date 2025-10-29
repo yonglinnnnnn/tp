@@ -12,7 +12,6 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.logic.Messages;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -42,7 +41,7 @@ public class TagCommandTest {
         Person taggedPerson = new PersonBuilder(personToTag, true).withTags(
                 updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
 
-        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson));
+        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, "newTag", employeeId);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(personToTag, taggedPerson);
@@ -66,8 +65,7 @@ public class TagCommandTest {
         Person taggedPerson = new PersonBuilder(personToTag, true).withTags(
                 updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
 
-        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson));
-
+        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, "tag1, tag2, tag3", employeeId);
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(personToTag, taggedPerson);
 
@@ -113,7 +111,6 @@ public class TagCommandTest {
         Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         String employeeId = personToTag.id();
 
-        // Ensure person has at least one existing tag
         Set<Tag> existingTags = personToTag.tags();
         if (existingTags.isEmpty()) {
             Set<Tag> initialTag = new HashSet<>();
@@ -125,26 +122,23 @@ public class TagCommandTest {
             existingTags = personToTag.tags();
         }
 
-        // Add mix of duplicate and new tags
-        Set<Tag> tagsToAdd = new HashSet<>();
-        tagsToAdd.addAll(existingTags); // Add duplicates
-        tagsToAdd.add(new Tag("newTag1")); // Add new tags
+        Set<Tag> tagsToAdd = new HashSet<>(existingTags);
+        tagsToAdd.add(new Tag("newTag1"));
         tagsToAdd.add(new Tag("newTag2"));
 
         TagCommand tagCommand = new TagCommand(employeeId, tagsToAdd);
 
-        // Expected: only new tags added
         Set<Tag> updatedTags = new HashSet<>(existingTags);
         updatedTags.add(new Tag("newTag1"));
         updatedTags.add(new Tag("newTag2"));
         Person taggedPerson = new PersonBuilder(personToTag, true).withTags(
                 updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
 
-        // Format duplicate tag names for expected message
         String duplicateTagNames = existingTags.stream()
                 .map(tag -> tag.tagName)
                 .collect(java.util.stream.Collectors.joining(", "));
-        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson))
+        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS,
+                "newTag1, newTag2", employeeId)
                 + "\n" + String.format(TagCommand.MESSAGE_DUPLICATE_TAGS, duplicateTagNames);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
@@ -176,7 +170,7 @@ public class TagCommandTest {
         Person taggedPerson = new PersonBuilder(personToTag, true).withTags(
                 updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
 
-        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson));
+        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, "likes-boardgames", employeeId);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(personToTag, taggedPerson);
@@ -199,7 +193,8 @@ public class TagCommandTest {
         Person taggedPerson = new PersonBuilder(personToTag, true).withTags(
                 updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
 
-        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson));
+        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS,
+                "cs2103-tp-pe-d-tag, senior-dev-lead", employeeId);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(personToTag, taggedPerson);
@@ -221,7 +216,8 @@ public class TagCommandTest {
         Person taggedPerson = new PersonBuilder(personToTag, true).withTags(
                 updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
 
-        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson));
+        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS,
+                "a1234567890123456789", employeeId);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(personToTag, taggedPerson);
