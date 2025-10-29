@@ -6,7 +6,6 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
-import seedu.address.logic.commands.SetSalaryCommand;
 
 class SalaryTest {
     private static final Random RAND = new Random();
