@@ -36,6 +36,8 @@ public class CommandTestUtil {
     public static final String VALID_ADDRESS_BOB = "Block 123, Bobby Street 3";
     public static final String VALID_GITHUBUSERNAME_AMY = "@amybee1";
     public static final String VALID_GITHUBUSERNAME_BOB = "@bobchoo2";
+    public static final double VALID_SALARY_AMY = 0.0;
+    public static final double VALID_SALARY_BOB = 0.0;
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friends";
 

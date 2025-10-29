@@ -14,6 +14,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.UniqueTeamList;
+import seedu.address.model.team.exceptions.TeamNotFoundException;
 
 /**
  * Represents an in-memory address book containing persons and teams.
@@ -134,6 +135,19 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Finds and returns a team by its ID.
+     * Returns null if no such team exists.
+     */
+    public Team getTeamById(String teamId) {
+        requireNonNull(teamId);
+        try {
+            return teams.getTeamById(teamId);
+        } catch (TeamNotFoundException e) {
+            return null;
+        }
+    }
+
+    /**
      * Adds a team to the address book.
      * The team must not already exist in the address book.
      */
@@ -159,7 +173,21 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Sets {@code subteamId} as a subteam of {@code parentTeamId}.
+     * Both teams must exist in the address book.
+     *
+     * @return true if the subteam was set successfully, false otherwise
+     */
+    public boolean setSubteam(Team parentTeam, Team subteam) {
+        if (parentTeam == null || subteam == null) {
+            return false;
+        }
+        return teams.setSubteam(parentTeam, subteam);
+    }
+
+    /**
      * Sorts the list of persons according to the given comparator.
+     *
      * @param comparator The comparator used to compare the selected keys.
      */
     public void sortPersons(Comparator<Person> comparator) {

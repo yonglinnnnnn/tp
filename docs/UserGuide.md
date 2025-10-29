@@ -132,6 +132,23 @@ Examples:
 *  `edit 1 -hp 91234567 -em johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 -name Betsy Crower -tag ` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
+### Creating a team: `create-team`
+TODO
+
+### Adding members to a team: `add-to-team`
+TODO
+
+### Removing members from a team: `remove-from-team`
+TODO
+
+### Set a team as a subteam of another team: `set-subteam`
+
+Sets an already created team as a subteam of another already created parent team.
+The parent team must not already contain the subteam as a subteam (directly or indirectly) to avoid cycles.
+The subteam must also not already contain the parent team as a subteam (directly or indirectly) to avoid cycles.
+
+Format: `set-subteam PARENT_TEAM_ID SUBTEAM_ID`
+
 ### Locating persons by name: `find`
 
 Finds persons whose names contain any of the given keywords.

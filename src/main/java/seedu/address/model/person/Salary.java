@@ -9,7 +9,7 @@ import java.text.DecimalFormat;
  * @param value The salary in dollars.
  */
 public record Salary(double value) implements Comparable<Salary> {
-    private static final String MESSAGE_CONSTRAINTS = "Salary should be a positive number.";
+    public static final String MESSAGE_CONSTRAINTS = "Salary should be a positive number.";
 
     public Salary {
         checkArgument(value >= 0, MESSAGE_CONSTRAINTS);

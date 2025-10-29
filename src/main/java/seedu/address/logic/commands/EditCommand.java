@@ -103,10 +103,12 @@ public class EditCommand extends Command {
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.address());
         GitHubUsername updatedGitHubUsername =
                 editPersonDescriptor.getGitHubUsername().orElse(personToEdit.gitHubUsername());
+        Salary updatedSalary = editPersonDescriptor.getSalary().orElse(personToEdit.salary());
+        Set<String> updatedTeamIds = editPersonDescriptor.getTeamIds().orElse(personToEdit.teamIds());
         Set<Tag> updatedTags = personToEdit.tags();
 
         return new Person(personToEdit.id(), updatedName, updatedPhone, updatedEmail,
-                updatedAddress, updatedGitHubUsername, updatedTags);
+                        updatedAddress, updatedGitHubUsername, updatedTeamIds, updatedTags, updatedSalary);
     }
 
     @Override
@@ -142,6 +144,8 @@ public class EditCommand extends Command {
         private Email email;
         private Address address;
         private GitHubUsername gitHubUsername;
+        private Salary salary;
+        private Set<String> teamIds;
         private Set<Tag> tags;
         private Salary salary;
 
@@ -157,6 +161,8 @@ public class EditCommand extends Command {
             setEmail(toCopy.email);
             setAddress(toCopy.address);
             setGitHubUsername(toCopy.gitHubUsername);
+            setSalary(toCopy.salary);
+            setTeamIds(toCopy.teamIds);
             setTags(toCopy.tags);
             setSalary(toCopy.salary);
         }
@@ -165,7 +171,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, gitHubUsername, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, gitHubUsername, salary, teamIds, tags);
         }
 
         public void setName(Name name) {
@@ -206,6 +212,22 @@ public class EditCommand extends Command {
 
         public Optional<GitHubUsername> getGitHubUsername() {
             return Optional.ofNullable(gitHubUsername);
+        }
+
+        public void setSalary(Salary salary) {
+            this.salary = salary;
+        }
+
+        public Optional<Salary> getSalary() {
+            return Optional.ofNullable(salary);
+        }
+
+        public void setTeamIds(Set<String> teamIds) {
+            this.teamIds = (teamIds != null) ? new HashSet<>(teamIds) : null;
+        }
+
+        public Optional<Set<String>> getTeamIds() {
+            return (teamIds != null) ? Optional.of(Collections.unmodifiableSet(teamIds)) : Optional.empty();
         }
 
         /**
@@ -257,6 +279,8 @@ public class EditCommand extends Command {
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(gitHubUsername, otherEditPersonDescriptor.gitHubUsername)
+                    && Objects.equals(salary, otherEditPersonDescriptor.salary)
+                    && Objects.equals(teamIds, otherEditPersonDescriptor.teamIds)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags);
         }
 
@@ -268,6 +292,8 @@ public class EditCommand extends Command {
                     .add("email", email)
                     .add("address", address)
                     .add("gitHubUsername", gitHubUsername)
+                    .add("salary", salary)
+                    .add("teamIds", teamIds)
                     .add("tags", tags)
                     .toString();
         }

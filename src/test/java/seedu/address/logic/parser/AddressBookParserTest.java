@@ -20,6 +20,7 @@ import seedu.address.logic.commands.AuditCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CreateTeamCommand;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.DeleteTeamCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
@@ -27,6 +28,7 @@ import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RemoveFromTeamCommand;
 import seedu.address.logic.commands.SetSalaryCommand;
+import seedu.address.logic.commands.SetSubteamCommand;
 import seedu.address.logic.commands.TagCommand;
 import seedu.address.logic.commands.UntagCommand;
 import seedu.address.logic.commands.ViewCommand;
@@ -161,6 +163,20 @@ public class AddressBookParserTest {
         CreateTeamCommand command = (CreateTeamCommand) parser.parseCommand(
                 CreateTeamCommand.COMMAND_WORD + " Systems " + person.id());
         assertEquals(new CreateTeamCommand("Systems", person.id()), command);
+    }
+
+    @Test
+    public void parseCommand_setSubteam() throws Exception {
+        SetSubteamCommand command = (SetSubteamCommand) parser.parseCommand(
+                SetSubteamCommand.COMMAND_WORD + " T0001 T0002");
+        assertEquals(new SetSubteamCommand("T0001", "T0002"), command);
+    }
+
+    @Test
+    public void parseCommand_deleteTeam() throws Exception {
+        DeleteTeamCommand command = (DeleteTeamCommand) parser.parseCommand(
+                DeleteTeamCommand.COMMAND_WORD + " T0001");
+        assertEquals(new DeleteTeamCommand("T0001"), command);
     }
 
     @Test
