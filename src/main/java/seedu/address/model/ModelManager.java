@@ -15,6 +15,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
+import seedu.address.model.team.TeamsManager;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -25,6 +26,7 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
+    private final TeamsManager teamsManager;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -36,6 +38,7 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
+        this.teamsManager = new TeamsManager();
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
     }
 
@@ -103,6 +106,12 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public boolean hasTeamWithId(String teamId) {
+        requireNonNull(teamId);
+        return (addressBook.getTeamById(teamId) != null);
+    }
+
+    @Override
     public void deletePerson(Person target) {
         addressBook.removePerson(target);
     }
@@ -117,6 +126,14 @@ public class ModelManager implements Model {
     public void addTeam(Team team) {
         requireNonNull(team);
         addressBook.addTeam(team);
+    }
+
+    @Override
+    public boolean setSubteam(String parentTeamId, String subteamId) {
+        requireAllNonNull(parentTeamId, subteamId);
+        Team parentTeam = addressBook.getTeamById(parentTeamId);
+        Team subteam = addressBook.getTeamById(subteamId);
+        return addressBook.setSubteam(parentTeam, subteam);
     }
 
     @Override

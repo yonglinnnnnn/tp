@@ -113,6 +113,11 @@ public interface Model {
     boolean hasTeam(Team team);
 
     /**
+     * Returns true if a team with the given ID exists in the address book.
+     */
+    boolean hasTeamWithId(String teamId);
+
+    /**
      * Adds a team to the address book.
      */
     void addTeam(Team team);
@@ -128,7 +133,11 @@ public interface Model {
     void removeTeam(Team team);
 
     /**
-     * Sorts the list of persons according to the given selector and comparator.
+     * Adds a subteam to a parent team.
+     */
+    boolean setSubteam(String parentTeamId, String subteamId);
+
+    /* Sorts the list of persons according to the given selector and comparator.
      * @param comparator The comparator used to compare the selected keys.
      */
     void sortPersons(Comparator<Person> comparator);

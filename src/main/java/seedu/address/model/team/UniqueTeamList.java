@@ -8,6 +8,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.model.team.exceptions.DuplicateTeamException;
+import seedu.address.model.team.exceptions.InvalidSubteamNesting;
 import seedu.address.model.team.exceptions.TeamNotFoundException;
 
 /**
@@ -29,6 +30,20 @@ public class UniqueTeamList implements Iterable<Team> {
     }
 
     /**
+     * Returns the team with the given teamId.
+     * Throws TeamNotFoundException if no such team is found.
+     */
+    public Team getTeamById(String teamId) {
+        requireNonNull(teamId);
+        for (Team team : internalList) {
+            if (team.getId().equals(teamId)) {
+                return team;
+            }
+        }
+        throw new TeamNotFoundException();
+    }
+
+    /**
      * Adds a team to the list.
      * The team must not already exist in the list.
      */
@@ -45,7 +60,7 @@ public class UniqueTeamList implements Iterable<Team> {
      * {@code target} must exist in the list.
      * The team identity of {@code editedTeam} must not be the same as another existing team in the list.
      */
-    public void setTeam(Team target, Team editedTeam) {
+    public void setTeam(Team target, Team editedTeam) throws TeamNotFoundException {
         requireNonNull(target);
         requireNonNull(editedTeam);
 
@@ -65,7 +80,7 @@ public class UniqueTeamList implements Iterable<Team> {
      * Removes the equivalent team from the list.
      * The team must exist in the list.
      */
-    public void remove(Team toRemove) {
+    public void remove(Team toRemove) throws TeamNotFoundException {
         requireNonNull(toRemove);
         if (!internalList.remove(toRemove)) {
             throw new TeamNotFoundException();
@@ -76,12 +91,37 @@ public class UniqueTeamList implements Iterable<Team> {
      * Replaces the contents of this list with {@code teams}.
      * {@code teams} must not contain duplicate teams.
      */
-    public void setTeams(List<Team> teams) {
+    public void setTeams(List<Team> teams) throws DuplicateTeamException {
         requireNonNull(teams);
         if (!teamsAreUnique(teams)) {
             throw new DuplicateTeamException();
         }
         internalList.setAll(teams);
+    }
+
+    /**
+     * Adds a subteam to a parent team in the list.
+     * The parent team must exist in the list.
+     * The subteam must not already exist as a subteam of the parent team.
+     *
+     * @return true if the subteam was added successfully, false if adding the subteam would create invalid nesting
+     */
+    public boolean setSubteam(Team parentTeam, Team subteam) {
+        requireNonNull(parentTeam);
+        requireNonNull(subteam);
+
+        int index = internalList.indexOf(parentTeam);
+        if (index == -1) {
+            throw new TeamNotFoundException();
+        }
+        try {
+            Team updatedSubteam = subteam.setParentTeamId(parentTeam.getId());
+            Team newTeam = parentTeam.addToSubteam(updatedSubteam);
+            internalList.set(index, newTeam);
+        } catch (InvalidSubteamNesting e) {
+            return false;
+        }
+        return true;
     }
 
     /**
