@@ -66,11 +66,15 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(newData);
         setPersons(newData.getPersonList());
 
-        // Restore audit log from persisted data
-        auditLog.clear();
-        for (var entry : newData.getAuditLog().getEntries()) {
-            auditLog.addEntry(entry.getAction(), entry.getDetails(), entry.getTimestamp());
+        // Only restore audit log if it's not empty in the new data
+        // This prevents clearing the audit log when clearing persons/teams
+        if (!newData.getAuditLog().getEntries().isEmpty()) {
+            auditLog.clear();
+            for (var entry : newData.getAuditLog().getEntries()) {
+                auditLog.addEntry(entry.getAction(), entry.getDetails(), entry.getTimestamp());
+            }
         }
+
         // ReadOnlyAddressBook is expected to expose getTeamList()
         if (newData instanceof ReadOnlyAddressBook) {
             try {
