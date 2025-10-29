@@ -133,8 +133,8 @@ public class DeleteTeamCommand extends Command {
         }
 
         // preserve parent's parent if present
-        if (potentialParent.getParentTeam() != null) {
-            editedParent.withParentTeam(potentialParent.getParentTeam());
+        if (potentialParent.getParentTeamId() != null) {
+            editedParent.withParentTeamId(potentialParent.getParentTeamId());
         }
 
         return editedParent;
