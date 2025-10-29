@@ -140,9 +140,8 @@ public class TagCommandTest {
         Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         String employeeId = personToTag.id();
         Set<Tag> tagsToAdd = new HashSet<>();
-        tagsToAdd.add(new Tag("senior-dev"));
-        tagsToAdd.add(new Tag("team-lead"));
-        tagsToAdd.add(new Tag("full-stack"));
+        tagsToAdd.add(new Tag("senior-dev-lead"));
+        tagsToAdd.add(new Tag("cs2103-tp-pe-d-tag"));
 
         TagCommand tagCommand = new TagCommand(employeeId, tagsToAdd);
 
