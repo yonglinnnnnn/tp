@@ -8,7 +8,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  * @param decimalPart The decimal part of the salary.
  */
 public record Salary(int integerPart, int decimalPart) implements Comparable<Salary> {
-    private static final String MESSAGE_CONSTRAINTS = "Salary should be a positive number in at most 2 decimal places";
+    public static final String MESSAGE_CONSTRAINTS = "Salary should be a positive number in at most 2 decimal places";
 
     public Salary {
         checkArgument(integerPart >= 0 && decimalPart >= 0 && decimalPart < 100, MESSAGE_CONSTRAINTS);
