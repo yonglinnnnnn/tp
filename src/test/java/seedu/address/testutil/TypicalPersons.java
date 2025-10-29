@@ -97,7 +97,7 @@ public class TypicalPersons {
             .withGitHubUsername("@ida09")
             .withAddress("chicago ave")
             .withoutTags().build();
-    public static final Person IDAsecond = new PersonBuilder()
+    public static final Person IDA_SECOND = new PersonBuilder()
             .withId(9)
             .withName("Idaline Whatever")
             .withPhone("2132321")
