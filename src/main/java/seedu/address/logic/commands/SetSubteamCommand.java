@@ -51,10 +51,10 @@ public class SetSubteamCommand extends Command {
         }
         boolean isValidOperation = model.setSubteam(parentTeamId, subteamId);
         if (!isValidOperation) {
-            throw new CommandException(String.format(MESSAGE_INVALID_SUBTEAM, subteamId, parentTeamId));
+            throw new CommandException(String.format(MESSAGE_INVALID_SUBTEAM, parentTeamId, subteamId));
         }
         modelLogger.info(String.format("Set team %s as subteam of team %s", subteamId, parentTeamId));
-        return new CommandResult(String.format(MESSAGE_SUCCESS, subteamId, parentTeamId));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, parentTeamId, subteamId));
     }
 
     @Override

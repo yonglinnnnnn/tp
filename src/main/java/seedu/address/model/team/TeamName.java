@@ -34,4 +34,12 @@ public record TeamName(String teamName) {
     public static boolean isValidTeamName(String test) {
         return test.matches(VALIDATION_REGEX);
     }
+
+    /**
+     * Returns the string representation of the TeamName.
+     */
+    @Override
+    public String toString() {
+        return teamName;
+    }
 }

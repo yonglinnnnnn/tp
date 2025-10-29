@@ -65,7 +65,7 @@ public class Team {
      */
     public Team addToSubteam(String subteamId) throws InvalidSubteamNesting {
         requireNonNull(subteamId);
-        if (subteamId.equals(this.id) || this.parentTeamId != null) {
+        if (subteamId.equals(this.id)) {
             throw new InvalidSubteamNesting();
         }
         // prevent cycles

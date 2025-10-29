@@ -100,8 +100,9 @@ public class Subteams {
     public boolean contains(String teamId) throws TeamNotFoundException {
         assert(addressBook != null) : "AddressBook must be set for subteams before using contains method.";
         Objects.requireNonNull(teamId);
-        // check first level
-        if (internalList.contains(teamId)) {
+        Team team = addressBook.getTeamById(teamId);
+        // check if team already nested or if first layer contains id
+        if (team.getParentTeamId() != null || internalList.contains(teamId)) {
             return true;
         }
         // check nested levels
