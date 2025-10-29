@@ -6,6 +6,7 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Salary;
 
 /**
  * Sets the salary for a person.
@@ -24,6 +25,7 @@ public final class SetSalaryCommand extends Command {
 
     private final String toSet;
     private final int salaryInCents;
+    private final EditCommand.EditPersonDescriptor editPersonDescriptor = new EditCommand.EditPersonDescriptor();
 
     /**
      * Creates an SetSalaryCommand for the specified {@code Person}
@@ -38,8 +40,8 @@ public final class SetSalaryCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         Person person = model.find(p -> p.id().equals(toSet));
-        model.deletePerson(person);
-        model.addPerson(person.duplicate(toSet).withSalary(salaryInCents).build());
+        Person edited = person.duplicate().withSalary(salaryInCents / 100.0).build();
+        model.setPerson(person, edited);
         return new CommandResult(String.format(MESSAGE_SUCCESS, salaryInCents / 100.0, person.id()));
     }
 

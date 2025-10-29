@@ -26,6 +26,7 @@ import seedu.address.model.person.GitHubUsername;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Salary;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -142,6 +143,7 @@ public class EditCommand extends Command {
         private Address address;
         private GitHubUsername gitHubUsername;
         private Set<Tag> tags;
+        private Salary salary;
 
         public EditPersonDescriptor() {}
 
@@ -156,6 +158,7 @@ public class EditCommand extends Command {
             setAddress(toCopy.address);
             setGitHubUsername(toCopy.gitHubUsername);
             setTags(toCopy.tags);
+            setSalary(toCopy.salary);
         }
 
         /**
@@ -220,6 +223,22 @@ public class EditCommand extends Command {
          */
         public Optional<Set<Tag>> getTags() {
             return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
+        }
+
+        /**
+         * Sets {@code salary} to this object's {@code salary}.
+         * @param salary salary to set
+         */
+        public void setSalary(Salary salary) {
+            this.salary = salary;
+        }
+
+        /**
+        * Returns the salary of this person.
+        * Returns {@code Optional#empty()} if {@code salary} is null.
+        */
+        public Optional<Salary> getSalary() {
+            return Optional.ofNullable(salary);
         }
 
         @Override

@@ -2,8 +2,6 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.DecimalFormat;
 
 /**
@@ -11,10 +9,15 @@ import java.text.DecimalFormat;
  * @param value The salary in dollars.
  */
 public record Salary(double value) implements Comparable<Salary> {
-    private static final String MESSAGE_CONSTRAINTS = "Salary should be a positive number in at most 2 decimal places";
+    private static final String MESSAGE_CONSTRAINTS = "Salary should be a positive number.";
 
     public Salary {
         checkArgument(value >= 0, MESSAGE_CONSTRAINTS);
+    }
+
+    @Override
+    public double value() {
+        return Math.round(value * 100) / 100.0;
     }
 
     /**
@@ -22,7 +25,7 @@ public record Salary(double value) implements Comparable<Salary> {
      * @return The salary as cents.
      */
     public int inCents() {
-        return (int)Math.round(value * 100);
+        return (int) Math.round(value * 100);
     }
 
     @Override
@@ -33,6 +36,6 @@ public record Salary(double value) implements Comparable<Salary> {
     @Override
     public String toString() {
         DecimalFormat format = new DecimalFormat("#,###.##");
-        return String.format("$%s", format.format(inCents() / 100.0));
+        return String.format("$%s / month", format.format(inCents() / 100.0));
     }
 }

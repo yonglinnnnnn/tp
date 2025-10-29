@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.text.DecimalFormat;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -10,9 +11,9 @@ class SalaryTest {
     private static final Random RAND = new Random();
 
     @Test
-    void toDouble() {
+    void value() {
         double value = RAND.nextDouble(100000);
-        assertEquals(new Salary(value).toDouble(), Double.parseDouble(String.format("%.2f", value)));
+        assertEquals(new Salary(value).value(), Double.parseDouble(String.format("%.2f", value)));
     }
 
     @Test
@@ -22,21 +23,10 @@ class SalaryTest {
     }
 
     @Test
-    void testToString() {
+    void toStringMethod() {
         double value = RAND.nextDouble(100000);
-        assertEquals(new Salary(value).toString(), String.format("$%.2f / month", value));
-    }
-
-    @Test
-    void integerPart() {
-        double value = RAND.nextDouble(100000);
-        assertEquals(new Salary(value).integerPart(), (int) value);
-    }
-
-    @Test
-    void decimalPart() {
-        double value = RAND.nextDouble(100000);
-        assertEquals(new Salary(value).decimalPart(), (int) Math.round((value - (int) value) * 100));
+        assertEquals(new Salary(value).toString(),
+                     String.format("$%s / month", new DecimalFormat("#,###.##").format(value)));
     }
 
     @Test

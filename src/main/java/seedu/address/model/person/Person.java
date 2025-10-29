@@ -235,7 +235,7 @@ public record Person(
          * @return This builder object.
          */
         public Builder withSalaryInCents(int salaryInCents) {
-            this.salary = new Salary(salaryInCents / 100, salaryInCents % 100);
+            this.salary = new Salary(salaryInCents / 100.0);
             return this;
         }
 
