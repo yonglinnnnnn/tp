@@ -6,9 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
+import static seedu.address.testutil.TypicalTeams.CORE;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +19,7 @@ import seedu.address.commons.util.JsonUtil;
 import seedu.address.model.AddressBook;
 import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
+import seedu.address.model.team.Team;
 import seedu.address.testutil.AddressBookBuilder;
 import seedu.address.testutil.TypicalPersons;
 
@@ -49,6 +52,19 @@ public class JsonSerializableAddressBookTest {
                 JsonSerializableAddressBook.class).get();
         assertThrows(DuplicatePersonException.class, "Operation would result in duplicate persons",
                 dataFromFile::toModelType);
+    }
+
+    @Test
+    public void toModelType_typicalTeamsFile_success() throws Exception {
+        AddressBook original = TypicalPersons.getTypicalAddressBook();
+        original.addTeam(CORE);
+
+        JsonSerializableAddressBook jsonBook = new JsonSerializableAddressBook(original);
+        AddressBook converted = jsonBook.toModelType();
+        List<Team> teams = converted.getTeamList();
+
+        assertEquals(1, teams.size());
+        assertEquals("Core", teams.get(0).getTeamName().teamName());
     }
 
     @Test

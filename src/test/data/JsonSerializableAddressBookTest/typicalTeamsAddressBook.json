@@ -1,0 +1,17 @@
+{
+  "persons": [],
+  "teams": [
+    {
+      "id": "T0001",
+      "name": "Core",
+      "leaderId": "E0001",
+      "members": [
+        "E0001",
+        "E0002"
+      ],
+      "parentTeamId": null,
+      "subTeamIds": []
+    }
+  ],
+  "auditLog": []
+}
