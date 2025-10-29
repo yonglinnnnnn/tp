@@ -186,17 +186,6 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Sets {@code parentTeamId} as the parent team of {@code subteamId}.
-     * Both teams must exist in the address book.
-     */
-    public void setParentTeam(Team subteam, String parentTeamId) {
-        if (parentTeamId == null || subteam == null) {
-            return;
-        }
-        subteam.setParentTeamId(parentTeamId);
-    }
-
-    /**
      * Sorts the list of persons according to the given comparator.
      *
      * @param comparator The comparator used to compare the selected keys.
