@@ -15,6 +15,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
+import seedu.address.model.team.Subteams;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamsManager;
 
@@ -43,6 +44,8 @@ public class ModelManager implements Model {
         this.teamsManager = new TeamsManager();
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         sortedPersons = new SortedList<>(filteredPersons);
+        // Set the address book reference in Subteams static class
+        Subteams.setAddressBook(this.addressBook);
     }
 
     public ModelManager() {

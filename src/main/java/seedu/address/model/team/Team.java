@@ -20,7 +20,7 @@ public class Team {
     private final TeamName teamName;
     private List<String> members = new ArrayList<>();
     private String leaderId = null;
-    private Subteams subteams = new Subteams();
+    private Subteams subteams = null;
     private String parentTeamId = null;
 
     /**
@@ -34,6 +34,7 @@ public class Team {
         requireNonNull(teamName);
         this.id = id;
         this.teamName = teamName;
+        this.subteams = new Subteams();
     }
 
     public String getId() {
@@ -55,25 +56,45 @@ public class Team {
         return leaderId;
     }
 
-    public List<Team> getSubteams() {
-        return subteams.getUnmodifiableList();
+    public Subteams getSubteams() {
+        return this.subteams;
     }
 
     /**
      * Adds a new subteam to this team.
      */
-    public Team addToSubteam(Team subteam) throws InvalidSubteamNesting {
-        requireNonNull(subteam);
-        if (subteam == this) {
+    public Team addToSubteam(String subteamId) throws InvalidSubteamNesting {
+        requireNonNull(subteamId);
+        if (subteamId.equals(this.id) || this.parentTeamId != null) {
             throw new InvalidSubteamNesting();
         }
         // prevent cycles
-        if (subteams.contains(subteam) || subteam.getSubteams().contains(this)) {
+        if (subteams.contains(subteamId)) {
             throw new InvalidSubteamNesting();
         } else {
-            subteams.add(subteam);
+            subteams.add(subteamId, this.id);
         }
         return this;
+    }
+
+    /**
+     * Checks if a team with the given ID is in this team's nested subteams.
+     *
+     * @param teamId the ID of the team to check
+     * @return true if the team is a subteam, false otherwise
+     */
+    public boolean containsTeamInSubteams(String teamId) {
+        return subteams.contains(teamId);
+    }
+
+    /**
+     * Checks if a team with the given ID is in this team's nested subteams.
+     *
+     * @param team the team to check
+     * @return true if the team is a subteam, false otherwise
+     */
+    public boolean containsTeamInSubteams(Team team) {
+        return subteams.contains(team.getId());
     }
 
     /**
@@ -161,13 +182,12 @@ public class Team {
     /**
      * Replaces this team's subteams with the provided list and sets their parent to this team.
      *
-     * @param subteams list of {@link Team} to set as subteams; must not be null
+     * @param subteams list of team IDs to set as subteams; must not be null
      * @return this team with subteams replaced
      */
-    public Team withSubteams(List<Team> subteams) {
-        this.subteams = new Subteams();
+    public Team withSubteams(Subteams subteams) {
         if (subteams != null) {
-            this.subteams.setAll(subteams);
+            this.subteams.setAll(subteams.getUnmodifiableList());
         }
         return this;
     }
