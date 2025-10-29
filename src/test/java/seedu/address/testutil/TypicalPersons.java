@@ -91,8 +91,16 @@ public class TypicalPersons {
             .withoutTags().build();
     public static final Person IDA = new PersonBuilder()
             .withId(8)
-            .withName("Ida Mueller")
+            .withName("Ida")
             .withPhone("8482131")
+            .withEmail("hans@example.com")
+            .withGitHubUsername("@ida09")
+            .withAddress("chicago ave")
+            .withoutTags().build();
+    public static final Person IDAsecond = new PersonBuilder()
+            .withId(9)
+            .withName("Idaline Whatever")
+            .withPhone("2132321")
             .withEmail("hans@example.com")
             .withGitHubUsername("@ida09")
             .withAddress("chicago ave")

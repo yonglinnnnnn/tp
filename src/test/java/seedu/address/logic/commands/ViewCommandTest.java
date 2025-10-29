@@ -8,6 +8,8 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.CARL;
 import static seedu.address.testutil.TypicalPersons.ELLE;
 import static seedu.address.testutil.TypicalPersons.FIONA;
+import static seedu.address.testutil.TypicalPersons.IDA;
+import static seedu.address.testutil.TypicalPersons.IDAsecond;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
@@ -75,13 +77,25 @@ public class ViewCommandTest {
     }
 
     @Test
-    public void execute_partialKeywords_multiplePersonsFound() {
+    public void execute_partialKeywords_PersonsFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
         NameContainsKeywordsPredicate predicate = preparePredicate("Ell");
         ViewCommand command = new ViewCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(ELLE), model.getFilteredPersonList());
+    }
+
+    @Test
+    public void execute_orderingCheckKeywords_multiplePersonsFound() {
+        model.addPerson(IDA);
+        model.addPerson(IDAsecond);
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2);
+        NameContainsKeywordsPredicate predicate = preparePredicate("Ida");
+        ViewCommand command = new ViewCommand(predicate);
+        CommandResult message = command.execute(model);
+        assertEquals(expectedMessage, message.getFeedbackToUser());
+        assertEquals(Arrays.asList(IDA, IDAsecond), model.getFilteredPersonList());
     }
 
     @Test
