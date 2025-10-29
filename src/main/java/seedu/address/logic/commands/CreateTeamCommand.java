@@ -62,9 +62,6 @@ public class CreateTeamCommand extends Command {
             throw new CommandException(e.getMessage());
         }
 
-        String id = String.format("T%04d", nextId++);
-        Team toAdd = new Team(id, validatedName);
-
         List<Person> persons = model.getFilteredPersonList();
         Optional<Person> leaderOpt = persons.stream()
                 .filter(p -> leaderPersonId.equals(p.id()))
@@ -73,10 +70,15 @@ public class CreateTeamCommand extends Command {
             throw new CommandException(String.format(MESSAGE_LEADER_NOT_FOUND, leaderPersonId));
         }
 
+        String id = String.format("T%04d", nextId++);
+        Team toAdd = new Team(id, validatedName);
+
         toAdd.withLeader(leaderOpt.get().id());
         updateLeaderPersonDetails(model, leaderOpt, id);
 
         if (model.hasTeam(toAdd)) {
+            // revert id increment
+            nextId--;
             throw new CommandException(MESSAGE_DUPLICATE_TEAM);
         }
 
@@ -84,6 +86,8 @@ public class CreateTeamCommand extends Command {
         boolean nameDuplicate = ab.getTeamList().stream()
                 .anyMatch(t -> t.getTeamName().equals(toAdd.getTeamName()));
         if (nameDuplicate) {
+            // revert id increment
+            nextId--;
             throw new CommandException(MESSAGE_DUPLICATE_TEAM);
         }
 
@@ -101,6 +105,14 @@ public class CreateTeamCommand extends Command {
         } catch (PersonNotFoundException e) {
             throw new CommandException("Failed to update Leader's teams: leader no longer exists");
         }
+    }
+
+    /**
+     * Sets the next ID based on the highest existing ID in the team list.
+     * Should be called when the application starts.
+     */
+    public static void setNextId(long id) {
+        nextId = id;
     }
 
     @Override
