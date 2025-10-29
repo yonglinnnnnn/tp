@@ -13,7 +13,6 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
-import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -30,7 +29,7 @@ public class TagCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_addSingleTagUnfilteredList_success() throws Exception {
+    public void execute_addSingleTagUnfilteredList_success() {
         Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         String employeeId = personToTag.id();
         Set<Tag> tagsToAdd = new HashSet<>();
@@ -52,7 +51,7 @@ public class TagCommandTest {
     }
 
     @Test
-    public void execute_addMultipleTagsUnfilteredList_success() throws Exception {
+    public void execute_addMultipleTagsUnfilteredList_success() {
         Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         String employeeId = personToTag.id();
         Set<Tag> tagsToAdd = new HashSet<>();
@@ -76,7 +75,7 @@ public class TagCommandTest {
     }
 
     @Test
-    public void execute_addDuplicateTag_success() throws CommandException {
+    public void execute_addDuplicateTag_success() {
         Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
         String employeeId = personToTag.id();
 
@@ -106,7 +105,7 @@ public class TagCommandTest {
     }
 
     @Test
-    public void execute_invalidEmployeeId_failure() throws Exception {
+    public void execute_invalidEmployeeId_failure() {
         Set<Tag> tagsToAdd = new HashSet<>();
         tagsToAdd.add(new Tag("tag"));
         TagCommand tagCommand = new TagCommand("E9999", tagsToAdd);
@@ -115,7 +114,76 @@ public class TagCommandTest {
     }
 
     @Test
-    public void equals() throws Exception {
+    public void execute_addHyphenatedTag_success() {
+        Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
+        String employeeId = personToTag.id();
+        Set<Tag> tagsToAdd = new HashSet<>();
+        tagsToAdd.add(new Tag("likes-boardgames"));
+
+        TagCommand tagCommand = new TagCommand(employeeId, tagsToAdd);
+
+        Set<Tag> updatedTags = new HashSet<>(personToTag.tags());
+        updatedTags.addAll(tagsToAdd);
+        Person taggedPerson = new PersonBuilder(personToTag, true).withTags(
+                updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
+
+        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToTag, taggedPerson);
+
+        assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_addMultipleHyphenatedTags_success() {
+        Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
+        String employeeId = personToTag.id();
+        Set<Tag> tagsToAdd = new HashSet<>();
+        tagsToAdd.add(new Tag("senior-dev"));
+        tagsToAdd.add(new Tag("team-lead"));
+        tagsToAdd.add(new Tag("full-stack"));
+
+        TagCommand tagCommand = new TagCommand(employeeId, tagsToAdd);
+
+        Set<Tag> updatedTags = new HashSet<>(personToTag.tags());
+        updatedTags.addAll(tagsToAdd);
+        Person taggedPerson = new PersonBuilder(personToTag, true).withTags(
+                updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
+
+        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToTag, taggedPerson);
+
+        assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_add20CharacterTag_success() {
+        Person personToTag = model.getFilteredPersonList().get(INDEX_FIRST_PERSON);
+        String employeeId = personToTag.id();
+        Set<Tag> tagsToAdd = new HashSet<>();
+        tagsToAdd.add(new Tag("a1234567890123456789")); // Exactly 20 chars
+
+        TagCommand tagCommand = new TagCommand(employeeId, tagsToAdd);
+
+        Set<Tag> updatedTags = new HashSet<>(personToTag.tags());
+        updatedTags.addAll(tagsToAdd);
+        Person taggedPerson = new PersonBuilder(personToTag, true).withTags(
+                updatedTags.stream().map(tag -> tag.tagName).toArray(String[]::new)).build();
+
+        String expectedMessage = String.format(TagCommand.MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToTag, taggedPerson);
+
+        assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
+    }
+
+
+    @Test
+    public void equals() {
         Set<Tag> tagsFirst = new HashSet<>();
         tagsFirst.add(new Tag("first"));
         Set<Tag> tagsSecond = new HashSet<>();
@@ -142,7 +210,7 @@ public class TagCommandTest {
     }
 
     @Test
-    public void toStringMethod() throws Exception {
+    public void toStringMethod() {
         String employeeId = "E1001";
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("friend"));
