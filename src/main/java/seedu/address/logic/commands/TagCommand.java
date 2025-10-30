@@ -6,6 +6,7 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -59,7 +60,11 @@ public class TagCommand extends Command {
 
         model.setPerson(personToTag, taggedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_TAG_SUCCESS, Messages.format(taggedPerson)));
+        return new CommandResult(String.format(MESSAGE_TAG_SUCCESS,
+                Messages.format(taggedPerson),
+                tagsToAdd.stream()
+                        .map(tag -> tag.tagName)
+                        .collect(Collectors.joining(", "))));
     }
 
     /**

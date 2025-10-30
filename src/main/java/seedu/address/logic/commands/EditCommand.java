@@ -160,9 +160,9 @@ public class EditCommand extends Command {
             setEmail(toCopy.email);
             setAddress(toCopy.address);
             setGitHubUsername(toCopy.gitHubUsername);
-            setSalary(toCopy.salary);
             setTeamIds(toCopy.teamIds);
             setTags(toCopy.tags);
+            setSalary(toCopy.salary);
         }
 
         /**
@@ -212,14 +212,6 @@ public class EditCommand extends Command {
             return Optional.ofNullable(gitHubUsername);
         }
 
-        public void setSalary(Salary salary) {
-            this.salary = salary;
-        }
-
-        public Optional<Salary> getSalary() {
-            return Optional.ofNullable(salary);
-        }
-
         public void setTeamIds(Set<String> teamIds) {
             this.teamIds = (teamIds != null) ? new HashSet<>(teamIds) : null;
         }
@@ -243,6 +235,22 @@ public class EditCommand extends Command {
          */
         public Optional<Set<Tag>> getTags() {
             return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
+        }
+
+        /**
+         * Sets {@code salary} to this object's {@code salary}.
+         * @param salary salary to set
+         */
+        public void setSalary(Salary salary) {
+            this.salary = salary;
+        }
+
+        /**
+        * Returns the salary of this person.
+        * Returns {@code Optional#empty()} if {@code salary} is null.
+        */
+        public Optional<Salary> getSalary() {
+            return Optional.ofNullable(salary);
         }
 
         @Override
