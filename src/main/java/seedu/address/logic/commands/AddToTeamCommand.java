@@ -60,9 +60,8 @@ public class AddToTeamCommand extends Command {
 
         // create edited team copy with the member added
         Team edited = new Team(team.getId(), team.getTeamName());
-        for (String subteamId : team.getSubteams().getUnmodifiableList()) {
-            edited.addToSubteam(subteamId);
-        }
+        edited.setParentTeamId(team.getParentTeamId());
+        edited.withSubteams(team.getSubteams());
         List<String> newMembers = new ArrayList<>(team.getMembers());
 
         updateSelectedPerson(model, person, newMembers, edited);

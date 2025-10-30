@@ -124,8 +124,14 @@ public class DeleteTeamCommand extends Command {
         editedParent.withMembers(new ArrayList<>(potentialParent.getMembers()));
 
         // copy subteams excluding the deleted team
-        List<String> newSubteamsList = potentialParent.getSubteams().getUnmodifiableList();
-        newSubteamsList.removeIf(st -> Objects.equals(st, teamId));
+        List<String> oldSubteamsList = potentialParent.getSubteams().getUnmodifiableList();
+
+        List<String> newSubteamsList = new ArrayList<>();
+        for (String id : oldSubteamsList) {
+            if (!Objects.equals(id, teamId)) {
+                newSubteamsList.add(id);
+            }
+        }
         editedParent.withSubteams(new Subteams(newSubteamsList));
 
         // preserve leader if still valid
