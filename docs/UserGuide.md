@@ -4,9 +4,9 @@
   pageNav: 3
 ---
 
-# AB-3 User Guide
+# Henri User Guide
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a  Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+Henri is a **desktop app for managing contacts, optimized for use via a  Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, Henri can get your contact management tasks done faster than traditional GUI apps.
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -133,13 +133,36 @@ Examples:
 *  `edit 2 -name Betsy Crower -tag ` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
 ### Creating a team: `create-team`
-TODO
+Adds a team to the address book.
+
+Format: `create-team [TEAM_NAME] [TEAM_LEADER_ID]`
+
+Example:
+* `create-team Systems E1001` creates a team named `Systems` with the person having employee ID `E1001` as the team leader.
 
 ### Adding members to a team: `add-to-team`
-TODO
+Adds a peron to an existing team in the address book.
+
+Format: `add-to-team [TEAM_ID] [MEMBER_ID]`
+
+Example:
+* `add-to-team T0001 E1002` adds the person with employee ID `E1002` to the team with team ID `T0001`.
+
+Exceptions:
+* If the team ID or member ID does not exist, the command will fail with an error message.
 
 ### Removing members from a team: `remove-from-team`
-TODO
+Remove a person from an existing team in the address book.
+
+Format: `remove-from-team [TEAM_ID] [MEMBER_ID]`
+
+Example:
+* `remove-from-team T0001 E1002` removes the person with employee ID `E1002` from the team with team ID `T0001`.
+
+Exceptions:
+* If the member to be removed is the team leader, the command will fail with an error message.
+* If the member to be removed is not part of the team, the command will fail with an error message.
+* If the team ID or member ID does not exist, the command will fail with an error message.
 
 ### Set a team as a subteam of another team: `set-subteam`
 
@@ -149,22 +172,43 @@ The subteam must also not already contain the parent team as a subteam (directly
 
 Format: `set-subteam PARENT_TEAM_ID SUBTEAM_ID`
 
-### Locating persons by name: `find`
+### Deleting a team `delete-team`
+Deletes an existing team from the address book.
+
+Format: `delete-team TEAM_ID`
+
+Example:
+* `delete-team T0001` deletes the team with team ID `T0001`.
+
+Exceptions:
+* If the team ID does not exist, the command will fail with an error message.
+* If the team to be deleted has subteams, the command will fail with an error message.
+
+Format: `remove-team TEAM_ID`
+
+### Locating persons by name: `view`
 
 Finds persons whose names contain any of the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `view KEYWORD [MORE_KEYWORDS]`
 
 * The search is case-insensitive. e.g `hans` will match `Hans`
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 * Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
+* Partial matches are allowed. e.g. `ann` will match `Annabel` and `Joanna`
 * Persons matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* Ordering of result is based on keyword. 
+  * sorts filtered persons by:
+    1) Number of matched keywords (more matches first)
+    2) Closeness of match (exact > word > substring)
+    3) Order of keyword appearance in the input
+    4) Last by name in case-insensitive alphabetical order
+
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
+* `view John` returns `john` and `John Doe`
+* `view alex david` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
 ### Deleting a person : `delete`
@@ -179,7 +223,7 @@ Format: `delete INDEX`
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `view Betsy` followed by `delete 1` deletes the 1st person in the results of the `view` command.
 
 ### Clearing all entries : `clear`
 
@@ -250,7 +294,11 @@ Action     | Format, Examples
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [-name NAME] [-hp PHONE_NUMBER] [-em EMAIL] [-addr ADDRESS] [-tag TAG]…​`<br> e.g.,`edit 2 -name James Lee -em jameslee@example.com`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**View**   | `view KEYWORD [MORE_KEYWORDS]`<br> e.g., `view James Jake`
+**create-team** | `create-team [TEAM_NAME] [TEAM_LEADER_ID]`<br> e.g., `create-team DevTeam E1001`
+**delete-team** | `delete-team TEAM_ID`<br> e.g., `delete-team T0001`
+**add-to-team** | `add-to-team [TEAM_ID] [MEMBER_ID]`<br> e.g., `add-to-team T0001 E1002`
+**remove-from-team** | `remove-from-team [TEAM_ID] [MEMBER_ID]`<br> e.g., `remove-from-team T0001 E1002`
 **Import** | `import FILENAME.json`<br> e.g., `import oldContacts.json`
 **List**   | `list`
 **Help**   | `help`
