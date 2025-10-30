@@ -277,6 +277,47 @@ Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `view Betsy` followed by `delete 1` deletes the 1st person in the results of the `view` command.
 
+### Setting a person's salary: `set-salary`
+
+Sets the salary of the specified person in the address book.
+
+Format: `set-salary EMPLOYEE_ID SALARY`
+
+* Sets the salary of the person with the specified `EMPLOYEE_ID` to the specified `SALARY`.
+* The employee ID starts with "E" and is displayed next to the name in the displayed person list.
+* The salary must be a positive number representing the **monthly salary in dollars**.
+* The salary may contain decimal places, but it will be rounded to two decimal places.
+
+Examples:
+* `set-salary E1001 1000` sets the salary of the person with the ID of "E1001" to *$1000 / month*.
+* `set-salary E2050 3550.61` sets the salary of the person with the ID of "E2050" to *$3550.61 / month*.
+* `set-salary E1001 4000.247` sets the salary of the person with the ID of "E1001" to *$4000.25 / month*.
+
+### Sorting persons: `sort`
+
+Sorts the persons in the address book by the specified fields.
+
+Format: `sort -FIELD [-MORE_FIELDS]`
+
+* Sorts the persons in the address book by the specified fields.
+* The fields are case-sensitive and must be from the following:
+  * `name` - sorts by name in alphabetical order
+  * `hp` - sorts by phone number in numerical order
+  * `em` - sorts by email address in alphabetical order
+  * `addr` - sorts by address in alphabetical order
+  * `salary` - sorts by salary in numerical order
+  * `gh` - sorts by GitHub username in alphabetical order
+  * `id` - sorts by employee ID in numerical order
+* The fields can be specified multiple times, although this should not be necessary for any use case.
+* The fields can be specified in any order. The order of the fields determines their priority in comparing two persons.
+* The default sorting is by name in alphabetical order.
+* The persons are always sorted in ascending order.
+
+Examples:
+* `sort -name -salary` sorts the persons in the address book by name in alphabetical order, then by salary in numerical order.
+* `sort -salary -gh` sorts the persons in the address book by salary in numerical order, then by GitHub username in alphabetical order.
+* `sort` sorts the persons in the address book by name in alphabetical order.
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
