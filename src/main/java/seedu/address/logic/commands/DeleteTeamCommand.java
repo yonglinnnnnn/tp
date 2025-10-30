@@ -13,6 +13,7 @@ import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.team.Subteams;
 import seedu.address.model.team.Team;
 
 /**
@@ -61,7 +62,7 @@ public class DeleteTeamCommand extends Command {
         }
 
         // Block deletion if team has subteams
-        if (!teamToDelete.getSubteams().isEmpty()) {
+        if (!teamToDelete.getSubteams().getUnmodifiableList().isEmpty()) {
             throw new CommandException(String.format(MESSAGE_HAS_SUBTEAMS, teamId));
         }
 
@@ -110,8 +111,9 @@ public class DeleteTeamCommand extends Command {
      * @return edited copy with the subteam removed, or {@code null}
      */
     private Team getEditedParentDetails(Team potentialParent) {
-        boolean contains = potentialParent.getSubteams().stream()
-                .anyMatch(st -> Objects.equals(st.getId(), teamId));
+        boolean contains = potentialParent.getSubteams()
+                .getUnmodifiableList().stream()
+                .anyMatch(st -> Objects.equals(st, teamId));
         if (!contains) {
             return null;
         }
@@ -122,9 +124,15 @@ public class DeleteTeamCommand extends Command {
         editedParent.withMembers(new ArrayList<>(potentialParent.getMembers()));
 
         // copy subteams excluding the deleted team
-        List<Team> newSubteams = new ArrayList<>(potentialParent.getSubteams());
-        newSubteams.removeIf(st -> Objects.equals(st.getId(), teamId));
-        editedParent.withSubteams(newSubteams);
+        List<String> oldSubteamsList = potentialParent.getSubteams().getUnmodifiableList();
+
+        List<String> newSubteamsList = new ArrayList<>();
+        for (String id : oldSubteamsList) {
+            if (!Objects.equals(id, teamId)) {
+                newSubteamsList.add(id);
+            }
+        }
+        editedParent.withSubteams(new Subteams(newSubteamsList));
 
         // preserve leader if still valid
         if (potentialParent.getLeaderId() != null

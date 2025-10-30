@@ -12,8 +12,10 @@ import static seedu.address.testutil.TypicalTeams.QA;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.AddressBook;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.exceptions.InvalidSubteamNesting;
 import seedu.address.testutil.PersonBuilder;
@@ -26,6 +28,13 @@ import seedu.address.testutil.TypicalPersons;
  * immutability of returned collections and basic identity semantics.
  */
 public class TeamTest {
+    private AddressBook ab;
+
+    @BeforeEach
+    public void setUp() {
+        ab = new AddressBook();
+        Subteams.setAddressBook(ab);
+    }
 
     @Test
     public void changeLeader_addsLeaderAndMemberIfAbsent() {
@@ -85,20 +94,22 @@ public class TeamTest {
     @Test
     public void addToSubteam_addingSelf_throwsInvalidSubteamNestingException() {
         Team t = new Team("T2000", new TeamName("TestTeam"));
-        assertThrows(InvalidSubteamNesting.class, () -> t.addToSubteam(t));
+        assertThrows(InvalidSubteamNesting.class, () -> t.addToSubteam(t.getId()));
     }
 
     @Test
     public void addToSubteam_cyclicTeams_throwsInvalidSubteamNestingException() {
         Team teamA = new Team("T0001", new TeamName("A"));
         Team teamB = new Team("T0003", new TeamName("B"));
+        ab.addTeam(teamA);
+        ab.addTeam(teamB);
         assertThrows(InvalidSubteamNesting.class, () -> {
-            Team at = teamA.addToSubteam(teamB);
-            at.addToSubteam(teamB);
+            Team at = teamA.addToSubteam(teamB.getId());
+            at.addToSubteam(teamB.getId());
         });
         assertThrows(InvalidSubteamNesting.class, () -> {
-            teamB.addToSubteam(teamA);
-            teamA.addToSubteam(teamB);
+            teamB.addToSubteam(teamA.getId());
+            teamA.addToSubteam(teamB.getId());
         });
     }
 

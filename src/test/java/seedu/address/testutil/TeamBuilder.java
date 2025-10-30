@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import seedu.address.model.team.Subteams;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamName;
 
@@ -20,7 +21,7 @@ public class TeamBuilder {
     private TeamName teamName;
     private List<String> members;
     private String leaderId;
-    private List<Team> subteams;
+    private Subteams subteams;
     private String parentTeamId;
 
     /**
@@ -31,7 +32,7 @@ public class TeamBuilder {
         this.teamName = new TeamName(DEFAULT_NAME);
         this.members = new ArrayList<>();
         this.leaderId = null;
-        this.subteams = new ArrayList<>();
+        this.subteams = null;
         this.parentTeamId = null;
     }
 
@@ -46,7 +47,7 @@ public class TeamBuilder {
         this.teamName = teamToCopy.getTeamName();
         this.members = new ArrayList<>(teamToCopy.getMembers());
         this.leaderId = teamToCopy.getLeaderId();
-        this.subteams = new ArrayList<>(teamToCopy.getSubteams());
+        this.subteams = teamToCopy.getSubteams();
         this.parentTeamId = teamToCopy.getParentTeamId();
     }
 
@@ -136,8 +137,8 @@ public class TeamBuilder {
      * @param subteams the list of subteams to set
      * @return this builder
      */
-    public TeamBuilder withSubteams(List<Team> subteams) {
-        this.subteams = new ArrayList<>(subteams);
+    public TeamBuilder withSubteams(Subteams subteams) {
+        this.subteams = subteams;
         return this;
     }
 
@@ -148,7 +149,11 @@ public class TeamBuilder {
      * @return this builder
      */
     public TeamBuilder withSubteams(Team... subteams) {
-        this.subteams = new ArrayList<>(Arrays.asList(subteams));
+        Subteams list = new Subteams();
+        for (Team t : subteams) {
+            list.add(t.getId(), this.id);
+        }
+        this.subteams = list;
         return this;
     }
 
@@ -180,7 +185,7 @@ public class TeamBuilder {
         }
         // apply subteams and parent
         if (subteams != null) {
-            team.withSubteams(new ArrayList<>(subteams));
+            team.withSubteams(subteams);
         }
         if (parentTeamId != null) {
             team.withParentTeamId(parentTeamId);

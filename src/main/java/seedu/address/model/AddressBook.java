@@ -211,10 +211,6 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     @Override
     public ObservableList<Person> getPersonList() {
-        // Current Internal Code to check for changes
-        // (Due to not having UI implemented yet)
-        System.out.println(teams);
-        System.out.println(persons);
         return persons.asUnmodifiableObservableList();
     }
 
@@ -223,6 +219,13 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public ObservableList<Team> getTeamList() {
         return teams.asUnmodifiableObservableList();
+    }
+
+    /**
+     * Returns the organization hierarchy string in a Linux tree format.
+     */
+    public String getOrganizationHierarchyString() {
+        return teams.getHierarchyString();
     }
 
     @Override

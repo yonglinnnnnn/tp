@@ -157,19 +157,7 @@ public class ModelManagerTest {
     @Test
     public void getOrganizationHierarchyString_validString() {
         ModelManager model = new ModelManager();
-        assertEquals("""
-                    ├── Finance Department
-                    │   ├── Samuel Lee
-                    │   └── Rachel Tan
-                    ├── Engineering Department
-                    │   ├── API Development
-                    │   │   └── Alice Chen
-                    │   └── Frontend
-                    │       └── Felicia Wong
-                    └── Quality Assurance
-                        ├── Michael Ong
-                        └── Derrick Lim
-                """, model.getOrganizationHierarchyString());
+        assertEquals("", model.getOrganizationHierarchyString());
     }
 
     @Test

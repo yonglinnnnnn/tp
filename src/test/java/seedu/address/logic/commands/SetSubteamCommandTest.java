@@ -33,7 +33,7 @@ class SetSubteamCommandTest {
             throw new AssertionError("Execution of valid SetSubteamCommand should not fail.", e);
         }
 
-        assertEquals(String.format(SetSubteamCommand.MESSAGE_SUCCESS, INDEX_SECOND, INDEX_FIRST),
+        assertEquals(String.format(SetSubteamCommand.MESSAGE_SUCCESS, INDEX_FIRST, INDEX_SECOND),
                 result.getFeedbackToUser());
     }
 

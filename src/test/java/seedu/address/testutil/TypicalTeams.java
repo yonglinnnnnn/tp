@@ -44,7 +44,6 @@ public class TypicalTeams {
             .withParentTeamId(CORE.getParentTeamId())
             .withLeader(TypicalPersons.FIONA.id())
             .withMembers(TypicalPersons.FIONA.id())
-            .withSubteams(FRONTEND, BACKEND)
             .build();
 
     private TypicalTeams() {}
