@@ -4,7 +4,7 @@
   pageNav: 3
 ---
 
-# AB-3 Developer Guide
+# Henri Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -35,7 +35,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -67,14 +67,13 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/ui/Ui.java)
 
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `OrganizationPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
-
+The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/resources/view/MainWindow.fxml)
 The `UI` component,
 
 * executes user commands using the `Logic` component.
@@ -84,7 +83,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -116,7 +115,7 @@ How the parsing works:
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/model/Model.java)
 
 <puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
@@ -139,7 +138,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/storage/Storage.java)
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
@@ -158,102 +157,12 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Undo/redo feature
+### \[Proposed\] Import feature enhancement
 
-#### Proposed Implementation
+{To explain how import feature is to be added}
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
-
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
-
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
-
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
-
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
-
-<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
-
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
-
-<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
-
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
-
-<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
-
-<box type="info" seamless>
-
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
-
-</box>
-
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
-
-<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
-
-
-<box type="info" seamless>
-
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
-
-</box>
-
-The following sequence diagram shows how an undo operation goes through the `Logic` component:
-
-<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
-
-<box type="info" seamless>
-
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
-
-</box>
-
-Similarly, how an undo operation goes through the `Model` component is shown below:
-
-<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
-
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
-
-<box type="info" seamless>
-
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
-
-</box>
-
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
-
-<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
-
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
-
-<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
-
-The following activity diagram summarizes what happens when a user executes a new command:
-
-<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
-
-#### Design considerations:
-
-**Aspect: How undo & redo executes:**
-
-* **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
-
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
+### \[\] Customisable command words to fit user preference
+{To explain how command word will be customisable}
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -286,24 +195,124 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​          | I want to …​                                                                      | So that I can…​                                                    |
-|----------|------------------|-----------------------------------------------------------------------------------|--------------------------------------------------------------------|
-| `* * *`  | HR administrator | see a company-level overview of all the employees and the departments they are in | have a better idea of the manpower allocation.                     |
-| `* * *`  | HR administrator | add people’s contact to my address book                                           | add them when they join the company                                |
-| `* * *`  | HR administrator | delete people’s contact to my address book                                        | remove them when they leave the company                            |
-| `* * *`  | HR administrator | directly export my saved contacts                                                 | save them as a backup                                              |
-| `* * *`  | HR administrator | create custom tags for employee roles or teams                                    | quickly filter contacts based on their job function                |
-| `* * *`  | HR administrator | see employee details including salary                                             | find out more details about them                                   |
-| `* * *`  | HR administrator | the application to provide feedback when actions are completed                    | can confirm my actions were properly executed                      |
-| `* * *`  | HR administrator | search developer details by a project team's name                                 | quickly find out which developers are allocated to a specific team |
-| `* * *`  | HR administrator | use contact management apps based on the command line                             | appear tech-savvy in my work style                                 |
-| `* * *`  | HR administrator | update contact information easily                                                 | keep employees' data up to date                                    |
-
-*{More to be added}*
+| Priority | As a …​                    | I want to …​                                                                      | So that I can…​                                                        |
+|----------|----------------------------|-----------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| `* * *`  | HR administrator           | add people’s contact to my address book                                           | add them when they join the company                                    |
+| `* * *`  | HR administrator           | delete people’s contact to my address book                                        | remove them when they leave the company                                |
+| `* * *`  | HR administrator           | edit people’s contact in my address book                                          | update their information                                               |
+| `* * *`  | HR administrator           | directly export my saved contacts                                                 | save them as a backup                                                  |
+| `* * *`  | HR administrator           | create custom tags for employee roles                                             | easily identify contacts based on their job function                   |
+| `* * *`  | HR administrator           | remove custom tags for employee roles                                             | remove irrelevant tags from the employee                               |
+| `* * *`  | HR administrator           | see employee details including salary                                             | find out more details about them                                       |
+| `* * *`  | HR administrator           | view feedback when actions are completed                                          | can confirm my actions were properly executed                          |
+| `* * *`  | HR administrator           | use contact management apps based on the command line                             | appear tech-savvy in my work style                                     |
+| `* * *`  | HR administrator           | update contact information easily                                                 | keep employees' data up to date                                        |
+| `* * *`  | HR administrator           | create team                                                                       | organise employees into d teams                                        |
+| `* * *`  | HR administrator           | delete team                                                                       | delete a useless team that is no longer used                           |
+| `* * *`  | HR administrator           | add employee to team                                                              | add an employee to their respective team                               |
+| `* * *`  | HR administrator           | remove employee from team                                                         | keep the list of team members updated                                  |
+| `* * *`  | HR administrator           | view audit log of past actions                                                    | keep track of the actions that change the details of the address book. |
+| `* * *`  | HR administrator           | search for specific employee                                                      | to get the specific employee details                                   |
+| `* * *`  | HR administrator           | update contact information easily                                                 | keep employees' data up to date                                        |
+| `* * *`  | forgetful HR administrator | have some way to see available commands                                           | recall what are the commands I forgot                                  |
+| `* * *`  | HR administrator           | clean the address book                                                            | reset it to clean state                                                |
+| `* * *`  | HR administrator           | update contact information easily                                                 | keep employees' data up to date                                        |
+| `* * *`  | HR administrator           | update contact information easily                                                 | keep employees' data up to date                                        |
+| `* *`    | HR administrator           | import users from another address book                                            | convert from one address book to another easily                        |
+| `* *`    | HR administrator           | sort the employee based on specific fields                                        | see the specifc information I want near the top                        |
+| `* *`    | HR administrator           | set sub teams to teams                                                            | to indicate the sub departments                                        |
+| `* * `   | HR administrator           | see a company-level overview of all the employees and the departments they are in | have a better idea of the manpower allocation.                         |
 
 ### Use cases
 
 (For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+
+**Use case: Add a person**
+
+**MSS**
+
+1. User requests to add a new person with specified details (name, phone, email, GitHub username, etc.)
+2. System validates the input 
+3. System adds the person to the address book 
+4. System displays a success message with the added person's details
+   Use case ends.
+
+**Extensions:**
+* 2a. Required fields are missing.
+  * 2a1. System shows an error message indicating which fields are required.
+    Use case ends.
+
+* 2b. The email format is invalid. 
+  * 2b1. System shows an error message about the invalid email format.
+    Use case ends.
+
+* 2c. The GitHub username already exists. 
+  * 2c1. System shows an error message indicating duplicate GitHub username.
+    Use case ends.
+
+* 2d. The phone number format is invalid. 
+  * 2d1. System shows an error message about the invalid phone format.
+    Use case ends.
+
+**Use case: Add employee to team**
+
+**MSS**
+1. User requests to add a person to a team by specifying employee ID and team name 
+2. System validates that both the person and team exist 
+3. System adds the person to the specified team 
+4. System displays a success message
+   Use case ends.
+
+**Extensions**
+* 2a. The employee ID does not exist.
+  * 2a1. System shows an error message.
+    Use case ends. 
+* 2b. The team name does not exist. 
+  * 2b1. System shows an error message.
+    Use case ends. 
+* 2c. The person is already in the team. 
+  * 2c1. System shows an error message indicating the person is already a team member.
+    Use case ends.
+
+**Use case: View audit log**
+
+**MSS**
+1. User requests to view the audit log 
+2. System displays a list of all recorded actions with timestamps, user, and details of changes made 
+3. User reviews the audit history
+   Use case ends.
+
+**Extensions**
+* 1a. No actions have been recorded yet.
+  * 1a1. System shows an empty audit log or a message indicating no history is available.
+    Use case ends.
+
+**Use case: Clear address book**
+
+**MSS** 
+1. User requests to clear all data from the address book 
+2. System prompts for confirmation 
+3. User confirms the action 
+4. System clears all persons and teams from the address book 
+5. System displays a success message
+   Use case ends.
+
+**Use case: Create team**
+
+**MSS**
+1. User requests to create a new team with a specified team name 
+2. System validates the team name 
+3. System creates the team 
+4. System displays a success message
+   Use case ends.
+
+**Extensions**
+* 2a. The team name already exists. 
+  * 2a1. System shows an error message indicating duplicate team name.
+    Use case ends. 
+* 2b. The team name format is invalid. 
+  * 2b1. System shows an error message about the invalid format.
+    Use case ends.
 
 **Use case: Delete a person**
 
@@ -314,77 +323,196 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3.  User finds the person's ID
 4.  User requests to delete a specific person in the list by ID
 5.  System deletes the person
-
     Use case ends.
 
 **Extensions**
 
 * 2a. The list is empty.
-
   Use case ends.
-
 * 3a. The given ID is invalid.
-
     * 3a1. System shows an error message.
-
       Use case resumes at step 2.
 
-**Use case: Query details of a person**
+**Use case: Delete team**
 
-1.  User requests to list persons
-2.  System shows a list of persons
-3.  User finds the person's ID
-4.  User requests to display details of a specific person in the list by ID
-5.  System shows the details of the person
+**MSS**
+1. User requests to delete a team by specifying team name 
+2. System validates that the team exists 
+3. System removes the team and all its associations 
+4. System displays a success message
+   Use case ends.
 
+**Extensions**
+* 2a. The team name does not exist. 
+  * 2a1. System shows an error message.
+    Use case ends. 
+* 2b. The team has members. 
+  * 2b1. System shows a warning and asks for confirmation. 
+  * 2b2. User confirms deletion. 
+  * 2b3. System removes all members from the team and deletes the team.
+    Use case resumes at step 4.
+
+**Use case: Edit details of a person**
+
+**MSS** 
+1. User requests to list persons 
+2. System shows a list of persons 
+3. User finds the person's ID 
+4. User requests to update details of a specific person in the list by ID 
+5. System shows the updated details of the person
     Use case ends.
 
 **Extensions**
-
 * 2a. The list is empty.
-
   Use case ends.
-
 * 3a. The given ID is invalid.
-
     * 3a1. System shows an error message.
-
       Use case resumes at step 2.
 
-**Use case: Finds all employees' details under a project team**
+**Use case: Exit application**
 
-1.  User requests to list persons allocated under a project team by team name
-2.  System shows a list of persons with their details
-
-    Use case ends.
-
-**Extensions**
-
-* 2a. The team name does not exist.
-
-  Use case ends.
-
-**Use case: Update details of a person**
-
-1.  User requests to list persons
-2.  System shows a list of persons
-3.  User finds the person's ID
-4.  User requests to update details of a specific person in the list by ID
-5.  System shows the updated details of the person
-
-    Use case ends.
+**MSS**
+1. User requests to exit the application 
+2. System saves all data 
+3. System closes the application
+   Use case ends.
 
 **Extensions**
+* 2a. There are unsaved changes. 
+  * 2a1. System saves the changes before closing.
+    Use case resumes at step 3.
 
-* 2a. The list is empty.
+**Use case: Display help**
 
-  Use case ends.
+**MSS**
+1. User requests help information 
+2. System displays a help window with available commands and their usage 
+3. User reviews the help information
+   Use case ends.
 
-* 3a. The given ID is invalid.
+**Extensions**
+* 1a. User specifies a specific command to get help for. 
+  * 1a1. System displays detailed help for that specific command.
+    Use case ends.
 
-    * 3a1. System shows an error message.
+**Use case: Import contacts**
 
-      Use case resumes at step 2.
+**MSS**
+1. User requests to import contacts from a file by specifying file path 
+2. System validates the file format 
+3. System reads the file and imports all valid contacts 
+4. System displays a summary of imported contacts and any errors encountered
+   Use case ends.
+
+**Extensions**
+* 2a. The file does not exist. 
+  * 2a1. System shows an error message.
+    Use case ends. 
+* 2b. The file format is invalid or corrupted. 
+  * 2b1. System shows an error message about the invalid format.
+    Use case ends. 
+* 3a. Some contacts in the file have invalid data. 
+  * 3a1. System skips invalid contacts and imports valid ones. 
+  * 3a2. System shows a summary of skipped contacts with reasons.
+    Use case resumes at step 4. 
+* 3b. Some contacts already exist (duplicate GitHub usernames). 
+  * 3b1. System skips duplicate contacts. 
+  * 3b2. System shows a summary of skipped duplicates.
+    Use case resumes at step 4.
+
+**Use case: List persons**
+
+**MSS**
+1. User requests to list all persons 
+2. System displays all persons in the address book with their basic information
+   Use case ends.
+
+**Extensions**
+* 1a. The address book is empty. 
+  * 1a1. System shows a message indicating no persons found.
+    Use case ends.
+
+**Use case: Remove employee from team**
+
+**MSS**
+
+1. User requests to remove a person from a team by specifying employee ID and team name 
+2. System validates that both the person and team exist 
+3. System validates that the person is a member of the team 
+4. System removes the person from the team 
+5. System displays a success message
+   Use case ends.
+
+**Extensions**
+* 2a. The employee ID does not exist. 
+  * 2a1. System shows an error message.
+    Use case ends. 
+* 2b. The team name does not exist. 
+  * 2b1. System shows an error message.
+    Use case ends. 
+* 3a. The person is not in the team. 
+  * 3a1. System shows an error message indicating the person is not a team member.
+    Use case ends.
+
+**Use case: Set employee salary**
+
+**MSS**
+1. User requests to set salary for a person by specifying employee ID and salary amount 
+2. System validates the employee ID exists 
+3. System validates the salary format 
+4. System updates the person's salary 
+5. System displays a success message with the updated salary
+   Use case ends.
+
+**Extensions**
+* 2a. The employee ID does not exist. 
+  * 2a1. System shows an error message.
+    Use case ends. 
+* 3a. The salary format is invalid (negative or non-numeric). 
+  * 3a1. System shows an error message about the invalid salary format.
+    Use case ends.
+
+**Use case: Set Subteam**
+
+**MSS**
+1. User requests to set a subteam relationship by specifying parent team and child team names 
+2. System validates that both teams exist 
+3. System validates that setting this relationship does not create a circular dependency 
+4. System sets the child team as a subteam of the parent team 
+5. System displays a success message
+   Use case ends.
+
+**Extensions**
+* 2a. The parent team does not exist. 
+  * 2a1. System shows an error message.
+    Use case ends. 
+* 2b. The child team does not exist. 
+  * 2b1. System shows an error message.
+    Use case ends. 
+* 3a. Setting this relationship would create a circular dependency. 
+  * 3a1. System shows an error message indicating circular dependency.
+    Use case ends. 
+* 3b. The child team is already a subteam of the parent team. 
+  * 3b1. System shows an error message indicating the relationship already exists.
+    Use case ends.
+
+**Use case: Sort persons**
+
+**MSS**
+1. User requests to sort persons by a specified field (name, salary, etc.)
+2. System validates the sort field 
+3. System sorts the persons list according to the specified field 
+4. System displays the sorted list
+   Use case ends.
+
+**Extensions**
+* 2a. The sort field is invalid. 
+  * 2a1. System shows an error message listing valid sort fields.
+    Use case ends. 
+* 3a. The address book is empty. 
+  * 3a1. System shows a message indicating no persons to sort.
+    Use case ends.
+
 
 **Use case: Add tags to a person**
 
@@ -397,22 +525,37 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     Use case ends.
 
 **Extensions**
-
 * 2a. The list is empty.
-
   Use case ends.
-
 * 3a. The given ID is invalid.
-
     * 3a1. System shows an error message.
-
       Use case resumes at step 2.
-
 * 4a. The tag already exists.
-
     * 4a1. System shows an error message.
-
       Use case resumes at step 2.
+
+**Use case: Remove tags from a person**
+1.  User requests to list persons
+2.  System shows a list of persons
+3.  User finds the person's ID
+4.  User requests to remove specific tags from the person by ID
+5.  System removes the specified tags from the person (case-insensitive matching)
+6.  System displays a success message listing removed tags
+    Use case ends.
+
+**Extensions**
+* 2a. The list is empty.
+  Use case ends.
+* 3a. The given ID is invalid.
+  * 3a1. System shows an error message.
+    Use case resumes at step 2. 
+* 5a. Some specified tags do not exist on the person. 
+  * 5a1. System removes only the existing tags. 
+  * 5a2. System displays a warning message listing tags that were not found.
+    Use case resumes at step 6. 
+* 5b. None of the specified tags exist on the person. 
+  * 5b1. System shows an error message indicating no tags were removed.
+    Use case ends.
 
 **Use case: Display company overview**
 
@@ -482,38 +625,466 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
 1. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
+   2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+## **Appendix: Instructions for manual testing**
 
-### Deleting a person
+Given below are instructions to test the app manually.
 
-1. Deleting a person while all persons are being shown
+<box type="info" seamless>
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+**Note:** These instructions only provide a starting point for testers to work on;
+testers are expected to do more *exploratory* testing.
 
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+</box>
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+### Launch and shutdown
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+1. Initial launch
 
-1. _{ more test cases …​ }_
+    1. Download the jar file and copy into an empty folder
+
+    2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+
+2. Saving window preferences
+
+    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+
+    2. Re-launch the app by double-clicking the jar file.<br>
+       Expected: The most recent window size and location is retained.
+
+### Add command
+
+1. Adding a person with all required fields
+
+    1. Test case: `add -name John Doe -hp 98765432 -em johnd@example.com -addr Woodalnds`<br>
+       Expected: New person is added to the list. Success message displays the added person's details including auto-generated employee ID.
+
+    2. Test case: `add -name Jane Smith -hp 87654321 -em janes@example.com -addr Woodlands -gh @JaneSmithy`<br>
+       Expected: New person is added with optional github field. Success message shows all details.
+
+2. Adding a person with missing required fields
+
+    1. Test case: `add -name John Doe -hp 98765432`<br>
+       Expected: No person is added. Error message indicates missing required fields (email and address).
+
+    2. Test case: `add`<br>
+       Expected: No person is added. Error message shows the correct command format.
+
+3. Adding a person with invalid fields
+
+    1. Test case: `add -name John Doe -hp invalid -em johnd@example.com -gh @johndoe`<br>
+       Expected: No person is added. Error message indicates invalid phone number format.
+
+    2. Test case: `add -name John Doe -hp 98765432 -em invalidemail -gh @johndoe`<br>
+       Expected: No person is added. Error message indicates invalid email format.
+
+
+### Add-to-team command
+
+1. Adding an employee to a team
+
+    1. Prerequisites: Person with ID E1001 exists and team "T9999" exists.
+
+    2. Test case: `add-to-team T9999 E1001`<br>
+       Expected: Person E1001 is added to the T9999 team. Success message confirms the addition.
+
+2. Adding an employee to a non-existent team
+
+    1. Prerequisites: Person with ID E1001 exists but team "T9999" does not exist.
+
+    2. Test case: `add-to-team T9999 E1001`<br>
+       Expected: No changes made. Error message indicates the team "T9999" does not exist.
+
+3. Adding a non-existent employee to a team
+
+    1. Prerequisites: Team "T9999" exists but no person with ID E1001 exists.
+
+    2. Test case: `add-to-team T9999 E1001`<br>
+       Expected: No changes made. Error message indicates the employee ID "E1001" does not exist.
+
+4. Adding an employee already in the team
+
+    1. Prerequisites: Person E1001 is already a member of team "T9999".
+
+    2. Test case: `add-to-team T9999 E1001`<br>
+       Expected: No changes made. Error message indicates the person is already in the team.
+
+### Audit command
+
+1. Viewing audit log with recorded actions
+
+    1. Prerequisites: Some actions have been performed (e.g., add, delete, edit).
+
+    2. Test case: `audit`<br>
+       Expected: Output feedback displays showing all recorded actions with timestamps and details.
+
+2. Viewing audit log with no recorded actions
+
+    1. Prerequisites: Fresh application start with no actions performed.
+
+    2. Test case: `audit`<br>
+       Expected: Output feedback displays with empty list or message indicating no history is available.
+
+### Clear command
+
+1. Clearing the address book
+
+    1. Prerequisites: Multiple persons and teams exist in the address book.
+
+    2. Test case: `clear`<br>
+       Expected: All persons and teams are removed from the address book. Success message confirms the address book has been cleared.
+
+2. Clearing an already empty address book
+
+    1. Prerequisites: Address book is empty.
+
+    2. Test case: `clear`<br>
+       Expected: Success message indicates the address book has been cleared (even though it was already empty).
+
+### Create-team command
+
+1. Creating a new team
+
+    1. Prerequisites: Team "Engineering" does not exist. Employee "E1001" exists.
+
+    2. Test case: `create-team Engineering E1001`<br>
+       Expected: New team "Engineering" is created. Success message confirms team creation.
+
+2. Creating a team with an existing name
+
+    1. Prerequisites: Team "Engineering" already exists. Employee "E1001" exists.
+
+    2. Test case: `create-team Engineering E1001`<br>
+       Expected: No team is created. Error message indicates duplicate team name.
+
+3. Creating a team with invalid format
+
+    1. Test case: `create-team 2312318`<br>
+       Expected: No team is created. Error message shows the correct command format.
+
+    2. Test case: `create-team`<br>
+       Expected: No team is created. Error message indicates team name cannot be empty.
+
+### Delete command
+
+1. Deleting a person by employee ID
+
+    1. Prerequisites: Person with ID E1001 exists in the list.
+
+    2. Test case: `delete E1001`<br>
+       Expected: Person E1001 is deleted from the list. Success message shows details of the deleted person.
+
+2. Deleting a non-existent person
+
+    1. Prerequisites: No person with ID E9999 exists.
+
+    2. Test case: `delete E9999`<br>
+       Expected: No person is deleted. Error message indicates the employee ID does not exist.
+
+3. Invalid delete command format
+
+    1. Test case: `delete`<br>
+       Expected: No person is deleted. Error message shows the correct command format.
+
+    2. Test case: `delete invalid`<br>
+       Expected: No person is deleted. Error message indicates invalid employee ID format.
+
+### Delete-team command
+
+1. Deleting a team
+
+    1. Prerequisites: Team "T0001" exists.
+
+    2. Test case: `delete-team T0001`<br>
+       Expected: Team "T0001" is deleted. Success message confirms deletion.
+
+2. Deleting a team with members
+
+    1. Prerequisites: Team "T0001" exists with members E1001 and E1002.
+
+    2. Test case: `delete-team T0001`<br>
+       Expected: Team "T0001" is deleted. Success message confirms deletion.
+
+3. Deleting a non-existent team
+
+    1. Prerequisites: Team "T9999" does not exist.
+
+    2. Test case: `delete-team T9999`<br>
+       Expected: No team is deleted. Error message indicates the team does not exist.
+
+### Edit command
+
+1. Editing a person's details
+
+    1. Prerequisites: Person with ID E1001 exists.
+
+    2. Test case: `edit E1001 -hp 91234567 -em newemail@example.com`<br>
+       Expected: Person E1001's phone and email are updated. Success message shows the updated person's details.
+
+2. Editing with no fields specified
+
+    1. Test case: `edit E1001`<br>
+       Expected: No changes made. Error message indicates at least one field to edit must be provided.
+
+3. Editing a non-existent person
+
+    1. Prerequisites: No person with ID E9999 exists.
+
+    2. Test case: `edit E9999 -hp 91234567`<br>
+       Expected: No person is edited. Error message indicates the employee ID does not exist.
+
+4. Editing with invalid field values
+
+    1. Test case: `edit E1001 -hp invalid`<br>
+       Expected: No changes made. Error message indicates invalid phone number format.
+
+### Exit command
+
+1. Exiting the application
+
+    1. Test case: `exit`<br>
+       Expected: Application saves all data and closes.
+
+### Help command
+
+1. Opening the help window
+
+    1. Test case: `help`<br>
+       Expected: Help window opens with link to user guide.
+
+### Import command
+
+1. Importing from a valid file
+
+    1. Prerequisites: A valid JSON file `contacts.json` exists in the specified path with proper format.
+
+    2. Test case: `import contacts.json`<br>
+       Expected: Valid contacts from the file are imported. Success message shows summary of imported contacts.
+
+2. Importing from a non-existent file
+
+    1. Test case: `import nonexistent.json`<br>
+       Expected: No contacts are imported. Error message indicates the file does not exist.
+
+3. Importing from an invalid file format
+
+    1. Prerequisites: File `invalid.txt` exists but is not in JSON format.
+
+    2. Test case: `import invalid.txt`<br>
+       Expected: No contacts are imported. Error message indicates invalid file format.
+
+4. Importing with duplicate entries
+
+    1. Prerequisites: File contains contacts with GitHub usernames that already exist in the address book.
+
+    2. Test case: `import contacts.json`<br>
+       Expected: Only non-duplicate contacts are imported. Summary message shows skipped duplicates.
+
+### List command
+
+1. Listing all persons
+
+    1. Prerequisites: Multiple persons exist in the address book.
+
+    2. Test case: `list`<br>
+       Expected: All persons are displayed in the list with their basic information.
+
+2. Listing when address book is empty
+
+    1. Prerequisites: Address book is empty.
+
+    2. Test case: `list`<br>
+       Expected: Message indicates no persons found or displays an empty list.
+
+### Remove-from-team command
+
+1. Removing an employee from a team
+
+    1. Prerequisites: Person E1001 is a member of team "T0001".
+
+    2. Test case: `remove-from-team T0001 E1001`<br>
+       Expected: Person E1001 is removed from the "T0001" team. Success message confirms removal.
+
+2. Removing an employee not in the team
+
+    1. Prerequisites: Person E1001 exists but is not a member of team "T0001".
+
+    2. Test case: `remove-from-team T0001 E1001`<br>
+       Expected: No changes made. Error message indicates the person is not in the team.
+
+3. Removing from a non-existent team
+
+    1. Test case: `remove-from-team T0001 E1001`<br>
+       Expected: No changes made. Error message indicates the team does not exist.
+
+### Set-salary command
+
+1. Setting salary for an employee
+
+    1. Prerequisites: Person with ID E1001 exists.
+
+    2. Test case: `set-salary E1001 5000`<br>
+       Expected: Person E1001's salary is updated to 5000/month. Success message shows the updated salary.
+
+2. Setting salary with invalid format
+
+    1. Test case: `set-salary E1001 -1000`<br>
+       Expected: No changes made. Error message indicates salary cannot be negative.
+
+    2. Test case: `set-salary E1001 invalid`<br>
+       Expected: No changes made. Error message indicates invalid salary format.
+
+3. Setting salary for non-existent employee
+
+    1. Test case: `set-salary E9999 5000`<br>
+       Expected: No changes made. Error message indicates employee ID does not exist.
+
+### Set-subteam command
+
+1. Setting a subteam relationship
+
+    1. Prerequisites: Teams "T0001" and "T0002" exist. No existing subteam relationship between them.
+
+    2. Test case: `set-subteam T0001 T0002`<br>
+       Expected: T0002 is set as a subteam of T0001. Success message confirms the relationship.
+
+2. Setting subteam with non-existent teams
+
+    1. Test case: `set-subteam T9999 T0002`<br>
+       Expected: No changes made. Error message indicates parent team does not exist.
+
+3. Creating circular dependency
+
+    1. Prerequisites: T0002 is already parent of T0001.
+
+    2. Test case: `set-subteam T0001 T0002`<br>
+       Expected: No changes made. Error message indicates circular dependency.
+
+4. Setting existing subteam relationship
+
+    1. Prerequisites: T0002 is already a subteam of T0001.
+
+    2. Test case: `set-subteam T0001 T0002`<br>
+       Expected: No changes made. Error message indicates the relationship already exists.
+
+### Sort command
+
+1. Sorting persons by name
+
+    1. Prerequisites: Multiple persons exist in the address book.
+
+    2. Test case: `sort -name`<br>
+       Expected: Persons list is sorted alphabetically by name. Sorted list is displayed.
+
+2. Sorting persons by salary
+
+    1. Test case: `sort -salary`<br>
+       Expected: Persons list is sorted by salary (ascending or descending based on implementation). Sorted list is displayed.
+
+3. Sorting with invalid field
+
+    1. Test case: `sort -invalid`<br>
+       Expected: No sorting performed. Error message lists valid sort fields.
+
+4. Sorting empty address book
+
+    1. Prerequisites: Address book is empty.
+
+    2. Test case: `sort -name`<br>
+       Expected: Message indicates no persons to sort.
+
+### Tag command
+
+1. Adding a tag to a person
+
+    1. Prerequisites: Person with ID E1001 exists and does not have tag "developer".
+
+    2. Test case: `tag E1001 developer`<br>
+       Expected: Tag "developer" is added to person E1001. Success message confirms the tag addition.
+
+2. Adding an existing tag
+
+    1. Prerequisites: Person E1001 already has tag "developer".
+
+    2. Test case: `tag E1001 developer`<br>
+       Expected: No changes made. Error message indicates the tag already exists.
+
+3. Adding multiple tags
+
+    1. Test case: `tag E1001 developer senior`<br>
+       Expected: Both tags are added to person E1001 (if not already present). Success message lists all added tags.
+
+### Untag command
+
+1. Removing tags from a person (case-insensitive)
+
+    1. Prerequisites: Person E1001 has tags "Developer" and "Senior".
+
+    2. Test case: `untag E1001 developer`<br>
+       Expected: Tag "Developer" is removed from person E1001 (case-insensitive match). Success message lists removed tags and shows employee ID.
+
+    3. Test case: `untag E1001 SENIOR developer`<br>
+       Expected: Both tags are removed. Success message lists all removed tags.
+
+2. Removing some non-existent tags
+
+    1. Prerequisites: Person E1001 has tag "Developer" but not "Manager".
+
+    2. Test case: `untag E1001 developer manager`<br>
+       Expected: Tag "Developer" is removed. Warning message indicates "manager" tag was not found on the person.
+
+3. Removing only non-existent tags
+
+    1. Prerequisites: Person E1001 does not have tags "Manager" or "Lead".
+
+    2. Test case: `untag E1001 manager lead`<br>
+       Expected: No changes made. Error message indicates none of the specified tags exist on the person.
+
+4. Removing tags from non-existent person
+
+    1. Test case: `untag E9999 developer`<br>
+       Expected: No changes made. Error message indicates employee ID does not exist.
+
+### View command
+
+1. Viewing person details
+
+    1. Prerequisites: Person with full name "Alex Magnus" exists with complete details.
+
+    2. Test case: `view Alex`<br>
+       Expected: Detailed information panel displays showing all details of person "Alex Magnus" including name, phone, email, GitHub username, salary, tags, and teams.
+
+2. Viewing non-existent person
+
+   1. Prerequisites: No person named "Nullable" exists.
+    
+   2. Test case: `view Nullable`<br>
+          Expected: No details displayed.
+
+3. Invalid view command format
+
+    1. Test case: `view`<br>
+       Expected: Error message shows the correct command format.
 
 ### Saving data
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+    1. Test case: Delete the data file at `[JAR file location]/data/addressbook.json` and restart the app.<br>
+       Expected: App starts with sample data populated.
 
-1. _{ more test cases …​ }_
+    2. Test case: Manually corrupt the data file by adding invalid JSON syntax and restart the app.<br>
+       Expected: App starts with an empty address book. Error message may be logged.
+
+2. Testing automatic saving
+
+    1. Test case: Add a new person using the `add` command and immediately close the app using the window close button (not the `exit` command).<br>
+       Expected: On restart, the newly added person should still be present in the address book.

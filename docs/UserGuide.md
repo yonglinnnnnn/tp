@@ -18,7 +18,7 @@ Henri is a **desktop app for managing contacts, optimized for use via a  Line In
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-2. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+2. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103-F12-1/tp/releases).
 
 3. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
@@ -126,7 +126,7 @@ Format: `edit EMPLOYEE_ID [-name NAME] [-hp PHONE] [-em EMAIL] [-addr ADDRESS] [
 
 Examples:
 *  `edit E1001 -hp 91234567 -em johndoe@example.com` Edits the phone number and email address of the person with the ID of "E1001" to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 -name Betsy Crower` Edits the name of the 2nd person to be `Betsy Crower`.
+*  `edit E1002 -name Betsy Crower` Edits the name of the employee with id "E1002" to be `Betsy Crower`.
 
 ### Adding a tag: `tag`
 Adds one or more tags to an existing person in the address book without removing existing tags.
@@ -224,6 +224,11 @@ The subteam must also not already contain the parent team as a subteam (directly
 
 Format: `set-subteam PARENT_TEAM_ID SUBTEAM_ID`
 
+Exceptions:
+* If the team to be added as a subteam already exists as a subteam of another team, the command will fail with an error message.
+* If the team to be added as a subteam is the same as the parent team, the command will fail with an error message.
+* If any of the team IDs do not exist as an existing team , the command will fail with an error message.
+
 ### Deleting a team `delete-team`
 Deletes an existing team from the address book.
 
@@ -267,15 +272,13 @@ Examples:
 
 Deletes the specified person from the address book.
 
-Format: `delete INDEX`
+Format: `delete E1002`
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* Deletes the person at the specified `EMPLOYEE_ID`.
+* The index **must be a valid employee** in Henri.
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `view Betsy` followed by `delete 1` deletes the 1st person in the results of the `view` command.
+* `delete E1002` deletes the employee with id "E1002" in the address book.
 
 ### Setting a person's salary: `set-salary`
 
@@ -330,13 +333,14 @@ Imports contact data from a specific JSON file from the data folder into the mai
 
 Format: `import FILENAME.json`
 
-- The file must be located inside the 'data' folder
-- The command must include the '.json' file extension
-- JSON format from the file must be valid
-- Duplicate contacts with the same employee ID will not be imported
+* The file must be located inside the 'data' folder 
+* The command must include the '.json' file extension 
+* This command only imports employee contacts, with the assumption that the JSON file contains an array of employee objects in the correct format as it appears in the main henri.json
+* JSON format from the file must be valid 
+* Duplicate contacts with the same employee ID will not be imported
 
 Example:
-- `import oldContacts.json` imports non-duplicate contacts from 'data/oldContacts.json' into the address book.
+* `import oldContacts.json` imports non-duplicate contacts from 'data/oldContacts.json' into the address book.
 
 ### Viewing of audit logs : `audit`
 
@@ -379,10 +383,6 @@ If your changes to the data file makes its format invalid, AddressBook will disc
 Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
-### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
@@ -392,29 +392,40 @@ _Details coming soon ..._
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Known issues
+## Known issues / Limitations
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+3. **`add-to-team` command might be long** we acknowledge that the command word might be long however for clarity reasons we decided to keep as such.
+4. **`remove-from-team` command might be long** we acknowledge that the command word might be long however for clarity reasons we decided to keep as such.
+5. **`add` command allows for duplicate phone number, email address, home address and GitHub username** as it is possible that multiple employees in the company share the same phone number (department phone number), home address (living together), email address (shared email address by department), GitHub username (shared GitHub account for open source projects). Hence, we allow duplicate entries for these fields.
+6. **`create-team` command does not check for duplicate team names** as it is possible that multiple teams in the company share the same name (e.g. multiple "DevTeam" in different departments). Hence, we allow duplicate team names.
 
 --------------------------------------------------------------------------------------------------------------------
+## Future Enhancements
+1. **Customize command word** Allow users to customize command words to their preference. This would resolve the problem where command words might feel too long (e.g remove-from-team command)
+2. **Import feature to support optional features, adding of subteams and team members** Currently, the import feature only supports adding of employees . We can enhance it to support adding of teams, subteams and team members as well.
 
 ## Command summary
 
-| Action                | Format, Examples                                                                                                                                                                                              |
-|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Add**               | `add -name NAME -hp PHONE_NUMBER -em EMAIL -addr ADDRESS [-gh GITHUB_USERNAME]` <br> e.g., `add -name James Ho -hp 22224444 -em jamesho@example.com -addr 123, Clementi Rd, 1234665 -tag friend -gh @jamesho` |
-| **Clear**             | `clear`                                                                                                                                                                                                       |
-| **Delete**            | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                           |
-| **Find**              | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                                                                    |
-| **Import**            | `import FILENAME.json`<br> e.g., `import oldContacts.json`                                                                                                                                                    |
-| **List**              | `list`                                                                                                                                                                                                        |
-| **Help**              | `help`                                                                                                                                                                                                        |
-| **View**              | `view KEYWORD [MORE_KEYWORDS]`<br> e.g., `view James Jake`
-| **create-team**       | `create-team TEAM_NAME TEAM_LEADER_ID`<br> e.g., `create-team DevTeam E1001`
-| **delete-team**       | `delete-team TEAM_ID`<br> e.g., `delete-team T0001`
-| **add-to-team**       | `add-to-team TEAM_ID MEMBER_ID`<br> e.g., `add-to-team T0001 E1002`
-| **remove-from-team**  | `remove-from-team TEAM_ID MEMBER_ID`<br> e.g., `remove-from-team T0001 E1002`
-| **Audit**             | `audit`
-| **Exit**              | `exit`
- 
+| Action               | Format, Examples                                                                                                                                                                                  |
+|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Add**              | `add -name NAME -hp PHONE_NUMBER -em EMAIL -addr ADDRESS [-gh GITHUB_USERNAME]` <br> e.g., `add -name James Ho -hp 22224444 -em jamesho@example.com -addr 123, Clementi Rd, 1234665 -gh @jamesho` |
+| **Add to Team**      | `add-to-team TEAM_ID MEMBER_ID`<br> e.g., `add-to-team T0001 E1002`                                                                                                                               |
+| **Audit**            | `audit`                                                                                                                                                                                           |
+| **Clear**            | `clear`                                                                                                                                                                                           |
+| **Create Team**      | `create-team TEAM_NAME TEAM_LEADER_ID`<br> e.g., `create-team DevTeam E1001`                                                                                                                      |
+| **Delete**           | `delete EMPLOYEE_ID`<br> e.g., `delete E1003`                                                                                                                                                     |
+| **Delete Team**      | `delete-team TEAM_ID`<br> e.g., `delete-team T0001`                                                                                                                                               |
+| **Edit**             | `edit EMPLOYEE_ID [-name NAME] [-hp PHONE] [-em EMAIL] [-addr ADDRESS] [-gh GITHUB_USERNAME]`<br> e.g., `edit E1001 -hp 91234567 -em johndoe@example.com`                                         |
+| **Exit**             | `exit`                                                                                                                                                                                            |
+| **Help**             | `help`                                                                                                                                                                                            |
+| **Import**           | `import FILENAME.json`<br> e.g., `import oldContacts.json`                                                                                                                                        |
+| **List**             | `list`                                                                                                                                                                                            |
+| **Remove from Team** | `remove-from-team TEAM_ID MEMBER_ID`<br> e.g., `remove-from-team T0001 E1002`                                                                                                                     |
+| **Set Salary**       | `set-salary EMPLOYEE_ID SALARY`<br> e.g., `set-salary E1001 3000.50`                                                                                                                              |
+| **Set Subteam**      | `set-subteam PARENT_TEAM_ID SUBTEAM_ID`<br> e.g., `set-subteam T0001 T0002`                                                                                                                       |
+| **Sort**             | `sort -FIELD [-MORE_FIELDS]`<br> e.g., `sort -name -salary`                                                                                                                                       |
+| **Tag**              | `tag EMPLOYEE_ID TAG [MORE_TAGS]…`<br> e.g., `tag E1003 cs2103-f12`                                                                                                                               |
+| **Untag**            | `untag EMPLOYEE_ID TAG [MORE_TAGS]…` <br> e.g., `untag E1003 ay2425`                                                                                                                              |
+| **View**             | `view KEYWORD [MORE_KEYWORDS]`<br> e.g., `view James Jake`                                                                                                                                        |
