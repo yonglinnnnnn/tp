@@ -64,7 +64,8 @@ public class CreateTeamCommand extends Command {
             throw new CommandException(String.format(MESSAGE_LEADER_NOT_FOUND, leaderPersonId));
         }
 
-        toAdd.withLeader(leaderOpt.get().id());
+        Person leader = leaderOpt.get();
+        toAdd.withLeader(leader.id());
 
         if (model.hasTeam(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_TEAM);
@@ -78,6 +79,8 @@ public class CreateTeamCommand extends Command {
         }
 
         model.addTeam(toAdd);
+        Person editedLeader = leader.withAddedTeam(toAdd.getId());
+        model.setPerson(leader, editedLeader);
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd.getTeamName().teamName()));
     }
 

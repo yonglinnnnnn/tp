@@ -11,7 +11,10 @@ import seedu.address.model.person.GitHubUsername;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Salary;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.team.Team;
+import seedu.address.model.team.TeamName;
 import seedu.address.model.util.SampleDataUtil;
 
 /**
@@ -23,6 +26,8 @@ public class PersonBuilder {
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_GITHUBUSERNAME = "@amybee01";
+    public static final double DEFAULT_SALARY = 0.00;
+    public static final Team DEFAULT_TEAM = new Team("T9999", new TeamName("DEFAULT TEAM"));
     public static final Tag DEFAULT_TAG = new Tag("friends");
 
     private String id;
@@ -31,6 +36,8 @@ public class PersonBuilder {
     private Email email;
     private Address address;
     private GitHubUsername gitHubUsername;
+    private Salary salary;
+    private Set<String> teamIds;
     private Set<Tag> tags;
 
     /**
@@ -56,6 +63,8 @@ public class PersonBuilder {
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
         gitHubUsername = new GitHubUsername(DEFAULT_GITHUBUSERNAME);
+        salary = new Salary(DEFAULT_SALARY);
+        teamIds = new HashSet<>();
         tags = new HashSet<>();
     }
 
@@ -82,6 +91,8 @@ public class PersonBuilder {
         email = personToCopy.email();
         address = personToCopy.address();
         gitHubUsername = personToCopy.gitHubUsername();
+        salary = personToCopy.salary();
+        teamIds = new HashSet<>(personToCopy.teamIds());
         tags = new HashSet<>(personToCopy.tags());
     }
 
@@ -112,6 +123,8 @@ public class PersonBuilder {
         email = personToCopy.email();
         address = personToCopy.address();
         gitHubUsername = personToCopy.gitHubUsername();
+        salary = personToCopy.salary();
+        teamIds = new HashSet<>(personToCopy.teamIds());
         tags = new HashSet<>(personToCopy.tags());
     }
 
@@ -189,7 +202,23 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code Salary} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withSalary(double salary) {
+        this.salary = new Salary(salary);
+        return this;
+    }
+
+    /**
+     * Parses the {@code teamIds} into a {@code Set<String>} and set it to the {@code Person} that we are building.
+     */
+    public PersonBuilder withTeamIds(String ... teamIds) {
+        this.teamIds = SampleDataUtil.getTeamIdSet(teamIds);
+        return this;
+    }
+
     public Person build() {
-        return new Person(id, name, phone, email, address, gitHubUsername, tags);
+        return new Person(id, name, phone, email, address, gitHubUsername, teamIds, tags, salary);
     }
 }

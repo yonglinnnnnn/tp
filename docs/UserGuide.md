@@ -4,9 +4,9 @@
   pageNav: 3
 ---
 
-# AB-3 User Guide
+# Henri User Guide
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a  Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+Henri is a **desktop app for managing contacts, optimized for use via a  Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, Henri can get your contact management tasks done faster than traditional GUI apps.
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -18,28 +18,28 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+2. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+3. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar henri.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
    * `list` : Lists all contacts.
 
    * `add -name John Doe -hp 98765432 -em johnd@example.com -addr John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
-   * `delete E1001` : Deletes the employee with id E1001 shown in the current list.
+   * `delete E1003` : Deletes the contact with the ID of "E1003" as shown in the current list.
 
    * `clear` : Deletes all contacts.
 
    * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+6. Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -80,26 +80,21 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add -name NAME -hp PHONE_NUMBER -em EMAIL -addr ADDRESS …​`
+Format: `add -name NAME -hp PHONE_NUMBER -em EMAIL -addr ADDRESS [-gh GITHUB_USERNAME]`
 
 #### Required Parameters
-1. `-name` - name of the person being added to the address book
-2. `-hp`   - numerical phone number of the person (minimum 3 digits)
+1. `-name` - name of the person being added to the address book (maximum 50 characters)
+2. `-hp`   - numerical phone number of the person (3-12 digits)
 3. `-em`   - email address in the format 'user@domain'
 4. `-addr` - the address of the person in string format
 
 #### Optional Parameters
-1. `-tag` - a string descriptor without any whitespaces
-2. `-gh` - the GitHub username string associated with the person
-
-<box type="tip" seamless>
-
-**Tip:** A person can have any number of tags (including 0)
-</box>
+1. `-gh` - the GitHub username string associated with the person (starts with '@', 3-39 characters)
 
 Examples:
 * `add -name John Doe -hp 98765432 -em johnd@example.com -addr John street, block 123, #01-01`
-* `add -name Betsy Crowe -tag friend -em betsycrowe@example.com -addr Newgate Prison -hp 1234567 -tag criminal`
+* `add -name Betsy Crowe -em betsycrowe@example.com -addr Newgate Prison -hp 1234567`
+* `add -name Mike Oxlong -hp 96767676 -em mikeo@exammple.com -addr 67 Downing St -gh @mikeoxlong`
 
 ### Listing all persons : `list`
 
@@ -111,26 +106,27 @@ Format: `list`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [-name NAME] [-hp PHONE] [-em EMAIL] [-addr ADDRESS]…​`
+Format: `edit EMPLOYEE_ID [-name NAME] [-hp PHONE] [-em EMAIL] [-addr ADDRESS] [-gh GITHUB_USERNAME]`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Edits the person with the specified `EMPLOYEE_ID`. The employee ID starts with 'E" and is displayed next to the name in the displayed person list.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `-tag ` without
-    specifying any tags after it.
 
 #### Possible Parameters
-1. `-name` - name of the person being added to the address book
-2. `-hp`   - numerical phone number of the person (minimum 3 digits)
+1. `-name` - name of the person being added to the address book (maximum 50 characters)
+2. `-hp`   - numerical phone number of the person (3-12 digits)
 3. `-em`   - email address in the format 'user@domain'
 4. `-addr` - the address of the person in string format
-5. `-tag` - a string descriptor without any whitespaces
-6. `-gh` - the GitHub username string associated with the person
+5. `-gh` - the GitHub username string associated with the person (starts with '@', 3-39 characters)
+
+<box type="tip" seamless>
+
+**Tip:** To remove the GitHub username of a person, use `-gh` with no username after the `-gh` prefix.
+</box>
 
 Examples:
-*  `edit 1 -hp 91234567 -em johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 -name Betsy Crower -tag ` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+*  `edit E1001 -hp 91234567 -em johndoe@example.com` Edits the phone number and email address of the person with the ID of "E1001" to be `91234567` and `johndoe@example.com` respectively.
+*  `edit 2 -name Betsy Crower` Edits the name of the 2nd person to be `Betsy Crower`.
 
 ### Adding a tag: `tag`
 Adds one or more tags to an existing person in the address book without removing existing tags.
@@ -189,13 +185,36 @@ Warning:
 * If none of the specified tags exist on the person, the command will fail with an error message listing the non-existent tags. However, if at least one tag exists, valid tags will be removed and a warning will show which tags were not found.
 
 ### Creating a team: `create-team`
-TODO
+Adds a team to the address book.
+
+Format: `create-team TEAM_NAME TEAM_LEADER_ID`
+
+Example:
+* `create-team Systems E1001` creates a team named `Systems` with the person having employee ID `E1001` as the team leader.
 
 ### Adding members to a team: `add-to-team`
-TODO
+Adds a peron to an existing team in the address book.
+
+Format: `add-to-team TEAM_ID MEMBER_ID`
+
+Example:
+* `add-to-team T0001 E1002` adds the person with employee ID `E1002` to the team with team ID `T0001`.
+
+Exceptions:
+* If the team ID or member ID does not exist, the command will fail with an error message.
 
 ### Removing members from a team: `remove-from-team`
-TODO
+Remove a person from an existing team in the address book.
+
+Format: `remove-from-team TEAM_ID MEMBER_ID`
+
+Example:
+* `remove-from-team T0001 E1002` removes the person with employee ID `E1002` from the team with team ID `T0001`.
+
+Exceptions:
+* If the member to be removed is the team leader, the command will fail with an error message.
+* If the member to be removed is not part of the team, the command will fail with an error message.
+* If the team ID or member ID does not exist, the command will fail with an error message.
 
 ### Set a team as a subteam of another team: `set-subteam`
 
@@ -205,22 +224,43 @@ The subteam must also not already contain the parent team as a subteam (directly
 
 Format: `set-subteam PARENT_TEAM_ID SUBTEAM_ID`
 
-### Locating persons by name: `find`
+### Deleting a team `delete-team`
+Deletes an existing team from the address book.
+
+Format: `delete-team TEAM_ID`
+
+Example:
+* `delete-team T0001` deletes the team with team ID `T0001`.
+
+Exceptions:
+* If the team ID does not exist, the command will fail with an error message.
+* If the team to be deleted has subteams, the command will fail with an error message.
+
+Format: `remove-team TEAM_ID`
+
+### Locating persons by name: `view`
 
 Finds persons whose names contain any of the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `view KEYWORD [MORE_KEYWORDS]`
 
 * The search is case-insensitive. e.g `hans` will match `Hans`
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 * Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
+* Partial matches are allowed. e.g. `ann` will match `Annabel` and `Joanna`
 * Persons matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* Ordering of result is based on keyword. 
+  * sorts filtered persons by:
+    1) Number of matched keywords (more matches first)
+    2) Closeness of match (exact > word > substring)
+    3) Order of keyword appearance in the input
+    4) Last by name in case-insensitive alphabetical order
+
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
+* `view John` returns `john` and `John Doe`
+* `view alex david` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
 ### Deleting a person : `delete`
@@ -235,7 +275,7 @@ Format: `delete INDEX`
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `view Betsy` followed by `delete 1` deletes the 1st person in the results of the `view` command.
 
 ### Clearing all entries : `clear`
 
@@ -300,13 +340,17 @@ _Details coming soon ..._
 
 ## Command summary
 
-Action     | Format, Examples
------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add -name NAME -hp PHONE_NUMBER -em EMAIL -addr ADDRESS [-tag TAG]…​` <br> e.g., `add -name James Ho -hp 22224444 -em jamesho@example.com -addr 123, Clementi Rd, 1234665 -tag friend -tag colleague`
-**Clear**  | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit**   | `edit INDEX [-name NAME] [-hp PHONE_NUMBER] [-em EMAIL] [-addr ADDRESS] [-tag TAG]…​`<br> e.g.,`edit 2 -name James Lee -em jameslee@example.com`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
-**Import** | `import FILENAME.json`<br> e.g., `import oldContacts.json`
-**List**   | `list`
-**Help**   | `help`
+| Action                | Format, Examples                                                                                                                                                                                              |
+|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Add**               | `add -name NAME -hp PHONE_NUMBER -em EMAIL -addr ADDRESS [-gh GITHUB_USERNAME]` <br> e.g., `add -name James Ho -hp 22224444 -em jamesho@example.com -addr 123, Clementi Rd, 1234665 -tag friend -gh @jamesho` |
+| **Clear**             | `clear`                                                                                                                                                                                                       |
+| **Delete**            | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                           |
+| **Find**              | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                                                                    |
+| **Import**            | `import FILENAME.json`<br> e.g., `import oldContacts.json`                                                                                                                                                    |
+| **List**              | `list`                                                                                                                                                                                                        |
+| **Help**              | `help`                                                                                                                                                                                                        |
+| **View**              | `view KEYWORD [MORE_KEYWORDS]`<br> e.g., `view James Jake`
+| **create-team**       | `create-team TEAM_NAME TEAM_LEADER_ID`<br> e.g., `create-team DevTeam E1001`
+| **delete-team**       | `delete-team TEAM_ID`<br> e.g., `delete-team T0001`
+| **add-to-team**       | `add-to-team TEAM_ID MEMBER_ID`<br> e.g., `add-to-team T0001 E1002`
+|  **remove-from-team** | `remove-from-team TEAM_ID MEMBER_ID`<br> e.g., `remove-from-team T0001 E1002`
