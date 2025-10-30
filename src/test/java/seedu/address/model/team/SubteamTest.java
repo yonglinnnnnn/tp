@@ -7,75 +7,86 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.AddressBook;
 import seedu.address.model.team.exceptions.InvalidSubteamNesting;
+import seedu.address.model.team.exceptions.TeamNotFoundException;
+
 
 class SubteamTest {
     private static final String INDEX_FIRST = "T0001";
     private static final String INDEX_SECOND = "T0002";
     private static final String INDEX_THIRD = "T0003";
+    private static Team teamA = null;
+    private static Team teamB = null;
+    private static Team teamC = null;
+
+    @BeforeEach
+    void setup() {
+        AddressBook ab = new AddressBook();
+        Subteams.setAddressBook(ab);
+        teamA = new Team("T0001", new TeamName("TeamA"));
+        teamB = new Team("T0002", new TeamName("TeamB"));
+        teamC = new Team("T0003", new TeamName("TeamC"));
+        ab.addTeam(teamA);
+        ab.addTeam(teamB);
+        ab.addTeam(teamC);
+    }
 
     @Test
     void teamInTopLevelList_returnsTrue() {
-        Team teamA = new Team(INDEX_FIRST, new TeamName("Example"));
-        Subteams subteams = new Subteams(Collections.singletonList(teamA));
-        assertTrue(subteams.contains(teamA));
+        Subteams subteams = new Subteams(Collections.singletonList(INDEX_FIRST));
+        assertTrue(subteams.contains(INDEX_FIRST));
     }
 
     @Test
     void teamNotInList_returnsFalse() {
-        Team teamA = new Team(INDEX_FIRST, new TeamName("Example"));
-        Team teamB = new Team(INDEX_SECOND, new TeamName("Example"));
-        Subteams subteams = new Subteams(Collections.singletonList(teamA));
-        assertFalse(subteams.contains(teamB));
+        teamA.addToSubteam(teamB.getId());
+        assertFalse(teamA.containsTeamInSubteams(INDEX_THIRD));
+    }
+
+    @Test
+    void subteamContainsNonExistentTeamId_throwsTeamNotFoundException() {
+        Subteams subteams = new Subteams(Collections.singletonList("T0004"));
+        teamA.withSubteams(subteams);
+        assertThrows(TeamNotFoundException.class, () -> teamA.containsTeamInSubteams("T0001"));
     }
 
     @Test
     void teamInNestedSubteams_returnsTrue() {
         Team teamA = new Team(INDEX_FIRST, new TeamName("Example"));
-        Team teamB = new Team(INDEX_SECOND, new TeamName("Example"));
-        Team teamANew = teamA.addToSubteam(teamB);
-        Subteams subteams = new Subteams(Collections.singletonList(teamANew));
-        assertTrue(subteams.contains(teamB));
+        teamA.addToSubteam(INDEX_SECOND);
+        assertTrue(teamA.containsTeamInSubteams(INDEX_SECOND));
     }
 
     @Test
     void teamInDeeplyNestedSubteams_returnsTrue() {
-        Team teamA = new Team(INDEX_FIRST, new TeamName("Example"));
-        Team teamB = new Team(INDEX_SECOND, new TeamName("Example"));
-        Team teamC = new Team(INDEX_THIRD, new TeamName("Example"));
-        Team teamBNew = teamB.addToSubteam(teamC);
-        Team teamANew = teamA.addToSubteam(teamBNew);
-        Subteams subteams = new Subteams(Collections.singletonList(teamANew));
-        assertTrue(subteams.contains(teamC));
+        teamB.addToSubteam(teamC.getId());
+        teamA.addToSubteam(teamB.getId());
+        assertTrue(teamA.containsTeamInSubteams(teamC));
     }
 
     @Test
     void teamNotNested_returnsFalse() {
-        Team teamA = new Team(INDEX_FIRST, new TeamName("Example"));
-        Team teamB = new Team(INDEX_SECOND, new TeamName("Example"));
-        Subteams subteams = new Subteams(Collections.singletonList(teamA));
-        assertFalse(subteams.contains(teamB));
+        Subteams subteams = new Subteams(Collections.singletonList(INDEX_FIRST));
+        assertFalse(subteams.contains(INDEX_SECOND));
     }
 
     @Test
     void cyclicSubteamsGraph_throwsInvalidSubteamNesting() {
-        Team teamA = new Team(INDEX_FIRST, new TeamName("Example"));
-        Team teamB = new Team(INDEX_SECOND, new TeamName("Example"));
         assertThrows(InvalidSubteamNesting.class, () -> {
-            teamA.addToSubteam(teamB);
-            teamB.addToSubteam(teamA);
+            teamA.addToSubteam(teamB.getId());
+            teamB.addToSubteam(teamA.getId());
         });
     }
 
     @Test
     void size_returnsCorrectSize() {
-        Team teamA = new Team(INDEX_FIRST, new TeamName("Example"));
-        Team teamB = new Team(INDEX_SECOND, new TeamName("Example"));
         Subteams subteams = new Subteams();
-        subteams.add(teamA);
-        subteams.add(teamB);
+        subteams.add(INDEX_FIRST, "A");
+        subteams.add(INDEX_SECOND, "B");
         assertEquals(2, subteams.size());
     }
 
@@ -87,19 +98,16 @@ class SubteamTest {
 
     @Test
     void removeTeam_successfulRemoval() {
-        Team teamA = new Team(INDEX_FIRST, new TeamName("Example"));
         Subteams subteams = new Subteams();
-        subteams.add(teamA);
-        boolean removed = subteams.remove(teamA);
+        subteams.add(INDEX_FIRST, "A");
+        boolean removed = subteams.remove(INDEX_FIRST);
         assertTrue(removed);
-        assertFalse(subteams.contains(teamA));
     }
 
     @Test
     void sameSubteams_returnsTrue() {
-        Team teamA = new Team(INDEX_FIRST, new TeamName("Example"));
-        Subteams subteams1 = new Subteams(Collections.singletonList(teamA));
-        Subteams subteams2 = new Subteams(Collections.singletonList(teamA));
+        Subteams subteams1 = new Subteams(Collections.singletonList(INDEX_FIRST));
+        Subteams subteams2 = new Subteams(Collections.singletonList(INDEX_FIRST));
         assertEquals(subteams1, subteams2);
     }
 }

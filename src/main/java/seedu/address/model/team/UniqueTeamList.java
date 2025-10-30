@@ -115,9 +115,9 @@ public class UniqueTeamList implements Iterable<Team> {
             throw new TeamNotFoundException();
         }
         try {
-            Team updatedSubteam = subteam.setParentTeamId(parentTeam.getId());
-            Team newTeam = parentTeam.addToSubteam(updatedSubteam);
-            internalList.set(index, newTeam);
+            parentTeam.addToSubteam(subteam.getId());
+            subteam.setParentTeamId(parentTeam.getId());
+            internalList.set(index, parentTeam);
         } catch (InvalidSubteamNesting e) {
             return false;
         }
@@ -155,6 +155,72 @@ public class UniqueTeamList implements Iterable<Team> {
     @Override
     public String toString() {
         return internalList.toString();
+    }
+
+    /**
+     * Build the hierarchy string recursively.
+     *
+     * @return String representation of all the teams in Linux tree format.
+     */
+    public String getHierarchyString() {
+        StringBuilder sb = new StringBuilder();
+        for (Team team : internalList) {
+            if (team.getParentTeamId() == null) {
+                // Build tree from root
+                sb.append(buildTeamDisplayString(team, ""));
+                generateHierarchyTree(team.getSubteams(), sb, "");
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Recursive helper method to build the tree structure.
+     *
+     * @param subteams The subteams to process.
+     * @param sb The StringBuilder to append the tree structure to.
+     * @param prefix The current line prefix (e.g., "│   ").
+     */
+    private void generateHierarchyTree(Subteams subteams, StringBuilder sb, String prefix) {
+        int subteamSize = subteams.getUnmodifiableList().size();
+        for (String teamId : subteams.getUnmodifiableList()) {
+            Team team = getTeamById(teamId);
+            boolean isTeamLast = subteams.getUnmodifiableList().indexOf(teamId) == subteamSize - 1;
+
+            // 1. Append the appropriate branch symbol and team name
+            sb.append(prefix);
+            if (isTeamLast) {
+                sb.append("└── "); // Last child in the list
+            } else {
+                sb.append("├── "); // Not the last child
+            }
+            sb.append(buildTeamDisplayString(team, prefix));
+
+            // 2. Calculate the new prefix for the subteams
+            String newPrefix = (isTeamLast) ? prefix + "    " : prefix + "│   ";
+
+            // 3. Recurse for the team's subteams
+            if (team.getSubteams().size() != 0) {
+                generateHierarchyTree(team.getSubteams(), sb, newPrefix);
+            }
+        }
+
+    }
+
+    /**
+     * Helper method to build the display string for a team with the given prefix.
+     *
+     * @param team The team to build the display string for.
+     * @param prefix The prefix to use for the display string.
+     * @return The display string for the team.
+     */
+    private String buildTeamDisplayString(Team team, String prefix) {
+        return team.getTeamName().toString()
+                + " #"
+                + team.getId()
+                + " Members: "
+                + team.getMembers().toString()
+                + "\n";
     }
 
     /**

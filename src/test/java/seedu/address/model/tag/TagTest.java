@@ -1,5 +1,6 @@
 package seedu.address.model.tag;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -44,4 +45,26 @@ public class TagTest {
         assertTrue(Tag.isValidTagName("123tag")); // starts with number
         assertTrue(Tag.isValidTagName("a1234567890123456789")); // exactly 20 characters
     }
+
+    @Test
+    public void equals_caseInsensitive() {
+        Tag tag1 = new Tag("boardgames");
+        Tag tag2 = new Tag("Boardgames");
+        Tag tag3 = new Tag("BOARDGAMES");
+
+        // different cases -> returns true
+        assertTrue(tag1.equals(tag2));
+        assertTrue(tag1.equals(tag3));
+        assertTrue(tag2.equals(tag3));
+    }
+
+    @Test
+    public void hashCode_caseInsensitive() {
+        Tag tag1 = new Tag("boardgames");
+        Tag tag2 = new Tag("Boardgames");
+
+        // same hash code for different cases
+        assertEquals(tag1.hashCode(), tag2.hashCode());
+    }
+
 }

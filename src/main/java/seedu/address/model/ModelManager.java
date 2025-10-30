@@ -15,8 +15,8 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.audit.AuditLog;
 import seedu.address.model.person.Person;
+import seedu.address.model.team.Subteams;
 import seedu.address.model.team.Team;
-import seedu.address.model.team.TeamsManager;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -28,7 +28,6 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final SortedList<Person> sortedPersons;
-    private final TeamsManager teamsManager;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -40,9 +39,10 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        this.teamsManager = new TeamsManager();
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         sortedPersons = new SortedList<>(filteredPersons);
+        // Set the address book reference in Subteams static class
+        Subteams.setAddressBook(this.addressBook);
     }
 
     public ModelManager() {
@@ -203,19 +203,7 @@ public class ModelManager implements Model {
     //=========== Organization Hierarchy Accessors =============================================================
     @Override
     public String getOrganizationHierarchyString() {
-        return """
-                    ├── Finance Department
-                    │   ├── Samuel Lee
-                    │   └── Rachel Tan
-                    ├── Engineering Department
-                    │   ├── API Development
-                    │   │   └── Alice Chen
-                    │   └── Frontend
-                    │       └── Felicia Wong
-                    └── Quality Assurance
-                        ├── Michael Ong
-                        └── Derrick Lim
-                """;
+        return addressBook.getOrganizationHierarchyString();
     }
 
     @Override

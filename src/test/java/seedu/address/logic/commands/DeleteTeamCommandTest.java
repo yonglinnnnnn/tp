@@ -16,6 +16,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.team.Subteams;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamName;
 import seedu.address.testutil.TypicalPersons;
@@ -70,7 +71,7 @@ public class DeleteTeamCommandTest {
     public void execute_teamHasSubteams_throwsCommandException() {
         Team child = new Team("T0002", new TeamName("Child"));
         Team parent = new Team("T0001", new TeamName("Parent"));
-        parent.withSubteams(List.of(child));
+        parent.withSubteams(new Subteams(List.of(child.getId())));
 
         model.addTeam(parent);
         model.addTeam(child);
@@ -101,8 +102,10 @@ public class DeleteTeamCommandTest {
                 .findFirst()
                 .orElseThrow();
 
-        assertFalse(updatedParent.getSubteams().stream()
-                .anyMatch(st -> teamIdToDelete.equals(st.getId())));
+        assertFalse(updatedParent.getSubteams()
+                .getUnmodifiableList()
+                .stream()
+                .anyMatch(teamIdToDelete::equals));
     }
 
     @Test

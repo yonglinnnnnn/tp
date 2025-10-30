@@ -25,4 +25,12 @@ public class OrganizationPanel extends UiPart<Region> {
         super(FXML);
         organizationDetails.setText(organizationHierarchyString);
     }
+
+    /**
+     * Updates the organization details displayed.
+     * @param organizationHierarchyString the new details of the organization in Linux tree format.
+     */
+    public void updateDetails(String organizationHierarchyString) {
+        organizationDetails.setText(organizationHierarchyString);
+    }
 }

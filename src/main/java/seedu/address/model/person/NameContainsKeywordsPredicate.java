@@ -18,8 +18,10 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
+        String fullName = person.name().fullName();
         return keywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.name().fullName(), keyword));
+                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(fullName, keyword)
+                        || fullName.toLowerCase().contains(keyword.toLowerCase()));
     }
 
     @Override
@@ -39,5 +41,9 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
     @Override
     public String toString() {
         return new ToStringBuilder(this).add("keywords", keywords).toString();
+    }
+
+    public List<String> getKeywords() {
+        return keywords;
     }
 }
