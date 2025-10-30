@@ -417,3 +417,4 @@ _Details coming soon ..._
 | **remove-from-team**  | `remove-from-team TEAM_ID MEMBER_ID`<br> e.g., `remove-from-team T0001 E1002`
 | **Audit**             | `audit`
 | **Exit**              | `exit`
+ 
