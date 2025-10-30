@@ -4,7 +4,7 @@
   pageNav: 3
 ---
 
-# AB-3 Developer Guide
+# Henri Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -35,7 +35,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -67,14 +67,13 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/ui/Ui.java)
 
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `OrganizationPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
-
+The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/resources/view/MainWindow.fxml)
 The `UI` component,
 
 * executes user commands using the `Logic` component.
@@ -84,7 +83,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -116,7 +115,7 @@ How the parsing works:
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/model/Model.java)
 
 <puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
@@ -139,7 +138,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2526S1-CS2103-F12-1/tp/blob/master/src/main/java/seedu/address/storage/Storage.java)
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
@@ -158,102 +157,12 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Undo/redo feature
+### \[Proposed\] Import feature enhancement
 
-#### Proposed Implementation
+{To explain how import feature is to be added}
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
-
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
-
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
-
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
-
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
-
-<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
-
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
-
-<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
-
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
-
-<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
-
-<box type="info" seamless>
-
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
-
-</box>
-
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
-
-<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
-
-
-<box type="info" seamless>
-
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
-
-</box>
-
-The following sequence diagram shows how an undo operation goes through the `Logic` component:
-
-<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
-
-<box type="info" seamless>
-
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
-
-</box>
-
-Similarly, how an undo operation goes through the `Model` component is shown below:
-
-<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
-
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
-
-<box type="info" seamless>
-
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
-
-</box>
-
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
-
-<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
-
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
-
-<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
-
-The following activity diagram summarizes what happens when a user executes a new command:
-
-<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
-
-#### Design considerations:
-
-**Aspect: How undo & redo executes:**
-
-* **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
-
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
+### \[\] Customisable command words to fit user preference
+{To explain how command word will be customisable}
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -286,24 +195,126 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​          | I want to …​                                                                      | So that I can…​                                                    |
-|----------|------------------|-----------------------------------------------------------------------------------|--------------------------------------------------------------------|
-| `* * *`  | HR administrator | see a company-level overview of all the employees and the departments they are in | have a better idea of the manpower allocation.                     |
-| `* * *`  | HR administrator | add people’s contact to my address book                                           | add them when they join the company                                |
-| `* * *`  | HR administrator | delete people’s contact to my address book                                        | remove them when they leave the company                            |
-| `* * *`  | HR administrator | directly export my saved contacts                                                 | save them as a backup                                              |
-| `* * *`  | HR administrator | create custom tags for employee roles or teams                                    | quickly filter contacts based on their job function                |
-| `* * *`  | HR administrator | see employee details including salary                                             | find out more details about them                                   |
-| `* * *`  | HR administrator | the application to provide feedback when actions are completed                    | can confirm my actions were properly executed                      |
-| `* * *`  | HR administrator | search developer details by a project team's name                                 | quickly find out which developers are allocated to a specific team |
-| `* * *`  | HR administrator | use contact management apps based on the command line                             | appear tech-savvy in my work style                                 |
-| `* * *`  | HR administrator | update contact information easily                                                 | keep employees' data up to date                                    |
+| Priority | As a …​                    | I want to …​                                                                      | So that I can…​                                                        |
+|----------|----------------------------|-----------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| `* * *`  | HR administrator           | add people’s contact to my address book                                           | add them when they join the company                                    |
+| `* * *`  | HR administrator           | delete people’s contact to my address book                                        | remove them when they leave the company                                |
+| `* * *`  | HR administrator           | edit people’s contact in my address book                                          | update their information                                               |
+| `* * *`  | HR administrator           | directly export my saved contacts                                                 | save them as a backup                                                  |
+| `* * *`  | HR administrator           | create custom tags for employee roles                                             | easily identify contacts based on their job function                   |
+| `* * *`  | HR administrator           | remove custom tags for employee roles                                             | remove irrelevant tags from the employee                               |
+| `* * *`  | HR administrator           | see employee details including salary                                             | find out more details about them                                       |
+| `* * *`  | HR administrator           | view feedback when actions are completed                                          | can confirm my actions were properly executed                          |
+| `* * *`  | HR administrator           | use contact management apps based on the command line                             | appear tech-savvy in my work style                                     |
+| `* * *`  | HR administrator           | update contact information easily                                                 | keep employees' data up to date                                        |
+| `* * *`  | HR administrator           | create team                                                                       | organise employees into d teams                                        |
+| `* * *`  | HR administrator           | delete team                                                                       | delete a useless team that is no longer used                           |
+| `* * *`  | HR administrator           | add employee to team                                                              | add an employee to their respective team                               |
+| `* * *`  | HR administrator           | remove employee from team                                                         | keep the list of team members updated                                  |
+| `* * *`  | HR administrator           | view audit log of past actions                                                    | keep track of the actions that change the details of the address book. |
+| `* * *`  | HR administrator           | search for specific employee                                                      | to get the specific employee details                                   |
+| `* * *`  | HR administrator           | update contact information easily                                                 | keep employees' data up to date                                        |
+| `* * *`  | forgetful HR administrator | have some way to see available commands                                           | recall what are the commands I forgot                                  |
+| `* * *`  | HR administrator           | clean the address book                                                            | reset it to clean state                                                |
+| `* * *`  | HR administrator           | update contact information easily                                                 | keep employees' data up to date                                        |
+| `* * *`  | HR administrator           | update contact information easily                                                 | keep employees' data up to date                                        |
+| `* *`    | HR administrator           | import users from another address book                                            | convert from one address book to another easily                        |
+| `* *`    | HR administrator           | sort the employee based on specific fields                                        | see the specifc information I want near the top                        |
+| `* *`    | HR administrator           | set sub teams to teams                                                            | to indicate the sub departments                                        |
+| `* * `   | HR administrator           | see a company-level overview of all the employees and the departments they are in | have a better idea of the manpower allocation.                         |
 
 *{More to be added}*
 
 ### Use cases
 
 (For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+
+**Use case: Add a person**
+
+**MSS**
+
+1. User requests to add a new person with specified details (name, phone, email, GitHub username, etc.)
+2. System validates the input 
+3. System adds the person to the address book 
+4. System displays a success message with the added person's details
+   Use case ends.
+
+**Extensions:**
+* 2a. Required fields are missing.
+  * 2a1. System shows an error message indicating which fields are required.
+    Use case ends.
+
+* 2b. The email format is invalid. 
+  * 2b1. System shows an error message about the invalid email format.
+    Use case ends.
+
+* 2c. The GitHub username already exists. 
+  * 2c1. System shows an error message indicating duplicate GitHub username.
+    Use case ends.
+
+* 2d. The phone number format is invalid. 
+  * 2d1. System shows an error message about the invalid phone format.
+    Use case ends.
+
+**Use case: Add employee to team**
+
+**MSS**
+1. User requests to add a person to a team by specifying employee ID and team name 
+2. System validates that both the person and team exist 
+3. System adds the person to the specified team 
+4. System displays a success message
+   Use case ends.
+
+**Extensions**
+* 2a. The employee ID does not exist.
+  * 2a1. System shows an error message.
+    Use case ends. 
+* 2b. The team name does not exist. 
+  * 2b1. System shows an error message.
+    Use case ends. 
+* 2c. The person is already in the team. 
+  * 2c1. System shows an error message indicating the person is already a team member.
+    Use case ends.
+
+**Use case: View audit log**
+
+**MSS**
+1. User requests to view the audit log 
+2. System displays a list of all recorded actions with timestamps, user, and details of changes made 
+3. User reviews the audit history
+   Use case ends.
+
+**Extensions**
+* 1a. No actions have been recorded yet.
+  * 1a1. System shows an empty audit log or a message indicating no history is available.
+    Use case ends.
+
+**Use case: Clear address book**
+
+**MSS** 
+1. User requests to clear all data from the address book 
+2. System prompts for confirmation 
+3. User confirms the action 
+4. System clears all persons and teams from the address book 
+5. System displays a success message
+   Use case ends.
+
+**Use case: Create team**
+
+**MSS**
+1. User requests to create a new team with a specified team name 
+2. System validates the team name 
+3. System creates the team 
+4. System displays a success message
+   Use case ends.
+
+**Extensions**
+* 2a. The team name already exists. 
+  * 2a1. System shows an error message indicating duplicate team name.
+    Use case ends. 
+* 2b. The team name format is invalid. 
+  * 2b1. System shows an error message about the invalid format.
+    Use case ends.
 
 **Use case: Delete a person**
 
@@ -314,77 +325,173 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3.  User finds the person's ID
 4.  User requests to delete a specific person in the list by ID
 5.  System deletes the person
-
     Use case ends.
 
 **Extensions**
 
 * 2a. The list is empty.
-
   Use case ends.
-
 * 3a. The given ID is invalid.
-
     * 3a1. System shows an error message.
-
       Use case resumes at step 2.
 
-**Use case: Query details of a person**
+**Use case: Delete team**
 
-1.  User requests to list persons
-2.  System shows a list of persons
-3.  User finds the person's ID
-4.  User requests to display details of a specific person in the list by ID
-5.  System shows the details of the person
+**MSS**
+1. User requests to delete a team by specifying team name 
+2. System validates that the team exists 
+3. System removes the team and all its associations 
+4. System displays a success message
+   Use case ends.
 
+**Extensions**
+* 2a. The team name does not exist. 
+  * 2a1. System shows an error message.
+    Use case ends. 
+* 2b. The team has members. 
+  * 2b1. System shows a warning and asks for confirmation. 
+  * 2b2. User confirms deletion. 
+  * 2b3. System removes all members from the team and deletes the team.
+    Use case resumes at step 4.
+
+**Use case: Edit details of a person**
+
+**MSS** 
+1. User requests to list persons 
+2. System shows a list of persons 
+3. User finds the person's ID 
+4. User requests to update details of a specific person in the list by ID 
+5. System shows the updated details of the person
     Use case ends.
 
 **Extensions**
-
 * 2a. The list is empty.
-
   Use case ends.
-
 * 3a. The given ID is invalid.
-
     * 3a1. System shows an error message.
-
       Use case resumes at step 2.
 
-**Use case: Finds all employees' details under a project team**
+**Use case: Exit application**
 
-1.  User requests to list persons allocated under a project team by team name
-2.  System shows a list of persons with their details
-
-    Use case ends.
-
-**Extensions**
-
-* 2a. The team name does not exist.
-
-  Use case ends.
-
-**Use case: Update details of a person**
-
-1.  User requests to list persons
-2.  System shows a list of persons
-3.  User finds the person's ID
-4.  User requests to update details of a specific person in the list by ID
-5.  System shows the updated details of the person
-
-    Use case ends.
+**MSS**
+1. User requests to exit the application 
+2. System saves all data 
+3. System closes the application
+   Use case ends.
 
 **Extensions**
+* 2a. There are unsaved changes. 
+  * 2a1. System saves the changes before closing.
+    Use case resumes at step 3.
 
-* 2a. The list is empty.
+**Use case: Display help**
 
-  Use case ends.
+**MSS**
+1. User requests help information 
+2. System displays a help window with available commands and their usage 
+3. User reviews the help information
+   Use case ends.
 
-* 3a. The given ID is invalid.
+**Extensions**
+* 1a. User specifies a specific command to get help for. 
+  * 1a1. System displays detailed help for that specific command.
+    Use case ends.
 
-    * 3a1. System shows an error message.
+**Use case: Import contacts**
 
-      Use case resumes at step 2.
+**MSS**
+1. User requests to import contacts from a file by specifying file path 
+2. System validates the file format 
+3. System reads the file and imports all valid contacts 
+4. System displays a summary of imported contacts and any errors encountered
+   Use case ends.
+
+**Extensions**
+* 2a. The file does not exist. 
+  * 2a1. System shows an error message.
+    Use case ends. 
+* 2b. The file format is invalid or corrupted. 
+  * 2b1. System shows an error message about the invalid format.
+    Use case ends. 
+* 3a. Some contacts in the file have invalid data. 
+  * 3a1. System skips invalid contacts and imports valid ones. 
+  * 3a2. System shows a summary of skipped contacts with reasons.
+    Use case resumes at step 4. 
+* 3b. Some contacts already exist (duplicate GitHub usernames). 
+  * 3b1. System skips duplicate contacts. 
+  * 3b2. System shows a summary of skipped duplicates.
+    Use case resumes at step 4.
+
+**Use case: List persons**
+
+**MSS**
+1. User requests to list all persons 
+2. System displays all persons in the address book with their basic information
+   Use case ends.
+
+**Extensions**
+* 1a. The address book is empty. 
+  * 1a1. System shows a message indicating no persons found.
+    Use case ends.
+
+**Use case: Remove employee from team**
+
+**MSS**
+
+1. User requests to remove a person from a team by specifying employee ID and team name 
+2. System validates that both the person and team exist 
+3. System validates that the person is a member of the team 
+4. System removes the person from the team 
+5. System displays a success message
+   Use case ends.
+
+**Extensions**
+* 2a. The employee ID does not exist. 
+  * 2a1. System shows an error message.
+    Use case ends. 
+* 2b. The team name does not exist. 
+  * 2b1. System shows an error message.
+    Use case ends. 
+* 3a. The person is not in the team. 
+  * 3a1. System shows an error message indicating the person is not a team member.
+    Use case ends.
+
+**Use case: Set employee salary**
+
+**MSS**
+1. User requests to set salary for a person by specifying employee ID and salary amount 
+2. System validates the employee ID exists 
+3. System validates the salary format 
+4. System updates the person's salary 
+5. System displays a success message with the updated salary
+   Use case ends.
+
+**Extensions**
+* 2a. The employee ID does not exist. 
+  * 2a1. System shows an error message.
+    Use case ends. 
+* 3a. The salary format is invalid (negative or non-numeric). 
+  * 3a1. System shows an error message about the invalid salary format.
+    Use case ends.
+
+**Use case: Sort persons**
+
+**MSS**
+1. User requests to sort persons by a specified field (name, salary, etc.)
+2. System validates the sort field 
+3. System sorts the persons list according to the specified field 
+4. System displays the sorted list
+   Use case ends.
+
+**Extensions**
+* 2a. The sort field is invalid. 
+  * 2a1. System shows an error message listing valid sort fields.
+    Use case ends. 
+* 3a. The address book is empty. 
+  * 3a1. System shows a message indicating no persons to sort.
+    Use case ends.
+
+
 
 **Use case: Add tags to a person**
 
@@ -397,22 +504,37 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     Use case ends.
 
 **Extensions**
-
 * 2a. The list is empty.
-
   Use case ends.
-
 * 3a. The given ID is invalid.
-
     * 3a1. System shows an error message.
-
       Use case resumes at step 2.
-
 * 4a. The tag already exists.
-
     * 4a1. System shows an error message.
-
       Use case resumes at step 2.
+
+**Use case: Remove tags from a person**
+1.  User requests to list persons
+2.  System shows a list of persons
+3.  User finds the person's ID
+4.  User requests to remove specific tags from the person by ID
+5.  System removes the specified tags from the person (case-insensitive matching)
+6.  System displays a success message listing removed tags
+
+    Use case ends.
+**Extensions**
+* 2a. The list is empty.
+  Use case ends.
+* 3a. The given ID is invalid.
+  * 3a1. System shows an error message.
+    Use case resumes at step 2. 
+* 5a. Some specified tags do not exist on the person. 
+  * 5a1. System removes only the existing tags. 
+  * 5a2. System displays a warning message listing tags that were not found.
+    Use case resumes at step 6. 
+* 5b. None of the specified tags exist on the person. 
+  * 5b1. System shows an error message indicating no tags were removed.
+    Use case ends.
 
 **Use case: Display company overview**
 
@@ -499,10 +621,10 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
+   1. Test case: `delete E1001`<br>
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-   1. Test case: `delete 0`<br>
+   1. Test case: `delete E1002`<br>
       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
