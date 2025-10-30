@@ -6,6 +6,7 @@
     "email": "alice@example.com",
     "address": "123, Jurong West Ave 6, #08-111",
     "gitHubUsername" : "@alice01",
+    "salary" : "1000.0",
     "tags": [ "friends" ]
   }, {
     "id": "E0000",
@@ -13,6 +14,7 @@
     "phone": "94351253",
     "email": "pauline@example.com",
     "address": "4th street",
+    "salary" : "1000.0",
     "gitHubUsername" : "@alice01"
   } ]
 }

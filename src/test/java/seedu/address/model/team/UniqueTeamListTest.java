@@ -22,7 +22,7 @@ public class UniqueTeamListTest {
         UniqueTeamList list = new UniqueTeamList();
         list.add(CORE);
         // team with same id but different name should be considered duplicate / same
-        Team edited = new TeamBuilder(CORE).withTeamName("Different Name").build();
+        Team edited = new TeamBuilder(CORE).withTeamName("DifferentName").build();
         assertTrue(list.contains(edited));
     }
 

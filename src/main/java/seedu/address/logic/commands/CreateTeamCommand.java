@@ -10,6 +10,8 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.exceptions.DuplicatePersonException;
+import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamName;
 
@@ -53,8 +55,12 @@ public class CreateTeamCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        String id = String.format("T%04d", nextId++);
-        Team toAdd = new Team(id, new TeamName(teamName));
+        final TeamName validatedName;
+        try {
+            validatedName = new TeamName(teamName);
+        } catch (IllegalArgumentException e) {
+            throw new CommandException(e.getMessage());
+        }
 
         List<Person> persons = model.getFilteredPersonList();
         Optional<Person> leaderOpt = persons.stream()
@@ -64,9 +70,17 @@ public class CreateTeamCommand extends Command {
             throw new CommandException(String.format(MESSAGE_LEADER_NOT_FOUND, leaderPersonId));
         }
 
-        toAdd.withLeader(leaderOpt.get().id());
+        String id = String.format("T%04d", nextId++);
+        Team toAdd = new Team(id, validatedName);
+
+        Person leader = leaderOpt.get();
+        toAdd.withLeader(leader.id());
+        updateLeaderPersonDetails(model, leaderOpt, id);
+
 
         if (model.hasTeam(toAdd)) {
+            // revert id increment
+            nextId--;
             throw new CommandException(MESSAGE_DUPLICATE_TEAM);
         }
 
@@ -74,11 +88,33 @@ public class CreateTeamCommand extends Command {
         boolean nameDuplicate = ab.getTeamList().stream()
                 .anyMatch(t -> t.getTeamName().equals(toAdd.getTeamName()));
         if (nameDuplicate) {
+            // revert id increment
+            nextId--;
             throw new CommandException(MESSAGE_DUPLICATE_TEAM);
         }
 
         model.addTeam(toAdd);
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd.getTeamName().teamName()));
+    }
+
+    private static void updateLeaderPersonDetails(Model model, Optional<Person> leaderOpt, String id)
+            throws CommandException {
+        try {
+            Person editedPerson = leaderOpt.get().withAddedTeam(id);
+            model.setPerson(leaderOpt.get(), editedPerson);
+        } catch (DuplicatePersonException e) {
+            throw new CommandException("Failed to update Leader's teams: would create a duplicate leader");
+        } catch (PersonNotFoundException e) {
+            throw new CommandException("Failed to update Leader's teams: leader no longer exists");
+        }
+    }
+
+    /**
+     * Sets the next ID based on the highest existing ID in the team list.
+     * Should be called when the application starts.
+     */
+    public static void setNextId(long id) {
+        nextId = id;
     }
 
     @Override

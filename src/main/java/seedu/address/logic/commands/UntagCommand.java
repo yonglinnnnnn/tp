@@ -1,14 +1,13 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -26,7 +25,7 @@ public class UntagCommand extends Command {
             + "Parameters: EMPLOYEE_ID (must start with E) TAG [MORE_TAGS]...\n"
             + "Example: " + COMMAND_WORD + " E1001 friends colleagues";
 
-    public static final String MESSAGE_UNTAG_SUCCESS = "Removed tags from Person: %1$s";
+    public static final String MESSAGE_UNTAG_SUCCESS = "Removed [%s] tags from: %s";
     public static final String MESSAGE_NO_TAGS_PROVIDED = "At least one tag must be provided.";
     public static final String MESSAGE_TAG_NOT_FOUND = "Some tags were not found on this person: %1$s";
     public static final String MESSAGE_PERSON_NOT_FOUND = "No person with employee ID %1$s found.";
@@ -51,34 +50,59 @@ public class UntagCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
-
-        // Find the person with the matching employee ID from the filtered list
-        // If not found, throw a CommandException with an appropriate error message
+        // Find the person with the matching employee ID
         Person personToUntag = lastShownList.stream()
-                .filter(person -> person.id().equals(employeeId)) // Keep only persons matching the ID
-                .findFirst() // Get the first matching person (if any)
+                .filter(person -> person.id().equals(employeeId))
+                .findFirst()
                 .orElseThrow(() -> new CommandException(String.format(MESSAGE_PERSON_NOT_FOUND, employeeId)));
 
-        // Validate that all tags to remove exist on the person
+        // Validate that all tags to remove exist on the person (case-insensitive)
         Set<Tag> personTags = personToUntag.tags();
         Set<Tag> nonExistentTags = new HashSet<>();
-        for (Tag tag : tagsToRemove) {
-            if (!personTags.contains(tag)) {
-                nonExistentTags.add(tag);
+        Set<Tag> actualTagsToRemove = new HashSet<>();
+
+        for (Tag tagToRemove : tagsToRemove) {
+            boolean found = false;
+            for (Tag personTag : personTags) {
+                if (personTag.tagName.equalsIgnoreCase(tagToRemove.tagName)) {
+                    actualTagsToRemove.add(personTag);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                nonExistentTags.add(tagToRemove);
             }
         }
 
-        if (!nonExistentTags.isEmpty()) {
-            throw new CommandException(String.format(MESSAGE_TAG_NOT_FOUND, nonExistentTags));
+        // Remove the valid tags (even if some are invalid)
+        Person untaggedPerson = createUntaggedPerson(personToUntag, actualTagsToRemove);
+        model.setPerson(personToUntag, untaggedPerson);
+        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
+
+        // Build result message with removed tags
+        String resultMessage;
+        if (actualTagsToRemove.isEmpty()) {
+            resultMessage = String.format("No tags were removed from: %s", employeeId);
+        } else {
+            String removedTags = formatTagNames(actualTagsToRemove);
+            resultMessage = String.format(MESSAGE_UNTAG_SUCCESS, removedTags, employeeId);
         }
 
-        Person untaggedPerson = createUntaggedPerson(personToUntag, tagsToRemove);
+        if (!nonExistentTags.isEmpty()) {
+            String invalidTags = formatTagNames(nonExistentTags);
+            resultMessage += "\n" + String.format(MESSAGE_TAG_NOT_FOUND, invalidTags);
+        }
 
-        model.setPerson(personToUntag, untaggedPerson);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_UNTAG_SUCCESS, Messages.format(untaggedPerson)));
+        return new CommandResult(resultMessage);
     }
 
+    private String formatTagNames(Set<Tag> tags) {
+        return tags.stream()
+                .map(tag -> tag.tagName)
+                .sorted()
+                .collect(Collectors.joining(", "));
+    }
 
     /**
      * Creates and returns a {@code Person} with the tags of {@code personToUntag}

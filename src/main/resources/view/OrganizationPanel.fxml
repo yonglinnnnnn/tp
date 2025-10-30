@@ -5,12 +5,8 @@
 <?import javafx.scene.layout.HBox?>
 
 <?import javafx.scene.text.Text?>
-<?import javafx.geometry.Insets?>
 <StackPane styleClass="organization-panel" xmlns="http://javafx.com/javafx/17"
            xmlns:fx="http://javafx.com/fxml/1">
-    <padding>
-        <Insets top="10" right="10" bottom="10" left="10" />
-    </padding>
     <Text fx:id="organizationTitle" styleClass="title" text="Organization Hierarchy" StackPane.alignment="TOP_CENTER"/>
     <Text fx:id="organizationDetails" styleClass="hierarchy-text"/>
     <Label fx:id="organizationPanelPlaceholder" styleClass="result-display" HBox.hgrow="ALWAYS" />

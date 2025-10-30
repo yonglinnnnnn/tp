@@ -22,7 +22,7 @@ public class DeleteCommand extends Command {
             + "Parameters: employee ID (must be in format Exxxx)\n"
             + "Example: " + COMMAND_WORD + " E1234";
 
-    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
+    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person:\n%1$s";
     public static final String MESSAGE_PERSON_NOT_FOUND = "No person found with employee ID: %1$s";
 
     private final String employeeId;

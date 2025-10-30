@@ -10,13 +10,13 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public record TeamName(String teamName) {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "TeamNames should only contain alphanumeric characters and spaces, and it should not be blank";
+            "TeamNames must be 1 to 40 alphanumeric characters and must not contain spaces";
 
     /*
      * The first character of the name must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
+    public static final String VALIDATION_REGEX = "^[\\p{Alnum}]{1,40}$";
 
     /**
      * Constructs a {@code Name}.
