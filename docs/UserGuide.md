@@ -297,6 +297,26 @@ Format: `import FILENAME.json`
 Example:
 - `import oldContacts.json` imports non-duplicate contacts from 'data/oldContacts.json' into the address book.
 
+### Viewing of audit logs : `audit`
+
+Displays a log of all past actions that have modified the address book data.
+
+Format: `audit`
+
+* Shows a chronological list of all commands that have changed the address book state.
+* Each entry includes:
+  * The action type (e.g., ADD, DELETE, EDIT, CLEAR)
+  * Details of what was changed 
+  * Timestamp of when the action occurred
+* Read-only commands (like list, find, view, help, exit) are not logged. 
+* If no actions have been performed, displays "No audit log entries found."
+
+Examples:
+* `audit` displays all logged actions in chronological order.
+
+Note: 
+* The audit log persists between sessions and survives application restarts. Only commands that modify data are recorded to keep the log meaningful and concise.
+
 ### Exiting the program : `exit`
 
 Exits the program.
@@ -353,4 +373,6 @@ _Details coming soon ..._
 | **create-team**       | `create-team TEAM_NAME TEAM_LEADER_ID`<br> e.g., `create-team DevTeam E1001`
 | **delete-team**       | `delete-team TEAM_ID`<br> e.g., `delete-team T0001`
 | **add-to-team**       | `add-to-team TEAM_ID MEMBER_ID`<br> e.g., `add-to-team T0001 E1002`
-|  **remove-from-team** | `remove-from-team TEAM_ID MEMBER_ID`<br> e.g., `remove-from-team T0001 E1002`
+| **remove-from-team**  | `remove-from-team TEAM_ID MEMBER_ID`<br> e.g., `remove-from-team T0001 E1002`
+| **Audit**             | `audit`
+| **Exit**              | `exit`

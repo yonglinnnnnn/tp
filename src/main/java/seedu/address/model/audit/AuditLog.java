@@ -16,7 +16,7 @@ public class AuditLog {
     }
 
     public void addEntry(String action, String details, LocalDateTime timestamp) {
-        entries.add(new AuditLogEntry(timestamp, action, details));
+        entries.add(0, new AuditLogEntry(timestamp, action, details));
     }
 
     public List<AuditLogEntry> getEntries() {
