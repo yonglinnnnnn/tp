@@ -137,12 +137,12 @@ Adds one or more tags to an existing person in the address book without removing
 
 Format: `tag EMPLOYEE_ID TAG [MORE_TAGS]…`
 
-* Adds tags to the person identified by their EMPLOYEE_ID. 
+* Adds tags to the person identified by their `EMPLOYEE_ID`. 
 * The employee ID must start with 'E' (e.g., E1001, E2050). 
 * At least one tag must be provided. 
 * Tags are added cumulatively - existing tags are preserved. 
 * Multiple tags can be added at once by separating them with spaces. 
-* Tags are case-insensitive - Friends and friends are treated as the same tag. 
+* Tags are case-insensitive - `Friends` and `friends` are treated as the same tag. 
 * Tags must be alphanumeric and can contain hyphens between words (e.g., part-time, team-lead). 
 * Tags must be between 1-20 characters in length. 
 * Tags cannot contain whitespaces. 
@@ -163,6 +163,30 @@ Warning:
 
 ### Removing a tag: `untag`
 
+Removes one or more tags from an existing person in the address book.
+
+Format: `untag EMPLOYEE_ID TAG [MORE_TAGS]…`
+
+* Removes tags from the person identified by their `EMPLOYEE_ID`. 
+* The employee ID must start with 'E' (e.g., E1001, E2050). 
+* At least one tag must be provided. 
+* Tags are case-insensitive - `Friends` and `friends` are treated as the same tag. 
+* Multiple tags can be removed at once by separating them with spaces. 
+* The command will show which tags were successfully removed. 
+* If some tags don't exist on the person, a warning will be shown indicating which tags were not found, but valid tags will still be removed. 
+* If all specified tags don't exist on the person, an error will be shown and no tags will be removed.
+
+Examples:
+* `untag E1001 friends` Removes the tag "friends" from employee E1001.
+* `untag E2050 colleagues mentor` Removes both "colleagues" and "mentor" tags from employee E2050.
+* `untag E1001 team-lead` Removes the hyphenated tag "team-lead" from employee E1001.
+* `untag E2050 Friends` Removes the tag "friends" (case-insensitive) from employee E2050, even if it was originally added as "friends".
+
+Note: 
+* Tag removal is case-insensitive. Removing Boardgames from a person who has boardgames will successfully remove that tag.
+
+Warning: 
+* If none of the specified tags exist on the person, the command will fail with an error message listing the non-existent tags. However, if at least one tag exists, valid tags will be removed and a warning will show which tags were not found.
 
 ### Creating a team: `create-team`
 TODO
