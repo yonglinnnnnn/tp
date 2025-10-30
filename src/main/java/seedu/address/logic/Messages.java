@@ -1,5 +1,6 @@
 package seedu.address.logic;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -42,17 +43,22 @@ public class Messages {
      */
     public static String format(Person person) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(person.name())
-                .append("; Phone: ")
-                .append(person.phone())
-                .append("; Email: ")
-                .append(person.email())
-                .append("; Address: ")
-                .append(person.address())
-                .append("; GitHubUsername: ")
-                .append(person.gitHubUsername())
-                .append("; Tags: ");
-        person.tags().forEach(builder::append);
+        builder.append("\t- Name: ").append(person.name().fullName()).append("\n")
+                .append("\t- Phone: ").append(person.phone().value()).append("\n")
+                .append("\t- Email: ").append(person.email().value()).append("\n")
+                .append("\t- Address: ").append(person.address().value()).append("\n");
+
+        if (!Objects.equals(person.gitHubUsername().value(), "")) {
+            builder.append("\t- GitHub Username: ").append(person.gitHubUsername().value()).append("\n");
+        }
+        if (person.salary().toDouble() != 0.0) {
+            builder.append("\t- Salary: ").append(String.valueOf(person.salary().toDouble())).append("\n");
+        }
+        if (!person.tags().isEmpty()) {
+            builder.append("\t- Tags: ");
+            person.tags().forEach(tagName -> builder.append(tagName).append(" "));
+            builder.append("\n");
+        }
         return builder.toString();
     }
 
