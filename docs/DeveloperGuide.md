@@ -223,8 +223,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | HR administrator           | set sub teams to teams                                                            | to indicate the sub departments                                        |
 | `* * `   | HR administrator           | see a company-level overview of all the employees and the departments they are in | have a better idea of the manpower allocation.                         |
 
-*{More to be added}*
-
 ### Use cases
 
 (For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
@@ -474,6 +472,30 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 3a1. System shows an error message about the invalid salary format.
     Use case ends.
 
+**Use case: Set Subteam**
+
+**MSS**
+1. User requests to set a subteam relationship by specifying parent team and child team names 
+2. System validates that both teams exist 
+3. System validates that setting this relationship does not create a circular dependency 
+4. System sets the child team as a subteam of the parent team 
+5. System displays a success message
+   Use case ends.
+
+**Extensions**
+* 2a. The parent team does not exist. 
+  * 2a1. System shows an error message.
+    Use case ends. 
+* 2b. The child team does not exist. 
+  * 2b1. System shows an error message.
+    Use case ends. 
+* 3a. Setting this relationship would create a circular dependency. 
+  * 3a1. System shows an error message indicating circular dependency.
+    Use case ends. 
+* 3b. The child team is already a subteam of the parent team. 
+  * 3b1. System shows an error message indicating the relationship already exists.
+    Use case ends.
+
 **Use case: Sort persons**
 
 **MSS**
@@ -490,7 +512,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 3a. The address book is empty. 
   * 3a1. System shows a message indicating no persons to sort.
     Use case ends.
-
 
 
 **Use case: Add tags to a person**
@@ -520,8 +541,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 4.  User requests to remove specific tags from the person by ID
 5.  System removes the specified tags from the person (case-insensitive matching)
 6.  System displays a success message listing removed tags
-
     Use case ends.
+
 **Extensions**
 * 2a. The list is empty.
   Use case ends.
@@ -604,38 +625,466 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
 1. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
+   2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+## **Appendix: Instructions for manual testing**
 
-### Deleting a person
+Given below are instructions to test the app manually.
 
-1. Deleting a person while all persons are being shown
+<box type="info" seamless>
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+**Note:** These instructions only provide a starting point for testers to work on;
+testers are expected to do more *exploratory* testing.
 
-   1. Test case: `delete E1001`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+</box>
 
-   1. Test case: `delete E1002`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+### Launch and shutdown
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+1. Initial launch
 
-1. _{ more test cases …​ }_
+    1. Download the jar file and copy into an empty folder
+
+    2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+
+2. Saving window preferences
+
+    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+
+    2. Re-launch the app by double-clicking the jar file.<br>
+       Expected: The most recent window size and location is retained.
+
+### Add command
+
+1. Adding a person with all required fields
+
+    1. Test case: `add -name John Doe -hp 98765432 -em johnd@example.com -addr Woodalnds`<br>
+       Expected: New person is added to the list. Success message displays the added person's details including auto-generated employee ID.
+
+    2. Test case: `add -name Jane Smith -hp 87654321 -em janes@example.com -addr Woodlands -gh @JaneSmithy`<br>
+       Expected: New person is added with optional github field. Success message shows all details.
+
+2. Adding a person with missing required fields
+
+    1. Test case: `add -name John Doe -hp 98765432`<br>
+       Expected: No person is added. Error message indicates missing required fields (email and address).
+
+    2. Test case: `add`<br>
+       Expected: No person is added. Error message shows the correct command format.
+
+3. Adding a person with invalid fields
+
+    1. Test case: `add -name John Doe -hp invalid -em johnd@example.com -gh @johndoe`<br>
+       Expected: No person is added. Error message indicates invalid phone number format.
+
+    2. Test case: `add -name John Doe -hp 98765432 -em invalidemail -gh @johndoe`<br>
+       Expected: No person is added. Error message indicates invalid email format.
+
+
+### Add-to-team command
+
+1. Adding an employee to a team
+
+    1. Prerequisites: Person with ID E1001 exists and team "T9999" exists.
+
+    2. Test case: `add-to-team T9999 E1001`<br>
+       Expected: Person E1001 is added to the T9999 team. Success message confirms the addition.
+
+2. Adding an employee to a non-existent team
+
+    1. Prerequisites: Person with ID E1001 exists but team "T9999" does not exist.
+
+    2. Test case: `add-to-team T9999 E1001`<br>
+       Expected: No changes made. Error message indicates the team "T9999" does not exist.
+
+3. Adding a non-existent employee to a team
+
+    1. Prerequisites: Team "T9999" exists but no person with ID E1001 exists.
+
+    2. Test case: `add-to-team T9999 E1001`<br>
+       Expected: No changes made. Error message indicates the employee ID "E1001" does not exist.
+
+4. Adding an employee already in the team
+
+    1. Prerequisites: Person E1001 is already a member of team "T9999".
+
+    2. Test case: `add-to-team T9999 E1001`<br>
+       Expected: No changes made. Error message indicates the person is already in the team.
+
+### Audit command
+
+1. Viewing audit log with recorded actions
+
+    1. Prerequisites: Some actions have been performed (e.g., add, delete, edit).
+
+    2. Test case: `audit`<br>
+       Expected: Output feedback displays showing all recorded actions with timestamps and details.
+
+2. Viewing audit log with no recorded actions
+
+    1. Prerequisites: Fresh application start with no actions performed.
+
+    2. Test case: `audit`<br>
+       Expected: Output feedback displays with empty list or message indicating no history is available.
+
+### Clear command
+
+1. Clearing the address book
+
+    1. Prerequisites: Multiple persons and teams exist in the address book.
+
+    2. Test case: `clear`<br>
+       Expected: All persons and teams are removed from the address book. Success message confirms the address book has been cleared.
+
+2. Clearing an already empty address book
+
+    1. Prerequisites: Address book is empty.
+
+    2. Test case: `clear`<br>
+       Expected: Success message indicates the address book has been cleared (even though it was already empty).
+
+### Create-team command
+
+1. Creating a new team
+
+    1. Prerequisites: Team "Engineering" does not exist. Employee "E1001" exists.
+
+    2. Test case: `create-team Engineering E1001`<br>
+       Expected: New team "Engineering" is created. Success message confirms team creation.
+
+2. Creating a team with an existing name
+
+    1. Prerequisites: Team "Engineering" already exists. Employee "E1001" exists.
+
+    2. Test case: `create-team Engineering E1001`<br>
+       Expected: No team is created. Error message indicates duplicate team name.
+
+3. Creating a team with invalid format
+
+    1. Test case: `create-team 2312318`<br>
+       Expected: No team is created. Error message shows the correct command format.
+
+    2. Test case: `create-team`<br>
+       Expected: No team is created. Error message indicates team name cannot be empty.
+
+### Delete command
+
+1. Deleting a person by employee ID
+
+    1. Prerequisites: Person with ID E1001 exists in the list.
+
+    2. Test case: `delete E1001`<br>
+       Expected: Person E1001 is deleted from the list. Success message shows details of the deleted person.
+
+2. Deleting a non-existent person
+
+    1. Prerequisites: No person with ID E9999 exists.
+
+    2. Test case: `delete E9999`<br>
+       Expected: No person is deleted. Error message indicates the employee ID does not exist.
+
+3. Invalid delete command format
+
+    1. Test case: `delete`<br>
+       Expected: No person is deleted. Error message shows the correct command format.
+
+    2. Test case: `delete invalid`<br>
+       Expected: No person is deleted. Error message indicates invalid employee ID format.
+
+### Delete-team command
+
+1. Deleting a team
+
+    1. Prerequisites: Team "T0001" exists.
+
+    2. Test case: `delete-team T0001`<br>
+       Expected: Team "T0001" is deleted. Success message confirms deletion.
+
+2. Deleting a team with members
+
+    1. Prerequisites: Team "T0001" exists with members E1001 and E1002.
+
+    2. Test case: `delete-team T0001`<br>
+       Expected: Team "T0001" is deleted. Success message confirms deletion.
+
+3. Deleting a non-existent team
+
+    1. Prerequisites: Team "T9999" does not exist.
+
+    2. Test case: `delete-team T9999`<br>
+       Expected: No team is deleted. Error message indicates the team does not exist.
+
+### Edit command
+
+1. Editing a person's details
+
+    1. Prerequisites: Person with ID E1001 exists.
+
+    2. Test case: `edit E1001 -hp 91234567 -em newemail@example.com`<br>
+       Expected: Person E1001's phone and email are updated. Success message shows the updated person's details.
+
+2. Editing with no fields specified
+
+    1. Test case: `edit E1001`<br>
+       Expected: No changes made. Error message indicates at least one field to edit must be provided.
+
+3. Editing a non-existent person
+
+    1. Prerequisites: No person with ID E9999 exists.
+
+    2. Test case: `edit E9999 -hp 91234567`<br>
+       Expected: No person is edited. Error message indicates the employee ID does not exist.
+
+4. Editing with invalid field values
+
+    1. Test case: `edit E1001 -hp invalid`<br>
+       Expected: No changes made. Error message indicates invalid phone number format.
+
+### Exit command
+
+1. Exiting the application
+
+    1. Test case: `exit`<br>
+       Expected: Application saves all data and closes.
+
+### Help command
+
+1. Opening the help window
+
+    1. Test case: `help`<br>
+       Expected: Help window opens with link to user guide.
+
+### Import command
+
+1. Importing from a valid file
+
+    1. Prerequisites: A valid JSON file `contacts.json` exists in the specified path with proper format.
+
+    2. Test case: `import contacts.json`<br>
+       Expected: Valid contacts from the file are imported. Success message shows summary of imported contacts.
+
+2. Importing from a non-existent file
+
+    1. Test case: `import nonexistent.json`<br>
+       Expected: No contacts are imported. Error message indicates the file does not exist.
+
+3. Importing from an invalid file format
+
+    1. Prerequisites: File `invalid.txt` exists but is not in JSON format.
+
+    2. Test case: `import invalid.txt`<br>
+       Expected: No contacts are imported. Error message indicates invalid file format.
+
+4. Importing with duplicate entries
+
+    1. Prerequisites: File contains contacts with GitHub usernames that already exist in the address book.
+
+    2. Test case: `import contacts.json`<br>
+       Expected: Only non-duplicate contacts are imported. Summary message shows skipped duplicates.
+
+### List command
+
+1. Listing all persons
+
+    1. Prerequisites: Multiple persons exist in the address book.
+
+    2. Test case: `list`<br>
+       Expected: All persons are displayed in the list with their basic information.
+
+2. Listing when address book is empty
+
+    1. Prerequisites: Address book is empty.
+
+    2. Test case: `list`<br>
+       Expected: Message indicates no persons found or displays an empty list.
+
+### Remove-from-team command
+
+1. Removing an employee from a team
+
+    1. Prerequisites: Person E1001 is a member of team "T0001".
+
+    2. Test case: `remove-from-team T0001 E1001`<br>
+       Expected: Person E1001 is removed from the "T0001" team. Success message confirms removal.
+
+2. Removing an employee not in the team
+
+    1. Prerequisites: Person E1001 exists but is not a member of team "T0001".
+
+    2. Test case: `remove-from-team T0001 E1001`<br>
+       Expected: No changes made. Error message indicates the person is not in the team.
+
+3. Removing from a non-existent team
+
+    1. Test case: `remove-from-team T0001 E1001`<br>
+       Expected: No changes made. Error message indicates the team does not exist.
+
+### Set-salary command
+
+1. Setting salary for an employee
+
+    1. Prerequisites: Person with ID E1001 exists.
+
+    2. Test case: `set-salary E1001 5000`<br>
+       Expected: Person E1001's salary is updated to 5000/month. Success message shows the updated salary.
+
+2. Setting salary with invalid format
+
+    1. Test case: `set-salary E1001 -1000`<br>
+       Expected: No changes made. Error message indicates salary cannot be negative.
+
+    2. Test case: `set-salary E1001 invalid`<br>
+       Expected: No changes made. Error message indicates invalid salary format.
+
+3. Setting salary for non-existent employee
+
+    1. Test case: `set-salary E9999 5000`<br>
+       Expected: No changes made. Error message indicates employee ID does not exist.
+
+### Set-subteam command
+
+1. Setting a subteam relationship
+
+    1. Prerequisites: Teams "T0001" and "T0002" exist. No existing subteam relationship between them.
+
+    2. Test case: `set-subteam T0001 T0002`<br>
+       Expected: T0002 is set as a subteam of T0001. Success message confirms the relationship.
+
+2. Setting subteam with non-existent teams
+
+    1. Test case: `set-subteam T9999 T0002`<br>
+       Expected: No changes made. Error message indicates parent team does not exist.
+
+3. Creating circular dependency
+
+    1. Prerequisites: T0002 is already parent of T0001.
+
+    2. Test case: `set-subteam T0001 T0002`<br>
+       Expected: No changes made. Error message indicates circular dependency.
+
+4. Setting existing subteam relationship
+
+    1. Prerequisites: T0002 is already a subteam of T0001.
+
+    2. Test case: `set-subteam T0001 T0002`<br>
+       Expected: No changes made. Error message indicates the relationship already exists.
+
+### Sort command
+
+1. Sorting persons by name
+
+    1. Prerequisites: Multiple persons exist in the address book.
+
+    2. Test case: `sort -name`<br>
+       Expected: Persons list is sorted alphabetically by name. Sorted list is displayed.
+
+2. Sorting persons by salary
+
+    1. Test case: `sort -salary`<br>
+       Expected: Persons list is sorted by salary (ascending or descending based on implementation). Sorted list is displayed.
+
+3. Sorting with invalid field
+
+    1. Test case: `sort -invalid`<br>
+       Expected: No sorting performed. Error message lists valid sort fields.
+
+4. Sorting empty address book
+
+    1. Prerequisites: Address book is empty.
+
+    2. Test case: `sort -name`<br>
+       Expected: Message indicates no persons to sort.
+
+### Tag command
+
+1. Adding a tag to a person
+
+    1. Prerequisites: Person with ID E1001 exists and does not have tag "developer".
+
+    2. Test case: `tag E1001 developer`<br>
+       Expected: Tag "developer" is added to person E1001. Success message confirms the tag addition.
+
+2. Adding an existing tag
+
+    1. Prerequisites: Person E1001 already has tag "developer".
+
+    2. Test case: `tag E1001 developer`<br>
+       Expected: No changes made. Error message indicates the tag already exists.
+
+3. Adding multiple tags
+
+    1. Test case: `tag E1001 developer senior`<br>
+       Expected: Both tags are added to person E1001 (if not already present). Success message lists all added tags.
+
+### Untag command
+
+1. Removing tags from a person (case-insensitive)
+
+    1. Prerequisites: Person E1001 has tags "Developer" and "Senior".
+
+    2. Test case: `untag E1001 developer`<br>
+       Expected: Tag "Developer" is removed from person E1001 (case-insensitive match). Success message lists removed tags and shows employee ID.
+
+    3. Test case: `untag E1001 SENIOR developer`<br>
+       Expected: Both tags are removed. Success message lists all removed tags.
+
+2. Removing some non-existent tags
+
+    1. Prerequisites: Person E1001 has tag "Developer" but not "Manager".
+
+    2. Test case: `untag E1001 developer manager`<br>
+       Expected: Tag "Developer" is removed. Warning message indicates "manager" tag was not found on the person.
+
+3. Removing only non-existent tags
+
+    1. Prerequisites: Person E1001 does not have tags "Manager" or "Lead".
+
+    2. Test case: `untag E1001 manager lead`<br>
+       Expected: No changes made. Error message indicates none of the specified tags exist on the person.
+
+4. Removing tags from non-existent person
+
+    1. Test case: `untag E9999 developer`<br>
+       Expected: No changes made. Error message indicates employee ID does not exist.
+
+### View command
+
+1. Viewing person details
+
+    1. Prerequisites: Person with full name "Alex Magnus" exists with complete details.
+
+    2. Test case: `view Alex`<br>
+       Expected: Detailed information panel displays showing all details of person "Alex Magnus" including name, phone, email, GitHub username, salary, tags, and teams.
+
+2. Viewing non-existent person
+
+   1. Prerequisites: No person named "Nullable" exists.
+    
+   2. Test case: `view Nullable`<br>
+          Expected: No details displayed.
+
+3. Invalid view command format
+
+    1. Test case: `view`<br>
+       Expected: Error message shows the correct command format.
 
 ### Saving data
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+    1. Test case: Delete the data file at `[JAR file location]/data/addressbook.json` and restart the app.<br>
+       Expected: App starts with sample data populated.
 
-1. _{ more test cases …​ }_
+    2. Test case: Manually corrupt the data file by adding invalid JSON syntax and restart the app.<br>
+       Expected: App starts with an empty address book. Error message may be logged.
+
+2. Testing automatic saving
+
+    1. Test case: Add a new person using the `add` command and immediately close the app using the window close button (not the `exit` command).<br>
+       Expected: On restart, the newly added person should still be present in the address book.

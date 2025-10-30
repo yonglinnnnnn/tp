@@ -21,12 +21,17 @@ Person *--> Email
 Person *--> Address
 Person *--> GithubUsername
 Person --> "*" TeamId
+Person *--> Salary
 
 UniqueTeamList --> "~* all" Team
 Team *--> Id
 Team *--> TeamName
 Team *--> LeaderId
 Team *--> "*" Members
-Team::west -> Team::west : " * SubTeams"
-Team::east -> Team::east : "1 ParentTeam"
+Team --> "1" Subteams
+Subteams --> AddressBook
+note bottom of Subteams: Subteams lookup Teams in AddressBook by ID
+Team --> "1" ParentTeamId
+
+
 @enduml

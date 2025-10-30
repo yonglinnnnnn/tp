@@ -224,6 +224,11 @@ The subteam must also not already contain the parent team as a subteam (directly
 
 Format: `set-subteam PARENT_TEAM_ID SUBTEAM_ID`
 
+Exceptions:
+* If the team to be added as a subteam already exists as a subteam of another team, the command will fail with an error message.
+* If the team to be added as a subteam is the same as the parent team, the command will fail with an error message.
+* If any of the team IDs do not exist as an existing team , the command will fail with an error message.
+
 ### Deleting a team `delete-team`
 Deletes an existing team from the address book.
 
@@ -403,18 +408,24 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 
 ## Command summary
 
-| Action                        | Format, Examples                                                                                                                                                                               |
-|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Add**                       | `add -name NAME -hp PHONE_NUMBER -em EMAIL -addr ADDRESS [-gh GITHUB_USERNAME]` <br> e.g., `add -name James Ho -hp 22224444 -em jamesho@example.com -addr 123, Clementi Rd, 1234665 -gh @jamesho` |
-| **Audit**                     | `audit`
-| **Clear**                     | `clear`                                                                                                                                                                                        |
-| **Create Team**               | `create-team TEAM_NAME TEAM_LEADER_ID`<br> e.g., `create-team DevTeam E1001`
-| **Delete**                    | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                            |
-| **Import**                    | `import FILENAME.json`<br> e.g., `import oldContacts.json`                                                                                                                                     |
-| **List**                      | `list`                                                                                                                                                                                         |
-| **Help**                      | `help`                                                                                                                                                                                         |
-| **View**                      | `view KEYWORD [MORE_KEYWORDS]`<br> e.g., `view James Jake`
-| **Delete Team**               | `delete-team TEAM_ID`<br> e.g., `delete-team T0001`
-| **Add to Team**               | `add-to-team TEAM_ID MEMBER_ID`<br> e.g., `add-to-team T0001 E1002`
-| **Remove from Team**          |`remove-from-team TEAM_ID MEMBER_ID`<br> e.g., `remove-from-team T0001 E1002`
-| **Exit**                      | `exit`
+| Action               | Format, Examples                                                                                                                                                                                  |
+|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Add**              | `add -name NAME -hp PHONE_NUMBER -em EMAIL -addr ADDRESS [-gh GITHUB_USERNAME]` <br> e.g., `add -name James Ho -hp 22224444 -em jamesho@example.com -addr 123, Clementi Rd, 1234665 -gh @jamesho` |
+| **Add to Team**      | `add-to-team TEAM_ID MEMBER_ID`<br> e.g., `add-to-team T0001 E1002`                                                                                                                               |
+| **Audit**            | `audit`                                                                                                                                                                                           |
+| **Clear**            | `clear`                                                                                                                                                                                           |
+| **Create Team**      | `create-team TEAM_NAME TEAM_LEADER_ID`<br> e.g., `create-team DevTeam E1001`                                                                                                                      |
+| **Delete**           | `delete EMPLOYEE_ID`<br> e.g., `delete E1003`                                                                                                                                                     |
+| **Delete Team**      | `delete-team TEAM_ID`<br> e.g., `delete-team T0001`                                                                                                                                               |
+| **Edit**             | `edit EMPLOYEE_ID [-name NAME] [-hp PHONE] [-em EMAIL] [-addr ADDRESS] [-gh GITHUB_USERNAME]`<br> e.g., `edit E1001 -hp 91234567 -em johndoe@example.com`                                         |
+| **Exit**             | `exit`                                                                                                                                                                                            |
+| **Help**             | `help`                                                                                                                                                                                            |
+| **Import**           | `import FILENAME.json`<br> e.g., `import oldContacts.json`                                                                                                                                        |
+| **List**             | `list`                                                                                                                                                                                            |
+| **Remove from Team** | `remove-from-team TEAM_ID MEMBER_ID`<br> e.g., `remove-from-team T0001 E1002`                                                                                                                     |
+| **Set Salary**       | `set-salary EMPLOYEE_ID SALARY`<br> e.g., `set-salary E1001 3000.50`                                                                                                                              |
+| **Set Subteam**      | `set-subteam PARENT_TEAM_ID SUBTEAM_ID`<br> e.g., `set-subteam T0001 T0002`                                                                                                                       |
+| **Sort**             | `sort -FIELD [-MORE_FIELDS]`<br> e.g., `sort -name -salary`                                                                                                                                       |
+| **Tag**              | `tag EMPLOYEE_ID TAG [MORE_TAGS]…`<br> e.g., `tag E1003 cs2103-f12`                                                                                                                               |
+| **Untag**            | `untag EMPLOYEE_ID TAG [MORE_TAGS]…` <br> e.g., `untag E1003 ay2425`                                                                                                                              |
+| **View**             | `view KEYWORD [MORE_KEYWORDS]`<br> e.g., `view James Jake`                                                                                                                                        |
