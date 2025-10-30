@@ -135,7 +135,7 @@ Examples:
 ### Creating a team: `create-team`
 Adds a team to the address book.
 
-Format: `create-team [TEAM_NAME] [TEAM_LEADER_ID]`
+Format: `create-team TEAM_NAME TEAM_LEADER_ID`
 
 Example:
 * `create-team Systems E1001` creates a team named `Systems` with the person having employee ID `E1001` as the team leader.
@@ -143,7 +143,7 @@ Example:
 ### Adding members to a team: `add-to-team`
 Adds a peron to an existing team in the address book.
 
-Format: `add-to-team [TEAM_ID] [MEMBER_ID]`
+Format: `add-to-team TEAM_ID MEMBER_ID`
 
 Example:
 * `add-to-team T0001 E1002` adds the person with employee ID `E1002` to the team with team ID `T0001`.
@@ -154,7 +154,7 @@ Exceptions:
 ### Removing members from a team: `remove-from-team`
 Remove a person from an existing team in the address book.
 
-Format: `remove-from-team [TEAM_ID] [MEMBER_ID]`
+Format: `remove-from-team TEAM_ID MEMBER_ID`
 
 Example:
 * `remove-from-team T0001 E1002` removes the person with employee ID `E1002` from the team with team ID `T0001`.
@@ -295,10 +295,10 @@ Action     | Format, Examples
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [-name NAME] [-hp PHONE_NUMBER] [-em EMAIL] [-addr ADDRESS] [-tag TAG]…​`<br> e.g.,`edit 2 -name James Lee -em jameslee@example.com`
 **View**   | `view KEYWORD [MORE_KEYWORDS]`<br> e.g., `view James Jake`
-**create-team** | `create-team [TEAM_NAME] [TEAM_LEADER_ID]`<br> e.g., `create-team DevTeam E1001`
+**create-team** | `create-team TEAM_NAME TEAM_LEADER_ID`<br> e.g., `create-team DevTeam E1001`
 **delete-team** | `delete-team TEAM_ID`<br> e.g., `delete-team T0001`
-**add-to-team** | `add-to-team [TEAM_ID] [MEMBER_ID]`<br> e.g., `add-to-team T0001 E1002`
-**remove-from-team** | `remove-from-team [TEAM_ID] [MEMBER_ID]`<br> e.g., `remove-from-team T0001 E1002`
+**add-to-team** | `add-to-team TEAM_ID MEMBER_ID`<br> e.g., `add-to-team T0001 E1002`
+**remove-from-team** | `remove-from-team TEAM_ID MEMBER_ID`<br> e.g., `remove-from-team T0001 E1002`
 **Import** | `import FILENAME.json`<br> e.g., `import oldContacts.json`
 **List**   | `list`
 **Help**   | `help`
