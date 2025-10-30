@@ -106,7 +106,7 @@ public class Subteams {
             return true;
         }
         // check nested levels
-        for (String t : internalList) {
+        for (String t : team.getSubteams().getUnmodifiableList()) {
             if (containsRecursive(t, teamId)) {
                 return true;
             }

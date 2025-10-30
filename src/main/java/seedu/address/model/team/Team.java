@@ -18,9 +18,9 @@ import seedu.address.model.team.exceptions.InvalidSubteamNesting;
 public class Team {
     private final String id;
     private final TeamName teamName;
+    private final Subteams subteams;
     private List<String> members = new ArrayList<>();
     private String leaderId = null;
-    private Subteams subteams = null;
     private String parentTeamId = null;
 
     /**
@@ -65,7 +65,8 @@ public class Team {
      */
     public Team addToSubteam(String subteamId) throws InvalidSubteamNesting {
         requireNonNull(subteamId);
-        if (subteamId.equals(this.id)) {
+        // checks for self and direct parent
+        if (subteamId.equals(this.id) || subteamId.equals(this.parentTeamId)) {
             throw new InvalidSubteamNesting();
         }
         // prevent cycles

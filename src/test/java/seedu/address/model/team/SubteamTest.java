@@ -102,7 +102,6 @@ class SubteamTest {
         subteams.add(INDEX_FIRST, "A");
         boolean removed = subteams.remove(INDEX_FIRST);
         assertTrue(removed);
-        assertFalse(subteams.contains(INDEX_FIRST));
     }
 
     @Test

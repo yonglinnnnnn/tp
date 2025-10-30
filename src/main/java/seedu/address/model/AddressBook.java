@@ -207,10 +207,6 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     @Override
     public ObservableList<Person> getPersonList() {
-        // Current Internal Code to check for changes
-        // (Due to not having UI implemented yet)
-        System.out.println(teams);
-        System.out.println(persons);
         return persons.asUnmodifiableObservableList();
     }
 
