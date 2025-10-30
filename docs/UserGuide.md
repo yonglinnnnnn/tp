@@ -128,6 +128,62 @@ Examples:
 *  `edit E1001 -hp 91234567 -em johndoe@example.com` Edits the phone number and email address of the person with the ID of "E1001" to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 -name Betsy Crower` Edits the name of the 2nd person to be `Betsy Crower`.
 
+### Adding a tag: `tag`
+Adds one or more tags to an existing person in the address book without removing existing tags.
+
+Format: `tag EMPLOYEE_ID TAG [MORE_TAGS]…`
+
+* Adds tags to the person identified by their `EMPLOYEE_ID`. 
+* The employee ID must start with 'E' (e.g., E1001, E2050). 
+* At least one tag must be provided. 
+* Tags are added cumulatively - existing tags are preserved. 
+* Multiple tags can be added at once by separating them with spaces. 
+* Tags are case-insensitive - `Friends` and `friends` are treated as the same tag. 
+* Tags must be alphanumeric and can contain hyphens between words (e.g., part-time, team-lead). 
+* Tags must be between 1-20 characters in length. 
+* Tags cannot contain whitespaces. 
+* If you attempt to add duplicate tags (including case variations), only the new tags will be added and a warning will be shown.
+
+Examples:
+* `tag E1001 friends` Adds the tag "friends" to the employee with ID E1001.
+* `tag E2050 colleagues mentor` Adds both "colleagues" and "mentor" tags to employee E2050.
+* `tag E1001 team-lead part-time` Adds hyphenated tags to employee E1001.
+* `tag E2050 Friends colleagues` If employee E2050 already has a "friends" tag (in any case variation), only "colleagues" will be added and a warning will show that "Friends" is a duplicate.
+
+Note: 
+* Tags are case-insensitive. Adding Boardgames to a person who already has boardgames will be detected as a duplicate and ignored.
+
+Warning: 
+* If all tags you attempt to add are duplicates, the command will return a message indicating no new tags were added.
+
+
+### Removing a tag: `untag`
+
+Removes one or more tags from an existing person in the address book.
+
+Format: `untag EMPLOYEE_ID TAG [MORE_TAGS]…`
+
+* Removes tags from the person identified by their `EMPLOYEE_ID`. 
+* The employee ID must start with 'E' (e.g., E1001, E2050). 
+* At least one tag must be provided. 
+* Tags are case-insensitive - `Friends` and `friends` are treated as the same tag. 
+* Multiple tags can be removed at once by separating them with spaces. 
+* The command will show which tags were successfully removed. 
+* If some tags don't exist on the person, a warning will be shown indicating which tags were not found, but valid tags will still be removed. 
+* If all specified tags don't exist on the person, an error will be shown and no tags will be removed.
+
+Examples:
+* `untag E1001 friends` Removes the tag "friends" from employee E1001.
+* `untag E2050 colleagues mentor` Removes both "colleagues" and "mentor" tags from employee E2050.
+* `untag E1001 team-lead` Removes the hyphenated tag "team-lead" from employee E1001.
+* `untag E2050 Friends` Removes the tag "friends" (case-insensitive) from employee E2050, even if it was originally added as "friends".
+
+Note: 
+* Tag removal is case-insensitive. Removing Boardgames from a person who has boardgames will successfully remove that tag.
+
+Warning: 
+* If none of the specified tags exist on the person, the command will fail with an error message listing the non-existent tags. However, if at least one tag exists, valid tags will be removed and a warning will show which tags were not found.
+
 ### Creating a team: `create-team`
 Adds a team to the address book.
 
