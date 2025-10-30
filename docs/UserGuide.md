@@ -80,7 +80,7 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add -name NAME -hp PHONE_NUMBER -em EMAIL -addr ADDRESS [-tag TAG]…​`
+Format: `add -name NAME -hp PHONE_NUMBER -em EMAIL -addr ADDRESS …​`
 
 #### Required Parameters
 1. `-name` - name of the person being added to the address book
@@ -111,7 +111,7 @@ Format: `list`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [-name NAME] [-hp PHONE] [-em EMAIL] [-addr ADDRESS] [-tag TAG]…​`
+Format: `edit INDEX [-name NAME] [-hp PHONE] [-em EMAIL] [-addr ADDRESS]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
@@ -131,6 +131,38 @@ Format: `edit INDEX [-name NAME] [-hp PHONE] [-em EMAIL] [-addr ADDRESS] [-tag T
 Examples:
 *  `edit 1 -hp 91234567 -em johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 -name Betsy Crower -tag ` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+
+### Adding a tag: `tag`
+Adds one or more tags to an existing person in the address book without removing existing tags.
+
+Format: `tag EMPLOYEE_ID TAG [MORE_TAGS]…`
+
+* Adds tags to the person identified by their EMPLOYEE_ID. 
+* The employee ID must start with 'E' (e.g., E1001, E2050). 
+* At least one tag must be provided. 
+* Tags are added cumulatively - existing tags are preserved. 
+* Multiple tags can be added at once by separating them with spaces. 
+* Tags are case-insensitive - Friends and friends are treated as the same tag. 
+* Tags must be alphanumeric and can contain hyphens between words (e.g., part-time, team-lead). 
+* Tags must be between 1-20 characters in length. 
+* Tags cannot contain whitespaces. 
+* If you attempt to add duplicate tags (including case variations), only the new tags will be added and a warning will be shown.
+
+Examples:
+* `tag E1001 friends` Adds the tag "friends" to the employee with ID E1001.
+* `tag E2050 colleagues mentor` Adds both "colleagues" and "mentor" tags to employee E2050.
+* `tag E1001 team-lead part-time` Adds hyphenated tags to employee E1001.
+* `tag E2050 Friends colleagues` If employee E2050 already has a "friends" tag (in any case variation), only "colleagues" will be added and a warning will show that "Friends" is a duplicate.
+
+Note: 
+* Tags are case-insensitive. Adding Boardgames to a person who already has boardgames will be detected as a duplicate and ignored.
+
+Warning: 
+* If all tags you attempt to add are duplicates, the command will return a message indicating no new tags were added.
+
+
+### Removing a tag: `untag`
+
 
 ### Creating a team: `create-team`
 TODO
