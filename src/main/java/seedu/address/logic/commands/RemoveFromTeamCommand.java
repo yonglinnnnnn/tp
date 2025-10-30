@@ -60,7 +60,10 @@ public class RemoveFromTeamCommand extends Command {
         Team team = getTeam(model);
 
         // Prevent removing the current leader, throws CommandException.
-        personIsLeader(team);
+        boolean isLeader = personIsLeader(team);
+        if (isLeader) {
+            throw new CommandException(MESSAGE_CANNOT_REMOVE_LEADER);
+        }
 
         // create edited team copy with the member removed
         Team edited = new Team(team.getId(), team.getTeamName());
@@ -72,10 +75,8 @@ public class RemoveFromTeamCommand extends Command {
         return new CommandResult(String.format(MESSAGE_SUCCESS, personId, teamId));
     }
 
-    private void personIsLeader(Team team) throws CommandException {
-        if (team.getLeaderId().equals(personId)) {
-            throw new CommandException(MESSAGE_CANNOT_REMOVE_LEADER);
-        }
+    private boolean personIsLeader(Team team) throws CommandException {
+        return team.getLeaderId().equals(personId);
     }
 
     private static void updateTeamDetails(Model model, Team team, List<String> newMembers, Team edited) {
