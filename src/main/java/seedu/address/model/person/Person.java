@@ -234,8 +234,8 @@ public record Person(
          * @param salaryInCents The salary to set.
          * @return This builder object.
          */
-        public Builder withSalaryInCents(int salaryInCents) {
-            this.salary = new Salary(salaryInCents / 100, salaryInCents % 100);
+        public Builder withSalaryInCents(long salaryInCents) {
+            this.salary = new Salary(salaryInCents / 100.0);
             return this;
         }
 
