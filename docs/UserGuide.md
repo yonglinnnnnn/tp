@@ -201,6 +201,26 @@ Format: `import FILENAME.json`
 Example:
 - `import oldContacts.json` imports non-duplicate contacts from 'data/oldContacts.json' into the address book.
 
+### Viewing of audit logs : `audit`
+
+Displays a log of all past actions that have modified the address book data.
+
+Format: `audit`
+
+* Shows a chronological list of all commands that have changed the address book state.
+* Each entry includes:
+  * The action type (e.g., ADD, DELETE, EDIT, CLEAR)
+  * Details of what was changed 
+  * Timestamp of when the action occurred
+* Read-only commands (like list, find, view, help, exit) are not logged. 
+* If no actions have been performed, displays "No audit log entries found."
+
+Examples:
+* `audit` displays all logged actions in chronological order.
+
+Note: 
+* The audit log persists between sessions and survives application restarts. Only commands that modify data are recorded to keep the log meaningful and concise.
+
 ### Exiting the program : `exit`
 
 Exits the program.
@@ -254,3 +274,5 @@ Action     | Format, Examples
 **Import** | `import FILENAME.json`<br> e.g., `import oldContacts.json`
 **List**   | `list`
 **Help**   | `help`
+**Audit**  | `audit`
+**Exit**   | `exit`
