@@ -27,7 +27,7 @@ public class PersonBuilder {
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_GITHUBUSERNAME = "@amybee01";
     public static final double DEFAULT_SALARY = 0.00;
-    public static final Team DEFAULT_TEAM = new Team("T9999", new TeamName("DEFAULT TEAM"));
+    public static final Team DEFAULT_TEAM = new Team("T9999", new TeamName("DEFAULTTEAM"));
     public static final Tag DEFAULT_TAG = new Tag("friends");
 
     private String id;
