@@ -17,7 +17,7 @@ class SetSalaryCommandTest {
 
     @Test
     void execute_validIdAndSalary_success() {
-        SetSalaryCommand command = new SetSalaryCommand("E0001", 10000);
+        SetSalaryCommand command = new SetSalaryCommand("E0001", 100);
         assertCommandSuccess(command, model, String.format(MESSAGE_SUCCESS, 100.0, "E0001"), model);
     }
 
@@ -35,7 +35,7 @@ class SetSalaryCommandTest {
     @Test
     void toString_method() {
         SetSalaryCommand command = new SetSalaryCommand("E12345", 100);
-        assertEquals("seedu.address.logic.commands.SetSalaryCommand{toSet=E12345, salaryInCents=100}",
+        assertEquals("seedu.address.logic.commands.SetSalaryCommand{toSet=E12345, salaryInDollars=100.0}",
                      command.toString());
     }
 }

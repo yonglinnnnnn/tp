@@ -25,6 +25,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.CreateTeamCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -38,6 +39,8 @@ import seedu.address.model.UserPrefs;
 import seedu.address.model.audit.AuditLog;
 import seedu.address.model.audit.AuditLogEntry;
 import seedu.address.model.person.Person;
+import seedu.address.model.team.Team;
+import seedu.address.model.team.TeamName;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
@@ -77,6 +80,15 @@ public class LogicManagerTest {
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
         logic = new LogicManager(model, storage);
+
+        // Reset team ID counter
+        try {
+            Field field = CreateTeamCommand.class.getDeclaredField("nextId");
+            field.setAccessible(true);
+            field.setLong(null, 1);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
@@ -383,5 +395,50 @@ public class LogicManagerTest {
         field.setAccessible(true);
         long nextId = field.getLong(null);
         assertEquals(7124L, nextId);
+    }
+
+    @Test
+    public void execute_emptyAddressBook_teamNextIdRemainsUnchanged() throws Exception {
+        // Setup empty model
+        Model emptyModel = new ModelManager(new AddressBook(), new UserPrefs());
+
+        // Get current nextId before initialization
+        Field field = CreateTeamCommand.class.getDeclaredField("nextId");
+        field.setAccessible(true);
+        long initialNextId = field.getLong(null);
+
+        // Create LogicManager with empty model (should not update nextId)
+        JsonAddressBookStorage addressBookStorage =
+                new JsonAddressBookStorage(temporaryFolder.resolve("addressBook.json"));
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        Logic logic = new LogicManager(emptyModel, storage);
+
+        // Verify nextId hasn't changed
+        long afterNextId = field.getLong(null);
+        assertEquals(initialNextId, afterNextId);
+    }
+
+    @Test
+    public void execute_addressBookWithTeams_nextIdUpdatedCorrectly() throws Exception {
+        // Setup model with teams having different IDs
+        AddressBook ab = new AddressBook();
+        ab.addTeam(new Team("T0001", new TeamName("Alpha")));
+        ab.addTeam(new Team("T0002", new TeamName("Beta")));
+        ab.addTeam(new Team("T0003", new TeamName("Gamma")));
+        Model modelWithTeams = new ModelManager(ab, new UserPrefs());
+
+        JsonAddressBookStorage addressBookStorage =
+                new JsonAddressBookStorage(temporaryFolder.resolve("addressBook.json"));
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        Logic logic = new LogicManager(modelWithTeams, storage);
+
+        Field field = CreateTeamCommand.class.getDeclaredField("nextId");
+        field.setAccessible(true);
+        long nextId = field.getLong(null);
+        assertEquals(4L, nextId);
     }
 }

@@ -10,6 +10,8 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_SALARY_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_SALARY_BOB;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +32,7 @@ public class TypicalPersons {
             .withEmail("alice@example.com")
             .withPhone("94351253")
             .withGitHubUsername("@alice01")
+            .withSalary(1000.00)
             .withTags("friends").build();
     public static final Person BENSON = new PersonBuilder()
             .withId(1)
@@ -38,6 +41,7 @@ public class TypicalPersons {
             .withEmail("johnd@example.com")
             .withPhone("98765432")
             .withGitHubUsername("@benson02")
+            .withSalary(2000.00)
             .withTags("owesMoney", "friends").build();
     public static final Person CARL = new PersonBuilder()
             .withId(2)
@@ -45,6 +49,7 @@ public class TypicalPersons {
             .withPhone("95352563")
             .withEmail("heinz@example.com")
             .withGitHubUsername("@carl03")
+            .withSalary(3000.00)
             .withAddress("wall street")
             .withoutTags().build();
     public static final Person DANIEL = new PersonBuilder()
@@ -54,14 +59,16 @@ public class TypicalPersons {
             .withEmail("cornelia@example.com")
             .withAddress("10th street")
             .withGitHubUsername("@daniel04")
+            .withSalary(4000.00)
             .withTags("friends").build();
     public static final Person ELLE = new PersonBuilder()
             .withId(4)
             .withName("Elle Meyer")
             .withPhone("9482224")
             .withEmail("werner@example.com")
-            .withGitHubUsername("@elle05")
             .withAddress("michegan ave")
+            .withGitHubUsername("@elle05")
+            .withSalary(5000.00)
             .withoutTags().build();
     public static final Person FIONA = new PersonBuilder()
             .withId(5)
@@ -70,6 +77,7 @@ public class TypicalPersons {
             .withEmail("lydia@example.com")
             .withGitHubUsername("@fiona06")
             .withAddress("little tokyo")
+            .withSalary(6000.00)
             .withoutTags().build();
     public static final Person GEORGE = new PersonBuilder()
             .withId(6)
@@ -78,6 +86,7 @@ public class TypicalPersons {
             .withEmail("anna@example.com")
             .withGitHubUsername("@george07")
             .withAddress("4th street")
+            .withSalary(0.00)
             .withoutTags().build();
 
     // Manually added
@@ -88,11 +97,21 @@ public class TypicalPersons {
             .withEmail("stefan@example.com")
             .withGitHubUsername("@hoon08")
             .withAddress("little india")
+            .withSalary(8000.00)
             .withoutTags().build();
     public static final Person IDA = new PersonBuilder()
             .withId(8)
-            .withName("Ida Mueller")
+            .withName("Ida")
             .withPhone("8482131")
+            .withEmail("hans@example.com")
+            .withGitHubUsername("@ida09")
+            .withAddress("chicago ave")
+            .withSalary(9000.00)
+            .withoutTags().build();
+    public static final Person IDA_SECOND = new PersonBuilder()
+            .withId(9)
+            .withName("Idaline Whatever")
+            .withPhone("2132321")
             .withEmail("hans@example.com")
             .withGitHubUsername("@ida09")
             .withAddress("chicago ave")
@@ -106,6 +125,7 @@ public class TypicalPersons {
             .withEmail(VALID_EMAIL_AMY)
             .withAddress(VALID_ADDRESS_AMY)
             .withGitHubUsername(VALID_GITHUBUSERNAME_AMY)
+            .withSalary(VALID_SALARY_AMY)
             .build();
     public static final Person BOB = new PersonBuilder()
             .withId(10)
@@ -113,6 +133,7 @@ public class TypicalPersons {
             .withPhone(VALID_PHONE_BOB)
             .withEmail(VALID_EMAIL_BOB)
             .withAddress(VALID_ADDRESS_BOB)
+            .withSalary(VALID_SALARY_BOB)
             .withGitHubUsername(VALID_GITHUBUSERNAME_BOB)
             .build();
 

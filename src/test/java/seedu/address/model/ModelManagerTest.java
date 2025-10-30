@@ -144,13 +144,13 @@ public class ModelManagerTest {
         Team original = new TeamBuilder().withId("T0001").withTeamName("Core").build();
         model.addTeam(original);
 
-        Team edited = new TeamBuilder(original).withTeamName("Core Renamed").build();
+        Team edited = new TeamBuilder(original).withTeamName("CoreRenamed").build();
         model.setTeam(original, edited);
 
         // find team with same id and verify updated name
         boolean foundEditedName = model.getAddressBook().getTeamList().stream()
                 .filter(t -> "T0001".equals(t.getId()))
-                .anyMatch(t -> "Core Renamed".equals(t.getTeamName().teamName()));
+                .anyMatch(t -> "CoreRenamed".equals(t.getTeamName().teamName()));
         assertTrue(foundEditedName);
     }
 

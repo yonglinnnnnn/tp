@@ -7,6 +7,7 @@
     "email" : "alice@example.com",
     "address" : "123, Jurong West Ave 6, #08-111",
     "gitHubUsername" : "@alice01",
+    "salary" : "1000.0",
     "tags" : [ "friends" ]
   }, {
     "id" : "E0001",
@@ -15,6 +16,7 @@
     "email" : "johnd@example.com",
     "address" : "311, Clementi Ave 2, #02-25",
     "gitHubUsername" : "@benson02",
+    "salary" : "2000.0",
     "tags" : [ "owesMoney", "friends" ]
   }, {
     "id" : "E0002",
@@ -23,6 +25,7 @@
     "email" : "heinz@example.com",
     "address" : "wall street",
     "gitHubUsername" : "@carl03",
+    "salary" : "3000.0",
     "tags" : [ ]
   }, {
     "id" : "E0003",
@@ -31,6 +34,7 @@
     "email" : "cornelia@example.com",
     "address" : "10th street",
     "gitHubUsername" : "@daniel04",
+    "salary" : "4000.0",
     "tags" : [ "friends" ]
   }, {
     "id" : "E0004",
@@ -39,6 +43,7 @@
     "email" : "werner@example.com",
     "address" : "michegan ave",
     "gitHubUsername" : "@elle05",
+    "salary" : "5000.0",
     "tags" : [ ]
   }, {
     "id" : "E0005",
@@ -47,6 +52,7 @@
     "email" : "lydia@example.com",
     "address" : "little tokyo",
     "gitHubUsername" : "@fiona06",
+    "salary" : "6000.0",
     "tags" : [ ]
   }, {
     "id" : "E0006",
@@ -55,6 +61,7 @@
     "email" : "anna@example.com",
     "address" : "4th street",
     "gitHubUsername" : "@george07",
+    "salary" : "0.0",
     "tags" : [ ]
   } ]
 }

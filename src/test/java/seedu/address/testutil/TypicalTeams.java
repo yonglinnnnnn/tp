@@ -6,12 +6,10 @@ import java.util.List;
 
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamName;
-import seedu.address.model.team.TeamsManager;
 
 /**
  * Test fixtures for {@link seedu.address.model.team.Team} objects.
  *
- * <p>Provides a small set of typical teams and a helper to populate a {@link TeamsManager}
  * for use in unit tests.
  */
 public class TypicalTeams {
@@ -57,14 +55,4 @@ public class TypicalTeams {
         return new ArrayList<>(Arrays.asList(CORE, BACKEND, FRONTEND, QA));
     }
 
-    /**
-     * Returns a TeamsManager populated with the typical teams.
-     */
-    public static TeamsManager getTypicalTeamsManager() {
-        TeamsManager manager = new TeamsManager();
-        for (Team t : getTypicalTeams()) {
-            manager.addTeam(t);
-        }
-        return manager;
-    }
 }

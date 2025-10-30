@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
+import seedu.address.model.audit.AuditLog;
 
 /**
  * Clears the address book.
@@ -17,9 +18,10 @@ public class ClearCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        int personCount = model.getAddressBook().getPersonList().size();
+        // Save the audit log before clearing
+        AuditLog existingAuditLog = model.getAuditLog();
+
         model.setAddressBook(new AddressBook());
-        model.addAuditEntry("CLEAR", String.format("Cleared all data (%d persons)", personCount));
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

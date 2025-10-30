@@ -29,6 +29,7 @@ public class RemoveFromTeamCommand extends Command {
     public static final String MESSAGE_TEAM_NOT_FOUND = "No team with ID %1$s found";
     public static final String MESSAGE_PERSON_NOT_FOUND = "No person with ID %1$s found";
     public static final String MESSAGE_NOT_MEMBER = "Person %1$s is not a member of team %2$s";
+    public static final String MESSAGE_CANNOT_REMOVE_LEADER = "Cannot remove the team leader";
     public static final String MESSAGE_SUCCESS = "Person %1$s removed from team %2$s";
 
     private final String teamId;
@@ -58,6 +59,12 @@ public class RemoveFromTeamCommand extends Command {
 
         Team team = getTeam(model);
 
+        // Prevent removing the current leader, throws CommandException.
+        boolean isLeader = personIsLeader(team);
+        if (isLeader) {
+            throw new CommandException(MESSAGE_CANNOT_REMOVE_LEADER);
+        }
+
         // create edited team copy with the member removed
         Team edited = new Team(team.getId(), team.getTeamName());
         List<String> newMembers = new ArrayList<>(team.getMembers());
@@ -66,6 +73,10 @@ public class RemoveFromTeamCommand extends Command {
 
         updateTeamDetails(model, team, newMembers, edited);
         return new CommandResult(String.format(MESSAGE_SUCCESS, personId, teamId));
+    }
+
+    private boolean personIsLeader(Team team) throws CommandException {
+        return team.getLeaderId().equals(personId);
     }
 
     private static void updateTeamDetails(Model model, Team team, List<String> newMembers, Team edited) {
