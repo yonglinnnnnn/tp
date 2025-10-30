@@ -27,9 +27,9 @@ class SubteamTest {
     void setup() {
         AddressBook ab = new AddressBook();
         Subteams.setAddressBook(ab);
-        teamA = new Team("T0001", new TeamName("Team A"));
-        teamB = new Team("T0002", new TeamName("Team B"));
-        teamC = new Team("T0003", new TeamName("Team C"));
+        teamA = new Team("T0001", new TeamName("TeamA"));
+        teamB = new Team("T0002", new TeamName("TeamB"));
+        teamC = new Team("T0003", new TeamName("TeamC"));
         ab.addTeam(teamA);
         ab.addTeam(teamB);
         ab.addTeam(teamC);
