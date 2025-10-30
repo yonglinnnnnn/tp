@@ -24,27 +24,27 @@ public class RemoveFromTeamCommandTest {
     @Test
     public void execute_removesMemberAndUpdatesPerson() throws Exception {
         Model model = new ModelManager(new AddressBook(), new UserPrefs());
-        Person p = new PersonBuilder().withId(1).build();
+        Person p = new PersonBuilder().withId(2).build();
         model.addPerson(p);
 
         // create team that contains the person
-        model.addTeam(new TeamBuilder().withId("T0001").withMembers("E0001").build());
+        model.addTeam(new TeamBuilder().withId("T0001").withLeader("E0001").withMembers("E0002").build());
 
-        RemoveFromTeamCommand cmd = new RemoveFromTeamCommand("T0001", "E0001");
+        RemoveFromTeamCommand cmd = new RemoveFromTeamCommand("T0001", "E0002");
         CommandResult result = cmd.execute(model);
 
-        assertEquals(String.format(RemoveFromTeamCommand.MESSAGE_SUCCESS, "E0001", "T0001"),
+        assertEquals(String.format(RemoveFromTeamCommand.MESSAGE_SUCCESS, "E0002", "T0001"),
                 result.getFeedbackToUser());
 
         // team no longer contains member
         assertTrue(model.getAddressBook().getTeamList().stream()
                 .filter(t -> "T0001".equals(t.getId()))
                 .findFirst()
-                .map(t -> !t.getMembers().contains("E0001"))
+                .map(t -> !t.getMembers().contains("E0002"))
                 .orElse(false));
 
         // person no longer has team id
-        Person updated = model.find(person -> "E0001".equals(person.id()));
+        Person updated = model.find(person -> "E0002".equals(person.id()));
         assertTrue(!updated.teamIds().contains("T0001"));
     }
 
@@ -100,6 +100,21 @@ public class RemoveFromTeamCommandTest {
         assertFalse(base.equals(diffPerson));
         assertFalse(base.equals(null));
         assertFalse(base.equals(new Object()));
+    }
+
+    @Test
+    public void execute_removeLeader_throwsCommandException() {
+        Model model = new ModelManager(new AddressBook(), new UserPrefs());
+        // leader person
+        Person leader = new PersonBuilder().withId(1).build(); // produces E0001
+        model.addPerson(leader);
+
+        // team with leader E0001 (and leader is a member)
+        model.addTeam(new TeamBuilder().withId("T0001").withLeader("E0001").withMembers("E0001").build());
+
+        RemoveFromTeamCommand cmd = new RemoveFromTeamCommand("T0001", "E0001");
+        CommandException ex = assertThrows(CommandException.class, () -> cmd.execute(model));
+        assertEquals(RemoveFromTeamCommand.MESSAGE_CANNOT_REMOVE_LEADER, ex.getMessage());
     }
 
     @Test
