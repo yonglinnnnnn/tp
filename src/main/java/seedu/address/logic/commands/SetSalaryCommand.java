@@ -23,24 +23,25 @@ public final class SetSalaryCommand extends Command {
 
 
     private final String toSet;
-    private final int salaryInCents;
+    private final double salaryInDollars;
+    private final EditCommand.EditPersonDescriptor editPersonDescriptor = new EditCommand.EditPersonDescriptor();
 
     /**
      * Creates an SetSalaryCommand for the specified {@code Person}
      */
-    public SetSalaryCommand(String personId, int salaryInCents) {
+    public SetSalaryCommand(String personId, double salaryInDollars) {
         requireNonNull(personId);
         toSet = personId;
-        this.salaryInCents = salaryInCents;
+        this.salaryInDollars = salaryInDollars;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         Person person = model.find(p -> p.id().equals(toSet));
-        model.deletePerson(person);
-        model.addPerson(person.duplicate(toSet).withSalary(salaryInCents).build());
-        return new CommandResult(String.format(MESSAGE_SUCCESS, salaryInCents / 100.0, person.id()));
+        Person edited = person.duplicate().withSalary(salaryInDollars).build();
+        model.setPerson(person, edited);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, salaryInDollars, person.id()));
     }
 
     @Override
@@ -54,14 +55,14 @@ public final class SetSalaryCommand extends Command {
             return false;
         }
 
-        return command.toSet.equals(this.toSet) && command.salaryInCents == this.salaryInCents;
+        return command.toSet.equals(this.toSet) && command.salaryInDollars == this.salaryInDollars;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("toSet", toSet)
-                .add("salaryInCents", salaryInCents)
+                .add("salaryInDollars", salaryInDollars)
                 .toString();
     }
 }

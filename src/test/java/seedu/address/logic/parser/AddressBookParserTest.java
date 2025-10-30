@@ -130,10 +130,10 @@ public class AddressBookParserTest {
         Person person = new PersonBuilder().build();
         SetSalaryCommand command = (SetSalaryCommand) parser.parseCommand(
                 SetSalaryCommand.COMMAND_WORD + " " + person.id() + " 100");
-        assertEquals(new SetSalaryCommand(person.id(), 10000), command);
+        assertEquals(new SetSalaryCommand(person.id(), 100), command);
         command = (SetSalaryCommand) parser.parseCommand(
                 SetSalaryCommand.COMMAND_WORD + " " + person.id() + " 100.23");
-        assertEquals(new SetSalaryCommand(person.id(), 10023), command);
+        assertEquals(new SetSalaryCommand(person.id(), 100.23), command);
     }
 
     @Test
