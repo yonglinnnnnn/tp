@@ -225,9 +225,13 @@ The subteam must also not already contain the parent team as a subteam (directly
 Format: `set-subteam PARENT_TEAM_ID SUBTEAM_ID`
 
 Exceptions:
-* If the team to be added as a subteam already exists as a subteam of another team, the command will fail with an error message.
-* If the team to be added as a subteam is the same as the parent team, the command will fail with an error message.
-* If any of the team IDs do not exist as an existing team , the command will fail with an error message.
+- `No team with ID <TEAM_ID> found`:
+  - This error message is shown when either the parent team ID or the subteam ID does not exist in the address book.
+- `Team <TEAM_ID_A> cannot be a subteam of team <TEAM_ID_B>`:
+  - If team TEAM_ID_A already exists as a subteam of another team.
+  - If TEAM_ID_A is the same as TEAM_ID_, the error message is shown. 
+  - If the team TEAM_ID_A exists as a parent team (directly or indirectly) of team TEAM_ID_B.
+  - If the team TEAM_ID_B exists as a subteam (directly or indirectly) of team TEAM_ID_A.
 
 ### Deleting a team `delete-team`
 Deletes an existing team from the address book.
