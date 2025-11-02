@@ -229,7 +229,7 @@ Exceptions:
   - This error message is shown when either the parent team ID or the subteam ID does not exist in the address book.
 - `Team <TEAM_ID_A> cannot be a subteam of team <TEAM_ID_B>`:
   - If team TEAM_ID_A already exists as a subteam of another team.
-  - If TEAM_ID_A is the same as TEAM_ID_, the error message is shown. 
+  - If TEAM_ID_A is the same as TEAM_ID_B. 
   - If the team TEAM_ID_A exists as a parent team (directly or indirectly) of team TEAM_ID_B.
   - If the team TEAM_ID_B exists as a subteam (directly or indirectly) of team TEAM_ID_A.
 
